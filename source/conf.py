@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = '深圳理工大学-数字逻辑基础与Verilog设计-实验课程'
-copyright = '2025, 陈奕含，黄夕祠'
-author = '黄夕祠'
-release = '0.1'
+project = '《数字逻辑与计算机组成》实验'
+copyright = '：深圳理工大学 - 算力微电子学院，2026 '
+author = '黄夕祠，陈奕含'
+release = '1.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
