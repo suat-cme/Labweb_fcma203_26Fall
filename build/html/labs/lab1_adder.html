@@ -9,7 +9,7 @@
   <title>实验一 加法器设计 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e50e972b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ed88f511" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -46,20 +46,27 @@
               <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">实验一 加法器设计</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#verilog">Verilog 代码编写环境</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#vs-code-verilog-hdl-systemverilog-bluespec-systemverilog-ctags">VS Code + Verilog-HDL/SystemVerilog/Bluespec SystemVerilog + ctags 插件</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#full-adder">Full Adder 全加器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#testbench">第一个 Testbench 程序</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">1. 实验准备</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#verilog-hdl">1.1 Verilog HDL 语言基础</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verilog">1.2 Verilog 仿真器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1.3 Verilog 代码编写环境</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#vivado">Vivado 使用教程</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id5">2. 实验内容</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#verilog-full-adder">2.1 Verilog 描述全加器 Full Adder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verilog-carry-look-ahead-adder">2.2 Verilog 描述超前进位加法器 Carry-look-ahead Adder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testbench">2.3 为超前进位加法器模块的 Testbench</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vivado">2.4 Vivado 中建立工程并仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">第一个 Testbench 程序</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">Vivado 使用教程</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#adder">创建 adder 工程</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#carry-look-ahead">Carry-look-ahead 超前进位加法器</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">4位超前进位加法器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">层次化超前进位加法器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">选择进位加法器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">层次化超前进位加法器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">选择进位加法器</a></li>
 </ul>
 </li>
 </ul>
@@ -92,32 +99,32 @@
              
   <section id="id1">
 <h1>实验一 加法器设计<a class="headerlink" href="#id1" title="链接到此标题。"></a></h1>
-<p>Verilog 是一种用于描述、设计电路的 <strong>硬件描述语言 HDL (Hardware Description Language)</strong> ，
-在实验一，我们已经尝试在 logisim 中设计并绘制电路图，并通过输入输出测试电路的功能。
-本次实验我们使用 Verilog 的各种基础语法完成一些电路设计，并通过仿真代码和波形图测试电路的功能。</p>
-<p>为此，我们需要使用 Verilog 仿真器，常见的仿真器有很多：VCS 、modelsim 、Verilog-XL 、iverilog 、verilator 等。
-考虑到后续实验我们将使用 Xilinx 的 FPGA 教学实验板，为此我们直接使用 Vivado 的 xsim 仿真器，能够在一体式软件中完成整个实验的流程。</p>
-<p>本次实验课我们使用 Verilog HDL 设计加法器等一些简单的电路，并编写 Testbench 程序，
-使用 Vivado 的仿真器测试我们设计的电路。</p>
-<section id="verilog">
-<h2>Verilog 代码编写环境<a class="headerlink" href="#verilog" title="链接到此标题。"></a></h2>
-<p>工欲善其事，必先利其器。
-一个好的代码 Coding 环境能极大的帮助你编写代码。</p>
-<section id="vs-code-verilog-hdl-systemverilog-bluespec-systemverilog-ctags">
-<h3>VS Code + Verilog-HDL/SystemVerilog/Bluespec SystemVerilog + ctags 插件<a class="headerlink" href="#vs-code-verilog-hdl-systemverilog-bluespec-systemverilog-ctags" title="链接到此标题。"></a></h3>
-<p>Vivado 作为一个集成开发环境，拥有代码编辑能力。不过作为一个大型软件，响应速度相对较慢，
-编写代码也没有插件那么方便。因此我们平时都是使用编辑器编写代码，当然有很多好用的编辑器，
-这里介绍 <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">Code</span></code> + <code class="docutils literal notranslate"><span class="pre">Verilog-HDL/SystemVerilog/Bluespec</span> <span class="pre">SystemVerilog</span></code> + <code class="docutils literal notranslate"><span class="pre">ctags</span></code> 插件。</p>
-<p>安装好 <code class="docutils literal notranslate"><span class="pre">Verilog-HDL/SystemVerilog/Bluespec</span> <span class="pre">SystemVerilog</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ctags</span></code> 插件后，可以为 Verilog 等
-语言提供基础的高亮和语法框架支持，还可以提供 <code class="docutils literal notranslate"><span class="pre">动态语法检查</span></code> 、鼠标悬停查看信号定义、跳转信号和模块等功能。相信对经常写代码的你们
-来说，这些功能不会陌生。你们可以在 <a class="reference external" href="https://dphweb.cn/index.php/2023/08/22/verilog-hdl%e6%8f%92%e4%bb%b6%e9%85%8d%e7%bd%ae%e6%95%99%e7%a8%8b/">这里</a> 学习
-配置教程，并不复杂。</p>
+<p>本实验中，我们将使用 Verilog 的各种基础语法完成加法器电路设计，并对电路进行仿真以测试电路的功能。</p>
+<section id="id2">
+<h2>1. 实验准备<a class="headerlink" href="#id2" title="链接到此标题。"></a></h2>
+<section id="verilog-hdl">
+<h3>1.1 Verilog HDL 语言基础<a class="headerlink" href="#verilog-hdl" title="链接到此标题。"></a></h3>
+<p>Verilog 是一种用于描述、设计电路的 <strong>硬件描述语言 HDL (Hardware Description Language)</strong> 。理论课堂上已给出一些简单的示例和基本语法的讲解，建议同学们在实验前阅读 “教材附录 A” 熟悉 Verilog 的基本语法。</p>
 </section>
-<section id="full-adder">
-<h3>Full Adder 全加器<a class="headerlink" href="#full-adder" title="链接到此标题。"></a></h3>
-<p>我们给出一种 Full Adder 全加器的 Verilog 实现方式参考：</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">Full Adder 全加器的 Verilog 实现方式参考</span><a class="headerlink" href="#id6" title="链接到此段代码"></a></div>
+<section id="verilog">
+<h3>1.2 Verilog 仿真器<a class="headerlink" href="#verilog" title="链接到此标题。"></a></h3>
+<p>常见的 Verilog 仿真器有 VCS 、modelsim 、Verilog-XL 、iverilog 、verilator 等。我们使用的是 Vivado 的 xsim 仿真器，为我们后续实验中使用 Xilinx 的 FPGA 教学实验板做准备。</p>
+</section>
+<section id="id3">
+<h3>1.3 Verilog 代码编写环境<a class="headerlink" href="#id3" title="链接到此标题。"></a></h3>
+<p>工欲善其事，必先利其器。
+一个好的代码 Coding 环境可以使得代码编写更加高效。Vivado 作为一个集成开发环境，当然也集成了代码编辑功能，不过辅助代码编写的各种插件仍然比不过 VC Code 中的丰富。</p>
+<p>这里建议使用 <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">Code</span></code> ， 配合 <code class="docutils literal notranslate"><span class="pre">Verilog-HDL/SystemVerilog/Bluespec</span> <span class="pre">SystemVerilog</span></code> + <code class="docutils literal notranslate"><span class="pre">ctags</span></code> 插件。这两个插件可以为 Verilog 等语言提供基础的高亮和语法框架支持，还可以提供 <code class="docutils literal notranslate"><span class="pre">动态语法检查</span></code> 、鼠标悬停查看信号定义、跳转信号和模块等功能。</p>
+<p>如果你经常写代码，安装插件对你来说肯定不陌生。你可以在 <a class="reference external" href="https://dphweb.cn/index.php/2023/08/22/verilog-hdl%e6%8f%92%e4%bb%b6%e9%85%8d%e7%bd%ae%e6%95%99%e7%a8%8b/">这里</a> 学习配置教程。</p>
+</section>
+</section>
+<section id="id5">
+<h2>2. 实验内容<a class="headerlink" href="#id5" title="链接到此标题。"></a></h2>
+<section id="verilog-full-adder">
+<h3>2.1 Verilog 描述全加器 Full Adder<a class="headerlink" href="#verilog-full-adder" title="链接到此标题。"></a></h3>
+<p>我们知道 Verilog 描述电路可以有很多模式：结构级描述、行为级描述等。以下给出一种全加器的 Verilog 实现方式：</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">全加器 (Full Adder) 的一种 Verilog 实现</span><a class="headerlink" href="#id10" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">ref_fa</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 2</span><span class="w">    </span><span class="n">a</span><span class="w">       </span><span class="c1">// &lt;&lt;i&lt;&lt;</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="p">,</span><span class="n">b</span><span class="w">       </span><span class="c1">// &lt;&lt;i&lt;&lt;</span>
@@ -129,25 +136,59 @@
 <span class="linenos"> 9</span><span class="w">   </span><span class="k">output</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">;</span>
 <span class="linenos">10</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
 <span class="linenos">11</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">;</span>
-<span class="hll"><span class="linenos">12</span><span class="w">   </span><span class="k">assign</span><span class="w"> </span><span class="p">{</span><span class="n">cout</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
-</span><span class="linenos">13</span><span class="k">endmodule</span>
+<span class="linenos">12</span>
+<span class="hll"><span class="linenos">13</span><span class="w">   </span><span class="k">assign</span><span class="w"> </span><span class="p">{</span><span class="n">cout</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
+</span><span class="linenos">14</span>
+<span class="linenos">15</span><span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="verilog-carry-look-ahead-adder">
+<h3>2.2 Verilog 描述超前进位加法器 Carry-look-ahead Adder<a class="headerlink" href="#verilog-carry-look-ahead-adder" title="链接到此标题。"></a></h3>
+<p>超前进位加法器是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。</p>
+<div class="admonition mytodo">
+   <p class="admonition-title">必做内容1：Verilog 实现4位超前进位加法器 </p >
+   <p>以下图代码框架为基础，补全4位超前进位加法器的 Verilog实现，并保存为 .v 文件。<br>
+   虽然上图中的 "assign {cout, sum} = a + b + cin" 的赋值方式可以只用一行实现4位加法，但无法在具体实现方式上体现 “超前进位”，因此不允许使用这种连续赋值法。</p>
+</div><div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">4位超前进位加法器代码框架</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
+<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">cla_4bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">);</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
+<span class="linenos"> 4</span><span class="w">   </span><span class="k">output</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">;</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="n">cin</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">;</span>
+<span class="linenos"> 8</span>
+<span class="hll"><span class="linenos"> 9</span><span class="w">   </span><span class="c1">// Your codes should start from here.</span>
+</span><span class="hll"><span class="linenos">10</span>
+</span><span class="hll"><span class="linenos">11</span><span class="w">   </span><span class="c1">// End of your codes.</span>
+</span><span class="linenos">12</span>
+<span class="linenos">13</span><span class="k">endmodule</span>
 </pre></div>
 </div>
 </div>
 <div class="admonition myquestion">
-   <p class="admonition-title">加法器的代码实现</p >
-   <p>加法器的 RTL 实现方式有很多，行波进位加法器、选择进位加法器、超前进位加法器、进位旁路加法器等。
-   当然还有上面参考代码的朴实无华的 + 号运算符实现的加法器，你觉得哪种代码编写的实现更好呢，这个问题开放答案，欢迎留下你的想法。</p>
+   <p class="admonition-title">思考：多位加法器的代码实现</p >
+   <p>多位加法器的实现方式有很多，行波进位加法器、选择进位加法器、超前进位加法器、进位旁路加法器等，当然还有此次禁止使用的朴实无华的 + 号运算符实现的加法器，如何判断哪种代码实现更好呢？</p>
 </div></section>
 <section id="testbench">
-<h3>第一个 Testbench 程序<a class="headerlink" href="#testbench" title="链接到此标题。"></a></h3>
-<p>Verilog 代码设计完成后，还需要进行重要的步骤，即逻辑功能仿真，仿真激励文件称之为 testbench，
-就像你之前使用 Logisim 设计完电路之后，需要你输入信号，观察输出，检查你的电路设计功能是否符合你的要求。</p>
-<p>我们从一个全加器的简单 Testbench 入手，编写你自己的第一个 Testbench 程序。</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">一个全加器的简单 Testbench</span><a class="headerlink" href="#id7" title="链接到此段代码"></a></div>
+<h3>2.3 为超前进位加法器模块的 Testbench<a class="headerlink" href="#testbench" title="链接到此标题。"></a></h3>
+<p>如何确定你设计的 Verilog 代码是正确的呢？对代码进行逻辑功能仿真！而用于仿真的代码文件被称为 Testbench 文件。</p>
+<p>Testbench 本身也描述了一个 module ，但是它没有端口，不需要和外界相连。在 这个testbench module 的内部生成一些信号，作为待测试模块（如 ref_fa 模块）的输入，然后观察待测试模块的输出信号是否符合预期。Testbench 也可以使用 $display() 函数打印一些信息，帮助我们判断电路是否正确。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/Testbench.png"><img alt="Testbench" height="162" src="../_images/Testbench.png" width="441" />
+</a>
+</figure>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>我们从一个简单的全加器 Testbench 入手，了解一下 Testbench 的简单写法。</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">全加器的简单 Testbench</span><a class="headerlink" href="#id12" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="no">`timescale</span><span class="w"> </span><span class="mh">1</span><span class="n">ns</span><span class="o">/</span><span class="mh">1</span><span class="n">ps</span>
-</span><span class="linenos"> 2</span><span class="k">module</span><span class="w"> </span><span class="n">ref_tb</span><span class="w"> </span><span class="p">();</span>
+</span><span class="linenos"> 2</span><span class="k">module</span><span class="w"> </span><span class="n">ref_fa_tb</span><span class="w"> </span><span class="p">();</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="mh">2</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">in</span><span class="p">;</span>
 <span class="linenos"> 4</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">;</span>
 <span class="linenos"> 5</span>
@@ -173,19 +214,26 @@
 </pre></div>
 </div>
 </div>
-<p>相信你理解这个程序并不会感到困难，在 Logisim 中，你可以把一个画布中的电路引出输入输出口，封装成模块，然后在另一个画布中放置这个模块。
-其中高亮的一大段，代表对 <code class="docutils literal notranslate"><span class="pre">ref_fa</span></code> 进行实例化，即在另一个模块中使用这个模块，然后将这个模块的信号与
-对应的信号相连。 <code class="docutils literal notranslate"><span class="pre">.a</span></code> 代表 ref_fa 中的 a 端口，后面括号中的 in[0] 是 ref_tb 中的信号，这样就完成了相连的操作。</p>
+<p>回忆一下，在 Logisim 中，你可以把一个画布中的电路引出输入输出口，封装成模块，然后在另一个画布中放置这个模块。类似地，在 Verilog 中，你可以在一个模块中使用另一个模块，这就是模块的实例化。代码中间高亮的一大段，代表在 Testbench 顶层 module 中对 <code class="docutils literal notranslate"><span class="pre">ref_fa</span></code> 进行实例化，并指定了哪些信号连接到这个实例的输入输出端口。 例如：<code class="docutils literal notranslate"><span class="pre">.a</span></code> 代表 ref_fa 中的 a 端口，后面括号中的 in[0] 是 ref_fa_tb 中的信号。</p>
 <p>Testbench 中一定会使用到 `timescale [timeunit]/[timeprecision] 。用来表示仿真时间的基本单位和时间精度。
 <code class="docutils literal notranslate"><span class="pre">#100</span></code> 也就是延迟 100个时间单位之后，再接着执行后面的语句。而时间精度代表最小的仿真尺度，对于 `timescale 1ns/1ps 你写 <code class="docutils literal notranslate"><span class="pre">#1.1111</span></code> ，
 则延迟 1.1111 ns，但由于 0.0001 是 0.1 ps，时间精度没这么高，因此会四舍五入变成延迟 1.111 ns。</p>
 <p>$stop 系统任务则是将仿真暂停，有点像是 Debug 打断点，你运行就会发现箭头指向 $stop ，仿真停下来了，可以手动继续运行仿真。</p>
 <p>然后我们对 in[2:0] 信号进行驱动，也就是对它进行赋值操作，我们直接使用 for 循环进行遍历所有的输入情况，然后你可以对比
 所有的输入是否会得到正确的输出，即可完成 Testbench 仿真测试。</p>
-</section>
-</section>
+<div class="admonition mytodo">
+   <p class="admonition-title">必做内容2：编写 Testbench </p >
+   <p>仿照上图全加器的 testbench 写法，为4位超前进位加法器编写 Testbench，并保存为 .v 文件。</p>
+</div></section>
 <section id="vivado">
-<h2>Vivado 使用教程<a class="headerlink" href="#vivado" title="链接到此标题。"></a></h2>
+<h3>2.4 Vivado 中建立工程并仿真<a class="headerlink" href="#vivado" title="链接到此标题。"></a></h3>
+</section>
+<section id="id6">
+<h3>第一个 Testbench 程序<a class="headerlink" href="#id6" title="链接到此标题。"></a></h3>
+</section>
+</section>
+<section id="id7">
+<h2>Vivado 使用教程<a class="headerlink" href="#id7" title="链接到此标题。"></a></h2>
 <p>Vivado 是 Xilinx 公司的 FPGA 集成设计环境，本次实验我们将使用 Vivado 对 Verilog 设计进行仿真。
 我们推荐使用 Vivado 2018.3 ，安装 WebPACK 版本。
 该版本安装体积约 20 GB，而近几年的版本安装体积已经约 100 GB，WebPACK 是免费的，不需要许可证的版本，并且已经能够满足我们的实验需求。
@@ -247,31 +295,6 @@
 </section>
 <section id="carry-look-ahead">
 <h2>Carry-look-ahead 超前进位加法器<a class="headerlink" href="#carry-look-ahead" title="链接到此标题。"></a></h2>
-<p>超前进位加法器是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。</p>
-<section id="id3">
-<h3>4位超前进位加法器<a class="headerlink" href="#id3" title="链接到此标题。"></a></h3>
-<div class="admonition mytodo">
-   <p class="admonition-title">4位超前进位加法器的实现</p >
-   <p>按照逻辑公式或者电路，完成4位超前进位加法器的代码实现。
-   下面给出了代码框架，在代码框架的基础上完成代码的编写。</p>
-</div><div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">4位超前进位加法器代码框架</span><a class="headerlink" href="#id8" title="链接到此段代码"></a></div>
-<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">cla_4bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">);</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
-<span class="linenos"> 4</span><span class="w">   </span><span class="k">output</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">;</span>
-<span class="linenos"> 5</span>
-<span class="linenos"> 6</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
-<span class="linenos"> 7</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="n">cin</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">;</span>
-<span class="linenos"> 8</span>
-<span class="hll"><span class="linenos"> 9</span><span class="w">   </span><span class="c1">// Your codes should start from here.</span>
-</span><span class="hll"><span class="linenos">10</span>
-</span><span class="hll"><span class="linenos">11</span><span class="w">   </span><span class="c1">// End of your codes.</span>
-</span><span class="linenos">12</span>
-<span class="linenos">13</span><span class="k">endmodule</span>
-</pre></div>
-</div>
-</div>
 <p>全加器你写好了，你很自信，这真的还需要测试吗？4位超前进位加法器你也写好了，这个也不难，只需要非常的细心。
 那这个需要写 Testbench 测试吗，你现在有信心认为代码一定是正确的吗？</p>
 <p>那该怎么写呢，还是和参考的 Testbench 一样吗，不过这次的信号数量特别多，真值表一共有512列，我需要依次去看
@@ -284,7 +307,7 @@
    可以打印一句提示信息，这样就不用我们去一个个看波形了。<strong>打印信息可以使用 $display() 函数，Vivado 会将信息显示在下方的 Tcl Console 中。</strong>
    使用方法很像 printf 函数，具体可以 STFW。</p>
 </div><figure class="align-center">
-<img alt="Testbench" src="../_images/Testbench.png" />
+<img alt="Testbench" src="../_images/Testbench1.png" />
 </figure>
 <div class="admonition mytodo">
    <p class="admonition-title">测试4位超前进位加法器</p >
@@ -292,17 +315,16 @@
    以及之后的实验中，请你好好测试你的代码，不要留下Bug。
    编写一个 Testbench 用于测试你的4位超前进位加法器，
    命名规则最好类似于 tb_cla_4bit ，这样很清晰的能够看得出这是用于测试什么模块的激励文件。</p>
-</div></section>
-<section id="id4">
-<h3>层次化超前进位加法器<a class="headerlink" href="#id4" title="链接到此标题。"></a></h3>
+</div><section id="id8">
+<h3>层次化超前进位加法器<a class="headerlink" href="#id8" title="链接到此标题。"></a></h3>
 <p>理论课上已经讲过层次化超前进位加法器，这样可以显著提升加法器的性能，但是随着加法器位宽的提升，进位的计算会花费指数级增加的电路开销。
 因此对于32位、64位等更大位宽的加法器，可以将低位宽的加法器块之间用行波进位等方式连接。</p>
 <div class="admonition mytodo">
    <p class="admonition-title">16位层次化超前进位加法器</p >
    <p>我们可以改造一下之前的4位超前进位加法器代码，将 generate 进位生成信号 g 和 propagate 进位传递信号 p 输出，
    给第二级超前进位电路使用，组成16位层次化超前进位加法器。下面给出了代码框架。</p>
-</div><div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">16位层次化超前进位加法器</span><a class="headerlink" href="#id9" title="链接到此段代码"></a></div>
+</div><div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">16位层次化超前进位加法器</span><a class="headerlink" href="#id13" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">cla_16bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">);</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
@@ -320,8 +342,8 @@
 </div>
 </div>
 </section>
-<section id="id5">
-<h3>选择进位加法器<a class="headerlink" href="#id5" title="链接到此标题。"></a></h3>
+<section id="id9">
+<h3>选择进位加法器<a class="headerlink" href="#id9" title="链接到此标题。"></a></h3>
 <p>选择进位加法器可以由3个16位加法器组成，低16位加法计算不变，另外两个加法器对高16位进行计算。一个进位假设为0，另一个假设为1，
 最后由低16位加法器实际计算出来的进位值输入 2-1 多路选通器（多路复用器），得到高16位的结果。这样可以有效减少了进位传播延迟。
 这种设计与超前进位加法器相比，所需的电路数量并非指数级增长，而是大约多花50%的电路开销，也是一种常见的加法器设计方法，可以用于组成位宽很大的加法器。</p>
@@ -343,8 +365,8 @@
    <p>在其他编程语言中有生成随机数的函数， Verilog 也不例外，我们可以利用 $random 这个函数帮我们生成一些随机数，
    帮助我们随机测试一些样例，然后循环10000次，或者100000次，或者更多。此外，对于一些特殊的情况，我们还可以手动地去测试，
    以确保我们的电路符合要求。比如输入全0，全1；除法器我们可能需要对除0进行测试等。</p>
-</div><div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">测试激励示例</span><a class="headerlink" href="#id10" title="链接到此段代码"></a></div>
+</div><div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">测试激励示例</span><a class="headerlink" href="#id14" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">initial</span><span class="w">  </span><span class="k">begin</span>
 <span class="hll"><span class="linenos"> 2</span><span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">integer</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">100000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">  </span><span class="k">begin</span>
 </span><span class="linenos"> 3</span><span class="w">      </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">$random</span><span class="p">;</span>

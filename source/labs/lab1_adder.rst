@@ -1,43 +1,43 @@
 实验一 加法器设计
 ==========================================
 
-Verilog 是一种用于描述、设计电路的 **硬件描述语言 HDL (Hardware Description Language)** ，
-在实验一，我们已经尝试在 logisim 中设计并绘制电路图，并通过输入输出测试电路的功能。
-本次实验我们使用 Verilog 的各种基础语法完成一些电路设计，并通过仿真代码和波形图测试电路的功能。
-
-为此，我们需要使用 Verilog 仿真器，常见的仿真器有很多：VCS 、modelsim 、Verilog-XL 、iverilog 、verilator 等。
-考虑到后续实验我们将使用 Xilinx 的 FPGA 教学实验板，为此我们直接使用 Vivado 的 xsim 仿真器，能够在一体式软件中完成整个实验的流程。
-
-本次实验课我们使用 Verilog HDL 设计加法器等一些简单的电路，并编写 Testbench 程序，
-使用 Vivado 的仿真器测试我们设计的电路。
+本实验中，我们将使用 Verilog 的各种基础语法完成加法器电路设计，并对电路进行仿真以测试电路的功能。
 
 
-Verilog 代码编写环境
+1. 实验准备
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.1 Verilog HDL 语言基础
+-----------------------------------------------------------------------------
+Verilog 是一种用于描述、设计电路的 **硬件描述语言 HDL (Hardware Description Language)** 。理论课堂上已给出一些简单的示例和基本语法的讲解，建议同学们在实验前阅读 “教材附录 A” 熟悉 Verilog 的基本语法。
+ 
+
+1.2 Verilog 仿真器
+-----------------------------------------------------------------------------
+常见的 Verilog 仿真器有 VCS 、modelsim 、Verilog-XL 、iverilog 、verilator 等。我们使用的是 Vivado 的 xsim 仿真器，为我们后续实验中使用 Xilinx 的 FPGA 教学实验板做准备。
+
+
+1.3 Verilog 代码编写环境
+-----------------------------------------------------------------------------
+工欲善其事，必先利其器。
+一个好的代码 Coding 环境可以使得代码编写更加高效。Vivado 作为一个集成开发环境，当然也集成了代码编辑功能，不过辅助代码编写的各种插件仍然比不过 VC Code 中的丰富。
+
+
+这里建议使用 ``VS Code`` ， 配合 ``Verilog-HDL/SystemVerilog/Bluespec SystemVerilog`` + ``ctags`` 插件。这两个插件可以为 Verilog 等语言提供基础的高亮和语法框架支持，还可以提供 ``动态语法检查`` 、鼠标悬停查看信号定义、跳转信号和模块等功能。
+
+
+如果你经常写代码，安装插件对你来说肯定不陌生。你可以在 `这里 <https://dphweb.cn/index.php/2023/08/22/verilog-hdl%e6%8f%92%e4%bb%b6%e9%85%8d%e7%bd%ae%e6%95%99%e7%a8%8b/>`_ 学习配置教程。
+
+2. 实验内容
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-工欲善其事，必先利其器。
-一个好的代码 Coding 环境能极大的帮助你编写代码。
-
-VS Code + Verilog-HDL/SystemVerilog/Bluespec SystemVerilog + ctags 插件
------------------------------------------------------------------------------
-
-Vivado 作为一个集成开发环境，拥有代码编辑能力。不过作为一个大型软件，响应速度相对较慢，
-编写代码也没有插件那么方便。因此我们平时都是使用编辑器编写代码，当然有很多好用的编辑器，
-这里介绍 ``VS Code`` + ``Verilog-HDL/SystemVerilog/Bluespec SystemVerilog`` + ``ctags`` 插件。
-
-安装好 ``Verilog-HDL/SystemVerilog/Bluespec SystemVerilog`` 和 ``ctags`` 插件后，可以为 Verilog 等
-语言提供基础的高亮和语法框架支持，还可以提供 ``动态语法检查`` 、鼠标悬停查看信号定义、跳转信号和模块等功能。相信对经常写代码的你们
-来说，这些功能不会陌生。你们可以在 `这里 <https://dphweb.cn/index.php/2023/08/22/verilog-hdl%e6%8f%92%e4%bb%b6%e9%85%8d%e7%bd%ae%e6%95%99%e7%a8%8b/>`_ 学习
-配置教程，并不复杂。
-
-Full Adder 全加器
+2.1 Verilog 描述全加器 Full Adder 
 ------------------------------------------------------
 
-我们给出一种 Full Adder 全加器的 Verilog 实现方式参考：
+我们知道 Verilog 描述电路可以有很多模式：结构级描述、行为级描述等。以下给出一种全加器的 Verilog 实现方式：
 
 .. code-block:: v
-   :caption: Full Adder 全加器的 Verilog 实现方式参考
-   :emphasize-lines: 12
+   :caption: 全加器 (Full Adder) 的一种 Verilog 实现
+   :emphasize-lines: 13
    :linenos:
 
    module ref_fa (
@@ -51,34 +51,75 @@ Full Adder 全加器
       output sum, cout;
       wire a, b, cin;
       wire sum, cout;
+
       assign {cout, sum} = a + b + cin;
+
    endmodule
 
+
+
+2.2 Verilog 描述超前进位加法器 Carry-look-ahead Adder
+------------------------------------------------------
+
+超前进位加法器是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。
+
+.. raw:: html
+
+   <div class="admonition mytodo">
+      <p class="admonition-title">必做内容1：Verilog 实现4位超前进位加法器 </p >
+      <p>以下图代码框架为基础，补全4位超前进位加法器的 Verilog实现，并保存为 .v 文件。<br>
+      虽然上图中的 "assign {cout, sum} = a + b + cin" 的赋值方式可以只用一行实现4位加法，但无法在具体实现方式上体现 “超前进位”，因此不允许使用这种连续赋值法。</p>
+   </div>
+
+.. code-block:: v
+   :caption: 4位超前进位加法器代码框架
+   :emphasize-lines: 9-11
+   :linenos:
+
+   module cla_4bit(a, b, cin, sum, cout);
+
+      input a, b, cin;
+      output sum, cout;
+
+      wire [3:0] a, b, sum;
+      wire cin, cout;
+
+      // Your codes should start from here.
+
+      // End of your codes.
+
+   endmodule
 
 .. raw:: html
 
    <div class="admonition myquestion">
-      <p class="admonition-title">加法器的代码实现</p >
-      <p>加法器的 RTL 实现方式有很多，行波进位加法器、选择进位加法器、超前进位加法器、进位旁路加法器等。
-      当然还有上面参考代码的朴实无华的 + 号运算符实现的加法器，你觉得哪种代码编写的实现更好呢，这个问题开放答案，欢迎留下你的想法。</p>
+      <p class="admonition-title">思考：多位加法器的代码实现</p >
+      <p>多位加法器的实现方式有很多，行波进位加法器、选择进位加法器、超前进位加法器、进位旁路加法器等，当然还有此次禁止使用的朴实无华的 + 号运算符实现的加法器，如何判断哪种代码实现更好呢？</p>
    </div>
 
 
-第一个 Testbench 程序
-----------------------------------------
+2.3 为超前进位加法器模块的 Testbench 
+------------------------------------------------------
+如何确定你设计的 Verilog 代码是正确的呢？对代码进行逻辑功能仿真！而用于仿真的代码文件被称为 Testbench 文件。 
 
-Verilog 代码设计完成后，还需要进行重要的步骤，即逻辑功能仿真，仿真激励文件称之为 testbench，
-就像你之前使用 Logisim 设计完电路之后，需要你输入信号，观察输出，检查你的电路设计功能是否符合你的要求。
 
-我们从一个全加器的简单 Testbench 入手，编写你自己的第一个 Testbench 程序。
+Testbench 本身也描述了一个 module ，但是它没有端口，不需要和外界相连。在 这个testbench module 的内部生成一些信号，作为待测试模块（如 ref_fa 模块）的输入，然后观察待测试模块的输出信号是否符合预期。Testbench 也可以使用 $display() 函数打印一些信息，帮助我们判断电路是否正确。
+
+.. figure:: ../picture/lab1_adder/Testbench.png
+   :alt: Testbench
+   :scale: 20
+   :align: center
+|
+
+我们从一个简单的全加器 Testbench 入手，了解一下 Testbench 的简单写法。
 
 .. code-block:: v
-   :caption: 一个全加器的简单 Testbench
+   :caption: 全加器的简单 Testbench
    :emphasize-lines: 1, 6-12, 21
    :linenos:
 
    `timescale 1ns/1ps
-   module ref_tb ();
+   module ref_fa_tb ();
       reg [2:0] in;
       wire sum, cout;
 
@@ -103,9 +144,7 @@ Verilog 代码设计完成后，还需要进行重要的步骤，即逻辑功能
    endmodule
 
 
-相信你理解这个程序并不会感到困难，在 Logisim 中，你可以把一个画布中的电路引出输入输出口，封装成模块，然后在另一个画布中放置这个模块。
-其中高亮的一大段，代表对 ``ref_fa`` 进行实例化，即在另一个模块中使用这个模块，然后将这个模块的信号与
-对应的信号相连。 ``.a`` 代表 ref_fa 中的 a 端口，后面括号中的 in[0] 是 ref_tb 中的信号，这样就完成了相连的操作。
+回忆一下，在 Logisim 中，你可以把一个画布中的电路块设置输入输出端口，封装成模块，然后在另一个画布中放置这个模块。类似地，在 Verilog 中，你可以在一个模块中使用另一个模块，这就是模块的实例化。代码中间高亮的一大段，代表在 Testbench 顶层 module 中对 ``ref_fa`` 进行实例化，并指定了哪些信号连接到这个实例的输入输出端口。 例如：``.a`` 代表 ref_fa 中的 a 端口，后面括号中的 in[0] 是 ref_fa_tb 中的信号。
 
 Testbench 中一定会使用到 \`timescale [timeunit]/[timeprecision] 。用来表示仿真时间的基本单位和时间精度。
 ``#100`` 也就是延迟 100个时间单位之后，再接着执行后面的语句。而时间精度代表最小的仿真尺度，对于 \`timescale 1ns/1ps 你写 ``#1.1111`` ，
@@ -115,6 +154,22 @@ $stop 系统任务则是将仿真暂停，有点像是 Debug 打断点，你运�
 
 然后我们对 in[2:0] 信号进行驱动，也就是对它进行赋值操作，我们直接使用 for 循环进行遍历所有的输入情况，然后你可以对比
 所有的输入是否会得到正确的输出，即可完成 Testbench 仿真测试。
+
+.. raw:: html
+
+   <div class="admonition mytodo">
+      <p class="admonition-title">必做内容2：编写 Testbench </p >
+      <p>仿照上图全加器的 testbench 写法，为4位超前进位加法器编写 Testbench，并保存为 .v 文件。</p>
+   </div>
+
+2.4 Vivado 中建立工程并仿真
+------------------------------------------------------
+
+
+第一个 Testbench 程序
+----------------------------------------
+
+
 
 Vivado 使用教程
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -215,39 +270,6 @@ Vivado 软件很复杂，我们一点点来了解它。创建一个名为 adder 
 
 Carry-look-ahead 超前进位加法器
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-超前进位加法器是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。
-
-4位超前进位加法器
-------------------------
-
-.. raw:: html
-
-   <div class="admonition mytodo">
-      <p class="admonition-title">4位超前进位加法器的实现</p >
-      <p>按照逻辑公式或者电路，完成4位超前进位加法器的代码实现。
-      下面给出了代码框架，在代码框架的基础上完成代码的编写。</p>
-   </div>
-
-
-.. code-block:: v
-   :caption: 4位超前进位加法器代码框架
-   :emphasize-lines: 9-11
-   :linenos:
-
-   module cla_4bit(a, b, cin, sum, cout);
-
-      input a, b, cin;
-      output sum, cout;
-
-      wire [3:0] a, b, sum;
-      wire cin, cout;
-
-      // Your codes should start from here.
-
-      // End of your codes.
-
-   endmodule
 
 
 全加器你写好了，你很自信，这真的还需要测试吗？4位超前进位加法器你也写好了，这个也不难，只需要非常的细心。

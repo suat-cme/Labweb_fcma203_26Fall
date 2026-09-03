@@ -50,17 +50,17 @@
 
       <div class="admonition mycomment">
          <p class="admonition-title">扩展阅读</p>
-         <p>小故事、大知识。</p>
+         <p>小故事、小知识。</p>
       </div>
 
       <div class="admonition mytodo">
          <p class="admonition-title">实验必做内容</p>
-         <p>所有人都要完成的，需要在实验报告中体现的内容。</p>
+         <p>所有人都要完成、需要在实验报告中体现的内容。</p>
       </div>
 
       <div class="admonition myquestion">
          <p class="admonition-title">实验选做内容</p>
-         <p>鼓励思考，欢迎讨论或评论。</p>
+         <p>鼓励思考和探索，欢迎讨论或评论。</p>
       </div>
 
 

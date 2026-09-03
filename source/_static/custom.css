@@ -94,3 +94,10 @@
 .rst-content .admonition.mycaution {
   background: #F2DEDE;
 }
+
+/* 缩短上方空白，增加下方空白 
+.figure {
+    margin-top: 0 ;
+    margin-bottom: 10em ;
+}
+*/
