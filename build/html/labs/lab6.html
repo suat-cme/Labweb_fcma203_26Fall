@@ -8,17 +8,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>移位乘法器设计 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ed88f511" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=50368ce6" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=f115507d"></script>
-      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/translations.js?v=540d3cec"></script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=beaddf03"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" /> 
@@ -73,10 +73,10 @@
            <div itemprop="articleBody">
              
   <section id="id1">
-<h1>移位乘法器设计<a class="headerlink" href="#id1" title="链接到此标题。"></a></h1>
+<h1>移位乘法器设计<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
 <p>本次实验需要理解移位加法乘法器的工作原理，并掌握有符号乘法通过无符号运算实现的方法。</p>
 <section id="id2">
-<h2>二进制乘法的原理<a class="headerlink" href="#id2" title="链接到此标题。"></a></h2>
+<h2>二进制乘法的原理<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <p>设被乘数为 A，乘数为 B，且 A、B 都为 16 位无符号数：</p>
 <div class="math notranslate nohighlight">
 \[B = \sum_{i=0}^{15} b_i \cdot 2^i\]</div>
@@ -86,7 +86,7 @@
 <p>其中，当 <code class="docutils literal notranslate"><span class="pre">b_i</span></code> 为 1 时，对应的部分积为 <code class="docutils literal notranslate"><span class="pre">A</span></code> 左移 <code class="docutils literal notranslate"><span class="pre">i</span></code> 位；
 当 <code class="docutils literal notranslate"><span class="pre">b_i</span></code> 为 0 时，对应部分积为 0。</p>
 <section id="id3">
-<h3>阵列乘法器<a class="headerlink" href="#id3" title="链接到此标题。"></a></h3>
+<h3>阵列乘法器<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <figure class="align-center">
 <img alt="阵列乘法器" src="../_images/%E9%98%B5%E5%88%97%E4%B9%98%E6%B3%95%E5%99%A8.png" />
 </figure>
@@ -95,7 +95,7 @@
 实现了两个无符号的二进制数相乘。也介绍了阵列乘法器有符号数与无符号数，有符号数与有符号数的乘法实现。</p>
 </section>
 <section id="id4">
-<h3>多周期移位乘法器实现<a class="headerlink" href="#id4" title="链接到此标题。"></a></h3>
+<h3>多周期移位乘法器实现<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>对于两个n位宽的二进制数乘法电路，当n的值比较大时，使用阵列乘法器实现需要大量的门电路，
 并且关键路径会非常长，单周期内难以完成乘法计算。</p>
 <p>另一种方案是通过一个移位寄存器和一个加法器，通过若干个周期完成乘法计算。
@@ -115,12 +115,12 @@
 </section>
 </section>
 <section id="id5">
-<h2>有符号数乘法的问题<a class="headerlink" href="#id5" title="链接到此标题。"></a></h2>
+<h2>有符号数乘法的问题<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
 <p>如果乘数是补码表示的正数，可以使用和无符号数一致的方法运算。
 被乘数可以是补码表示的正数或者负数，当为负数时需要对符号位进行扩展。
 而乘数是补码表示的负数时，则需要做额外的处理。</p>
 <section id="id6">
-<h3>二进制数的补码表示<a class="headerlink" href="#id6" title="链接到此标题。"></a></h3>
+<h3>二进制数的补码表示<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <p>补码我们已经很熟悉了。</p>
 <figure class="align-center">
 <img alt="补码表示" src="../_images/%E8%A1%A5%E7%A0%81%E8%A1%A8%E7%A4%BA.png" />
@@ -139,9 +139,9 @@
 通过“移位加法”直接参与部分积计算。</p>
 </section>
 <section id="id7">
-<h3>计算有符号数乘法<a class="headerlink" href="#id7" title="链接到此标题。"></a></h3>
+<h3>计算有符号数乘法<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <section id="id8">
-<h4>方法1<a class="headerlink" href="#id8" title="链接到此标题。"></a></h4>
+<h4>方法1<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
 <p>有符号数通常使用补码来表示。对于补码表示的负数，我们可以求2的补码，统一转换为正数进行计算。如果乘数和被乘数都是补码表示的负数，
 那么结果不需要再进行改变，如果只有乘数或者被乘数是补码表示的负数，则对计算结果也求2的补码，得到最终的结果。</p>
 <p>为正确实现有符号乘法，可以采用如下步骤：</p>
@@ -152,13 +152,13 @@
 <li><p>根据 A 和 B 的原始符号，对结果进行符号修正</p></li>
 </ol>
 <p>最终结果的符号由以下关系确定：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result_sign</span> <span class="o">=</span> <span class="n">A_sign</span> <span class="o">^</span> <span class="n">B_sign</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>result_sign = A_sign ^ B_sign
 </pre></div>
 </div>
 <p>若 <code class="docutils literal notranslate"><span class="pre">result_sign</span></code> 为 1，则对无符号乘积求2的补码。</p>
 </section>
 <section id="id9">
-<h4>方法2<a class="headerlink" href="#id9" title="链接到此标题。"></a></h4>
+<h4>方法2<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
 <p>当然也可以通过另一种办法计算有符号数乘法，被乘数乘以乘数的某一位得到部分积，最后每个部分积之间做加法，补码是可以直接进行加法的。
 如果被乘数是补码表示的负数，部分积则需要扩展符号位。一种更好的方式是，相较于上面的“移位加乘法器”的结构，乘数和被乘数的移位方向都反过来。
 被乘数A使用算数右移，而乘数B使用左移，先对高位相乘，依次往下计算部分积并相加。
@@ -173,7 +173,7 @@
 </section>
 </section>
 <section id="id10">
-<h2>设计多周期移位乘法器<a class="headerlink" href="#id10" title="链接到此标题。"></a></h2>
+<h2>设计多周期移位乘法器<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
 <p>多周期移位乘法器本身就是适用于两个无符号数计算相乘，通过额外的电路结构，即可计算有符号数乘法，在上面已经讲了一些实现的方法，
 需要你去仔细的思考、比较，并选择出一种合理的方案：既可以计算两个无符号数相乘，也可以计算两个补码表示的有符号数相乘，
 还能计算一个无符号数和一个补码表示的有符号数相乘。</p>
@@ -183,7 +183,7 @@
      还能计算一个无符号数和一个补码表示的有符号数相乘。我们通过两个输入信号表明乘数和被乘数分别是无符号数，
      还是补码表示的有符号数。写出你认为合适的方案，并参照上面给出的移位乘法器的电路结构，画出你的电路结构。</p>
 </div><section id="id11">
-<h3>求2的补码<a class="headerlink" href="#id11" title="链接到此标题。"></a></h3>
+<h3>求2的补码<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
 <p>求2的补码有多种方式，最常见的方式就是取反加一（其1的补码加1），或者减一再取反，这两种方式都可以用一个加法器和反相器简单实现。
 也可以不使用加法器实现，我们保留从右往左的第一个&quot;1&quot;及其右边的&quot;0&quot;不变，其余位全部取反。
 比如对 11100000 求2的补码，保留从右往左的第一个&quot;1&quot;及其右边的&quot;0&quot;，也就是低6位保持不变，高2位取反，
@@ -195,7 +195,7 @@
      这样就能得知第一个"1"的位置，并且第一个"1"之后的或会一直传播下去，然后利用异或门可控取反。</p>
 </div></section>
 <section id="id12">
-<h3>输入为 0 的特殊情况<a class="headerlink" href="#id12" title="链接到此标题。"></a></h3>
+<h3>输入为 0 的特殊情况<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
 <p>若 A 或 B 任意一个为 0，则乘法结果必然为 0。
 在这种情况下，状态机可以直接跳转到完成状态，
 无需进入移位计算过程，从而简化计算。</p>
@@ -204,7 +204,7 @@
      <p>如何处理输入为 0 更好呢，实现并分别描述数据A、数据B的输入为 0 ，状态机是如何运行的。</p>
 </div></section>
 <section id="id13">
-<h3>状态机设计<a class="headerlink" href="#id13" title="链接到此标题。"></a></h3>
+<h3>状态机设计<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
 <p>我们可以通过有限状态机控制乘法过程，参考的状态划分如下：</p>
 <ul class="simple">
 <li><p>IDLE：等待开始信号</p></li>
@@ -225,7 +225,7 @@
 </div></section>
 </section>
 <section id="id14">
-<h2>乘法器输入<a class="headerlink" href="#id14" title="链接到此标题。"></a></h2>
+<h2>乘法器输入<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
 <p>我们的乘法器的输入部分设计如下：</p>
 <p>FPGA 的 SW0~SW15 作为数据A或者B输入、SW16 用于指示数据A或者数据B是有符号数还是无符号数，当SW16为1时，
 为有符号数，0时为无符号数。SW17 作为数据A 输入的标志位，SW18 作为数据B 输入的标志位，SW19作为开始计算的标志位。</p>
@@ -250,7 +250,7 @@
      但如何设计，状态机划分可以自定义实现。完成所有的设计。</p>
 </div><p>下面是代码框架参考：</p>
 <div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">乘法器代码框架参考</span><a class="headerlink" href="#id15" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">乘法器代码框架参考</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">   </span><span class="k">module</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 2</span><span class="w">      </span><span class="n">clk</span>
 <span class="linenos"> 3</span><span class="w">      </span><span class="p">,</span><span class="n">reset</span>

@@ -8,16 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>实验四 桶形移位器设计 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ed88f511" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=50368ce6" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=f115507d"></script>
-      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/translations.js?v=540d3cec"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=beaddf03"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" /> 
@@ -72,19 +72,19 @@
            <div itemprop="articleBody">
              
   <section id="id1">
-<h1>实验四 桶形移位器设计<a class="headerlink" href="#id1" title="链接到此标题。"></a></h1>
+<h1>实验四 桶形移位器设计<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
 <p>桶形移位器 (barrel shifter) 由组合逻辑电路构成，可以用于任意多位的位移操作。
 你应该在编程语言中使用过左移、逻辑右移、算数右移等操作。</p>
 <section id="id2">
-<h2>左移与右移<a class="headerlink" href="#id2" title="链接到此标题。"></a></h2>
+<h2>左移与右移<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <section id="id3">
-<h3>逻辑右移与算数右移<a class="headerlink" href="#id3" title="链接到此标题。"></a></h3>
+<h3>逻辑右移与算数右移<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>逻辑右移（Logical Right Shift）与算术右移（Arithmetic Right Shift）都是常见的位移运算，
 用于将二进制数的各个位向右移动若干位，但它们在符号位的处理上不同。</p>
 <p>逻辑右移时高位直接补 0 ，低位丢失，不需要考虑符号位。
 以下图为示例，每行逻辑右移一位。</p>
 <div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">8位二进制数逻辑右移示意图</span><a class="headerlink" href="#id13" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">8位二进制数逻辑右移示意图</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>     <span class="mi">11000010</span>            <span class="mi">01000010</span>
 <span class="linenos">2</span> <span class="o">-&gt;</span>  <span class="mi">01100001</span>        <span class="o">-&gt;</span>  <span class="mi">00100001</span>
 <span class="linenos">3</span> <span class="o">-&gt;</span>  <span class="mi">00110000</span>        <span class="o">-&gt;</span>  <span class="mi">00010000</span>
@@ -100,7 +100,7 @@
 <p>算数右移时高位补符号位，符号位为1则补1，符号位为0则补0，低位丢失，因此需要考虑符号位。
 以下图为示例，每行算数右移一位。</p>
 <div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">8位二进制数算数右移示意图</span><a class="headerlink" href="#id14" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">8位二进制数算数右移示意图</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>     <span class="mi">11000010</span>            <span class="mi">01000010</span>
 <span class="linenos">2</span> <span class="o">-&gt;</span>  <span class="mi">11100001</span>        <span class="o">-&gt;</span>  <span class="mi">00100001</span>
 <span class="linenos">3</span> <span class="o">-&gt;</span>  <span class="mi">11110000</span>        <span class="o">-&gt;</span>  <span class="mi">00010000</span>
@@ -118,18 +118,18 @@
 <p><strong>左移操作</strong> 没有区分逻辑左移和算数左移，就是左移低位补0，高位丢失。</p>
 </section>
 <section id="id4">
-<h3>移位的应用<a class="headerlink" href="#id4" title="链接到此标题。"></a></h3>
+<h3>移位的应用<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <section id="id5">
-<h4>乘除法运算<a class="headerlink" href="#id5" title="链接到此标题。"></a></h4>
+<h4>乘除法运算<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
 <p>左移可以替代乘以2的幂次，右移可以替代除以2的幂次。
 前提是数值的有效位没有消失，算数右移可以对补码表示的负数进行除以2的幂次。
 你可以使用一门编程语言例如C/C++、Java对数进行左移、逻辑右移、算数右移，输出并观察结果。</p>
 </section>
 <section id="id6">
-<h4>循环移位<a class="headerlink" href="#id6" title="链接到此标题。"></a></h4>
+<h4>循环移位<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
 <p>循环位移不会丢失高位或者低位，而是将移出的部分放在补充的位置。</p>
 <div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">8位二进制数循环右移示意图</span><a class="headerlink" href="#id15" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">8位二进制数循环右移示意图</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>     <span class="mi">11000010</span>            <span class="mi">01000010</span>
 <span class="linenos">2</span> <span class="o">-&gt;</span>  <span class="mi">01100001</span>        <span class="o">-&gt;</span>  <span class="mi">00100001</span>
 <span class="linenos">3</span> <span class="o">-&gt;</span>  <span class="mi">10110000</span>        <span class="o">-&gt;</span>  <span class="mi">10010000</span>
@@ -148,7 +148,7 @@
 </section>
 </section>
 <section id="id7">
-<h2>桶形移位器电路<a class="headerlink" href="#id7" title="链接到此标题。"></a></h2>
+<h2>桶形移位器电路<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
 <p>桶形移位器可以移位任意位，例如一个16位的桶形移位器，可以移位 0~15 位，大于15位的移位操作没有什么实际的意义。
 下面的电路实现了4位宽二进制数逻辑右移 0 或者 1 位的功能，最高位补零即可。使用了4个二选一选通器。</p>
 <figure class="align-center">
@@ -161,11 +161,11 @@
 <p>同样，当选择端输入为1时，选择高两位的信号，否则选择对应位的信号，即可实现逻辑右移 0 或者 2 位的功能。
 那么如果需要逻辑右移 3 位，则将逻辑右移 2 位之后的信号给上面逻辑右移 1 位的电路即可完成功能。</p>
 <section id="id8">
-<h3>多路选通器<a class="headerlink" href="#id8" title="链接到此标题。"></a></h3>
+<h3>多路选通器<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <section id="id9">
-<h4>二选一选通器<a class="headerlink" href="#id9" title="链接到此标题。"></a></h4>
+<h4>二选一选通器<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
 <div class="literal-block-wrapper docutils container" id="id16">
-<div class="code-block-caption"><span class="caption-text">二选一选通器代码示例</span><a class="headerlink" href="#id16" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">二选一选通器代码示例</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">mux2_1</span><span class="w"> </span><span class="p">#(</span>
 <span class="linenos"> 2</span><span class="w">     </span><span class="k">parameter</span><span class="w"> </span><span class="n">W</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">8</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
@@ -193,10 +193,10 @@
 比如 {32{1'b0}} 表示 32'b0 ， {4{8'h12}} 表示 32'h12121212 。</p>
 </section>
 <section id="id10">
-<h4>四选一选通器<a class="headerlink" href="#id10" title="链接到此标题。"></a></h4>
+<h4>四选一选通器<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
 <p>四选一选通器可以通过3个二选一选通器组成。下面是代码示例。</p>
 <div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">四选一选通器代码示例</span><a class="headerlink" href="#id17" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">四选一选通器代码示例</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">mux4_1</span><span class="w"> </span><span class="p">#(</span>
 <span class="linenos"> 2</span><span class="w">     </span><span class="k">parameter</span><span class="w"> </span><span class="n">W</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">8</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
@@ -214,8 +214,8 @@
 <span class="hll"><span class="linenos">15</span><span class="w"> </span><span class="kt">wire</span><span class="w">    </span><span class="p">[</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">sel</span><span class="p">;</span>
 </span><span class="hll"><span class="linenos">16</span>
 </span><span class="linenos">17</span><span class="w"> </span><span class="c1">// assign out = sel[1] ? (sel[0] ? d : c) : (sel[0] ? b : a);</span>
-<span class="linenos">18</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b00</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b01</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">|</span>
-<span class="linenos">19</span><span class="w">     </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b10</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b11</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">d</span><span class="p">);</span>
+<span class="linenos">18</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b00</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b01</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">|</span>
+<span class="linenos">19</span><span class="w">     </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b10</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">({</span><span class="n">W</span><span class="p">{</span><span class="n">sel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b11</span><span class="p">}}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">d</span><span class="p">);</span>
 <span class="linenos">20</span>
 <span class="linenos">21</span><span class="w"> </span><span class="k">endmodule</span>
 </pre></div>
@@ -223,14 +223,14 @@
 </div>
 </section>
 <section id="id11">
-<h4>多选一选通器<a class="headerlink" href="#id11" title="链接到此标题。"></a></h4>
+<h4>多选一选通器<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
 <div class="admonition mycaution">
     <p class="admonition-title"> 组合逻辑中慎用 always 语法 </p>
     <p>我们其实已经初步掌握了一些 Verilog 语法，但其实示例代码中还没有与 always 相关的部分。
     always 可以用来实现组合逻辑电路，以后的实验还会使用 always 实现时序逻辑电路。
     因为 always 的使用比较复杂，我希望大家在掌握之前慎用，防止出现你难以理解的bugs。</p>
 </div><div class="literal-block-wrapper docutils container" id="id18">
-<div class="code-block-caption"><span class="caption-text">always代码片段示例1</span><a class="headerlink" href="#id18" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">always代码片段示例1</span><a class="headerlink" href="#id18" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="w"> </span><span class="c1">// assign out = a &amp; b;</span>
 </span><span class="linenos">2</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="n">a</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w">    </span><span class="k">begin</span>
 <span class="linenos">3</span><span class="w">     </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
@@ -239,7 +239,7 @@
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id19">
-<div class="code-block-caption"><span class="caption-text">always代码片段示例2</span><a class="headerlink" href="#id19" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">always代码片段示例2</span><a class="headerlink" href="#id19" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="w"> </span><span class="c1">// assign pop_cnt = in[0] + in[1] + in[2] + in[3] + in[4] + in[5] + in[6] + in[7];</span>
 </span><span class="linenos">2</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos">3</span><span class="w">     </span><span class="n">pop_cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span>
@@ -251,7 +251,7 @@
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id20">
-<div class="code-block-caption"><span class="caption-text">always代码片段示例3</span><a class="headerlink" href="#id20" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">always代码片段示例3</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span><span class="w"> </span><span class="c1">// assign out = sel[1] ? (sel[0] ? in[31:24] : in[23:16]) : (sel[0] ? in[15:8] : in[7:0]);</span>
 </span><span class="linenos">2</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos">3</span><span class="w">     </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span>
@@ -278,7 +278,7 @@
 </section>
 </section>
 <section id="id12">
-<h2>桶形移位器电路实现<a class="headerlink" href="#id12" title="链接到此标题。"></a></h2>
+<h2>桶形移位器电路实现<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
 <figure class="align-center">
 <img alt="barrel_shifter" src="../_images/barrel_shifter.png" />
 </figure>
@@ -292,16 +292,16 @@
    2'b00表示左移，2'b01表示逻辑右移，2'b11表示算数右移。</p>
 </div><p>当我们尝试使用 assign 去描述4位桶形移位器时，会发现很多重复的电路结构。</p>
 <div class="literal-block-wrapper docutils container" id="id21">
-<div class="code-block-caption"><span class="caption-text">4位桶形移位器代码片段示例1</span><a class="headerlink" href="#id21" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">4位桶形移位器代码片段示例1</span><a class="headerlink" href="#id21" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">shl1</span><span class="p">;</span><span class="w">    </span><span class="c1">// shift left 1-bit</span>
-</span><span class="linenos"> 2</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">0</span><span class="p">];</span>
+</span><span class="linenos"> 2</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">0</span><span class="p">];</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">1</span><span class="p">];</span>
 <span class="linenos"> 4</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">2</span><span class="p">];</span>
 <span class="linenos"> 5</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mh">3</span><span class="p">];</span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">shl2</span><span class="p">;</span><span class="w">    </span><span class="c1">// shift left 2-bit</span>
-<span class="linenos"> 8</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">0</span><span class="p">];</span>
-<span class="linenos"> 9</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">1</span><span class="p">];</span>
+<span class="linenos"> 8</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">0</span><span class="p">];</span>
+<span class="linenos"> 9</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">1</span><span class="p">];</span>
 <span class="linenos">10</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">2</span><span class="p">];</span>
 <span class="linenos">11</span><span class="w"> </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="mh">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="mh">3</span><span class="p">];</span>
 </pre></div>
@@ -312,14 +312,14 @@ generate 可以构造循环结构，用来多次实例化某个模块，或者�
 我们给出两个代码示例来描述上面的4位桶形移位器代码片段示例1的结构。
 注意 genvar 是在 generate 语法中用做变量使用的，不能使用 integer 做变量。</p>
 <div class="literal-block-wrapper docutils container" id="id22">
-<div class="code-block-caption"><span class="caption-text">4位桶形移位器代码片段示例2</span><a class="headerlink" href="#id22" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">4位桶形移位器代码片段示例2</span><a class="headerlink" href="#id22" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="w"> </span><span class="k">genvar</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 </span><span class="linenos"> 2</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">shl1</span><span class="p">;</span><span class="w">    </span><span class="c1">// shift left 1-bit</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="w"> </span><span class="k">generate</span>
 <span class="linenos"> 5</span><span class="w">     </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">   </span><span class="k">begin</span>
 <span class="linenos"> 6</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0</span><span class="p">)</span>
-<span class="linenos"> 7</span><span class="w">             </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="linenos"> 7</span><span class="w">             </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="linenos"> 8</span><span class="w">         </span><span class="k">else</span>
 <span class="linenos"> 9</span><span class="w">             </span><span class="k">assign</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="linenos">10</span><span class="w">     </span><span class="k">end</span>
@@ -329,7 +329,7 @@ generate 可以构造循环结构，用来多次实例化某个模块，或者�
 <span class="linenos">14</span><span class="w"> </span><span class="k">generate</span>
 <span class="linenos">15</span><span class="w">     </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">   </span><span class="k">begin</span>
 <span class="linenos">16</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">2</span><span class="p">)</span>
-<span class="linenos">17</span><span class="w">             </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="linenos">17</span><span class="w">             </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="linenos">18</span><span class="w">         </span><span class="k">else</span>
 <span class="linenos">19</span><span class="w">             </span><span class="k">assign</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="linenos">20</span><span class="w">     </span><span class="k">end</span>
@@ -339,14 +339,14 @@ generate 可以构造循环结构，用来多次实例化某个模块，或者�
 </div>
 <p>当然你也可以在 generate 块中多次实例化二选一选通器模块来描述这个电路。</p>
 <div class="literal-block-wrapper docutils container" id="id23">
-<div class="code-block-caption"><span class="caption-text">4位桶形移位器代码片段示例3</span><a class="headerlink" href="#id23" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">4位桶形移位器代码片段示例3</span><a class="headerlink" href="#id23" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="w"> </span><span class="k">genvar</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 </span><span class="linenos"> 2</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">shl1</span><span class="p">;</span><span class="w">    </span><span class="c1">// shift left 1-bit</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="w"> </span><span class="k">generate</span>
 <span class="hll"><span class="linenos"> 5</span><span class="w">     </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">   </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">gen_mux2_1_shl1</span>
 </span><span class="linenos"> 6</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0</span><span class="p">)</span>
-<span class="linenos"> 7</span><span class="w">             </span><span class="n">mux2_1</span><span class="w"> </span><span class="p">#(</span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="n">u_mux2_1</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="p">,</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">],</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="linenos"> 7</span><span class="w">             </span><span class="n">mux2_1</span><span class="w"> </span><span class="p">#(</span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="n">u_mux2_1</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">,</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">],</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 <span class="linenos"> 8</span><span class="w">         </span><span class="k">else</span>
 <span class="linenos"> 9</span><span class="w">             </span><span class="n">mux2_1</span><span class="w"> </span><span class="p">#(</span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="n">u_mux2_1</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mh">1</span><span class="p">],</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">0</span><span class="p">],</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 <span class="linenos">10</span><span class="w">     </span><span class="k">end</span>
@@ -356,7 +356,7 @@ generate 可以构造循环结构，用来多次实例化某个模块，或者�
 <span class="linenos">14</span><span class="w"> </span><span class="k">generate</span>
 <span class="hll"><span class="linenos">15</span><span class="w">     </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">   </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">gen_mux2_1_shl2</span>
 </span><span class="linenos">16</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">2</span><span class="p">)</span>
-<span class="linenos">17</span><span class="w">             </span><span class="n">mux2_1</span><span class="w"> </span><span class="p">#(</span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="n">u_mux2_1</span><span class="p">(</span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="p">,</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">],</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="linenos">17</span><span class="w">             </span><span class="n">mux2_1</span><span class="w"> </span><span class="p">#(</span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="n">u_mux2_1</span><span class="p">(</span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">,</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">],</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 <span class="linenos">18</span><span class="w">         </span><span class="k">else</span>
 <span class="linenos">19</span><span class="w">             </span><span class="n">mux2_1</span><span class="w"> </span><span class="p">#(</span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="n">u_mux2_1</span><span class="p">(</span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">shl1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mh">2</span><span class="p">],</span><span class="w"> </span><span class="n">shamt</span><span class="p">[</span><span class="mh">1</span><span class="p">],</span><span class="w"> </span><span class="n">shl2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 <span class="linenos">20</span><span class="w">     </span><span class="k">end</span>

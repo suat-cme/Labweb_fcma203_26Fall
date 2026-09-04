@@ -109,7 +109,8 @@
 
 最终结果的符号由以下关系确定：
 
-::
+.. code-block:: text
+   :linenos:
 
    result_sign = A_sign ^ B_sign
 

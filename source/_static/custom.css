@@ -5,6 +5,236 @@
     padding: 0 2rem !important;
 }
 
+/* 缩小二、三级标题与后续内容之间的间距 */
+.rst-content h2,
+.rst-content h3 {
+    margin-bottom: 10px;
+}
+
+/* 隐藏图片与代码框标题，保留代码行号 */
+.rst-content figure > figcaption,
+.rst-content figure > p.caption,
+.rst-content div.figure > p.caption,
+.rst-content .code-block-caption {
+    display: none;
+}
+
+/* 统一正文图片外框：浅色圆角边框、白色留边和轻微阴影 */
+.rst-content img {
+    box-sizing: border-box;
+    display: block;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto !important;
+    padding: 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+/* 图片贴近前文，并与后文留出更明显的间距 */
+.rst-content figure,
+.rst-content figure.align-center,
+.rst-content div.figure,
+.rst-content div.figure.align-center,
+.rst-content p:has(> img, > a.image-reference) {
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+/* 同时缩小前一段的下边距，避免段落外边距抵消图片上方间距 */
+.rst-content p:has(+ figure, + div.figure, + p > img, + p > a.image-reference) {
+    margin-bottom: 8px;
+}
+
+/* 代码框与前文的距离和图片一致 */
+.rst-content .literal-block-wrapper,
+.rst-content div[class^="highlight"],
+.rst-content pre.literal-block {
+    margin-top: 8px;
+}
+
+.rst-content .literal-block-wrapper > div[class^="highlight"],
+.rst-content div[class^="highlight"] div[class^="highlight"] {
+    margin-top: 0;
+}
+
+.rst-content :has(+ .literal-block-wrapper, + div[class^="highlight"], + pre.literal-block) {
+    margin-bottom: 8px;
+}
+
+/* 统一提示框、代码框及正文信息框的圆角和阴影 */
+.rst-content .admonition,
+.rst-content .admonition-todo,
+.rst-content .attention,
+.rst-content .caution,
+.rst-content .danger,
+.rst-content .error,
+.rst-content .hint,
+.rst-content .important,
+.rst-content .note,
+.rst-content .seealso,
+.rst-content .tip,
+.rst-content .warning,
+.rst-content .sidebar,
+.rst-content .topic,
+.rst-content div[class^="highlight"],
+.rst-content pre.literal-block {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+/* 彩色标题栏与外框的顶部圆角保持一致 */
+.rst-content .admonition-title,
+.rst-content .sidebar-title {
+    border-radius: 12px 12px 0 0;
+}
+
+/* 代码框保留横向滚动，内层不重复添加阴影 */
+.rst-content div[class^="highlight"],
+.rst-content pre.literal-block {
+    border-color: #cbd5e1;
+    overflow: auto;
+}
+
+.rst-content div[class^="highlight"] div[class^="highlight"] {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.rst-content code.literal,
+.rst-content tt.literal {
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #fff3f5;
+    border: 1px solid #ffdce3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+/* 类似 VS Code 的深色代码配色 */
+.rst-content div[class^="highlight"],
+.rst-content pre.literal-block {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border-color: #3c3c3c;
+    color-scheme: dark;
+}
+
+.rst-content .highlight pre {
+    background: transparent;
+    color: #d4d4d4;
+}
+
+.rst-content .highlight span {
+    color: inherit;
+}
+
+.rst-content .highlight :is(.k, .kc, .kd, .kn, .kp, .kr, .kt, .nt) {
+    color: #569cd6;
+}
+
+.rst-content .highlight :is(.c, .ch, .cm, .cp, .cpf, .c1, .cs) {
+    color: #6a9955;
+}
+
+.rst-content .highlight :is(.s, .sa, .sb, .sc, .dl, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss) {
+    color: #ce9178;
+}
+
+.rst-content .highlight :is(.m, .mb, .mf, .mh, .mi, .mo, .il) {
+    color: #b5cea8;
+}
+
+.rst-content .highlight :is(.na, .n, .nv, .vc, .vg, .vi, .vm) {
+    color: #9cdcfe;
+}
+
+.rst-content .highlight :is(.nf, .fm, .nb, .bp) {
+    color: #dcdcaa;
+}
+
+.rst-content .highlight :is(.nc, .nn, .ne) {
+    color: #4ec9b0;
+}
+
+.rst-content .highlight :is(.o, .ow, .nd) {
+    color: #c586c0;
+}
+
+.rst-content .highlight :is(.no, .ni, .nl) {
+    color: #4fc1ff;
+}
+
+.rst-content .highlight :is(.err, .gr, .gt, .gd) {
+    color: #f48771;
+}
+
+.rst-content .highlight :is(.gi) {
+    color: #b5cea8;
+}
+
+.rst-content .highlight :is(.gh, .gu, .gp) {
+    color: #569cd6;
+}
+
+.rst-content .highlight :is(.go, .w) {
+    color: #b0b0b0;
+}
+
+.rst-content .highlight .hll {
+    background: #343434;
+}
+
+.rst-content .highlight :is(.linenos, .linenos.special) {
+    color: #858585;
+    background: transparent;
+    border-color: #3c3c3c;
+}
+
+/* 打开实验后显示其全部子目录，不随小节跳转而折叠 */
+.wy-menu-vertical li.toctree-l1.current > ul ul {
+    display: block !important;
+}
+
+/* 各级目录固定缩进，不依赖当前选中的小节 */
+.wy-menu-vertical li.toctree-l1.current li.toctree-l2 > a {
+    padding-left: 2.427em;
+    padding-right: 1.618em;
+}
+
+.wy-menu-vertical li.toctree-l1.current li.toctree-l3 > a {
+    padding-left: calc(4.045em + 1.8em);
+    padding-right: 1.618em;
+    text-indent: -1.8em;
+}
+
+.wy-menu-vertical li.toctree-l1.current li.toctree-l4 > a {
+    padding-left: 5.663em;
+    padding-right: 1.618em;
+}
+
+/* 子目录保持展开，仅保留实验一级的收起按钮 */
+.wy-menu-vertical li.toctree-l1.current > ul .toctree-expand {
+    display: none;
+}
+
+/* 放大并居中显示侧边栏目录标题 */
+.wy-menu-vertical p.caption {
+    font-size: 20px;
+    text-align: center;
+}
+
+/* 增加目录字距，并补偿末尾字距以保持视觉居中 */
+.wy-menu-vertical p.caption .caption-text {
+    display: inline-block;
+    letter-spacing: 0.4em;
+    text-indent: 0.4em;
+}
+
 /* 确保导航栏正常显示 */
 .wy-nav-side {
     position: fixed;

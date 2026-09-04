@@ -8,16 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>时序逻辑电路设计 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ed88f511" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=50368ce6" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=f115507d"></script>
-      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../_static/translations.js?v=540d3cec"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=beaddf03"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" /> 
@@ -72,16 +72,16 @@
            <div itemprop="articleBody">
              
   <section id="id1">
-<h1>时序逻辑电路设计<a class="headerlink" href="#id1" title="链接到此标题。"></a></h1>
+<h1>时序逻辑电路设计<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
 <p>在上一次实验中我们才开始使用 always 描述组合逻辑电路，不过使用 always 比较危险，可能与你想要实现的电路和功能不一样。
 使用 always 描述组合逻辑电路时容易生成锁存器电路 (Latch) 。
 因此我们想要使用 always 描述组合逻辑电路时需要小心谨慎，严格遵守规范。</p>
 <section id="always">
-<h2>always 描述组合逻辑电路时常见错误<a class="headerlink" href="#always" title="链接到此标题。"></a></h2>
+<h2>always 描述组合逻辑电路时常见错误<a class="headerlink" href="#always" title="Link to this heading"></a></h2>
 <section id="if">
-<h3>if 语句分支不完整<a class="headerlink" href="#if" title="链接到此标题。"></a></h3>
+<h3>if 语句分支不完整<a class="headerlink" href="#if" title="Link to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">if 语句分支不完整示例</span><a class="headerlink" href="#id9" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">if 语句分支不完整示例</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">q</span><span class="p">;</span>
 <span class="linenos">2</span>
 <span class="linenos">3</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
@@ -97,9 +97,9 @@
 <p>因此在描述组合逻辑电路时必须将 if-else 补充完整。</p>
 </section>
 <section id="if-else">
-<h3>if-else 存在分支没给所有信号赋值<a class="headerlink" href="#if-else" title="链接到此标题。"></a></h3>
+<h3>if-else 存在分支没给所有信号赋值<a class="headerlink" href="#if-else" title="Link to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">if-else 存在分支没给所有信号赋值示例</span><a class="headerlink" href="#id10" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">if-else 存在分支没给所有信号赋值示例</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
@@ -120,7 +120,7 @@
 中被赋值，防止出错。</p>
 <p>如果将上面的代码修改为下面这样写，就不会生成锁存器，描述完整了所有信号在每个分支的情况。</p>
 <div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">if-else 存在默认赋值示例</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">if-else 存在默认赋值示例</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
@@ -138,16 +138,16 @@
 <p>这样 b 信号默认赋值为 0，不存在有分支没有分支没有被赋值的情况，不会生成锁存器电路。</p>
 </section>
 <section id="if-else-case">
-<h3>if-else / case 没覆盖所有分支情况<a class="headerlink" href="#if-else-case" title="链接到此标题。"></a></h3>
+<h3>if-else / case 没覆盖所有分支情况<a class="headerlink" href="#if-else-case" title="Link to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">if-else 没覆盖所有分支情况</span><a class="headerlink" href="#id12" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">if-else 没覆盖所有分支情况</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">q</span><span class="p">;</span>
 <span class="linenos">2</span>
 <span class="linenos">3</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos">4</span><span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
-<span class="linenos">5</span><span class="w">         </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b1</span><span class="p">;</span>
+<span class="linenos">5</span><span class="w">         </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
 <span class="linenos">6</span><span class="w">     </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-<span class="linenos">7</span><span class="w">         </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="p">;</span>
+<span class="linenos">7</span><span class="w">         </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
 <span class="hll"><span class="linenos">8</span><span class="w">     </span><span class="c1">// 其他情况，比如 a = 1, b = 0, c = 0, q 没有被赋值</span>
 </span><span class="linenos">9</span><span class="w"> </span><span class="k">end</span>
 </pre></div>
@@ -155,15 +155,15 @@
 </div>
 <p>只要存在某些输入组合时，q 没有被赋新值，那么 q 就会“保持原值”，生成锁存器电路。</p>
 <div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">case 没覆盖所有分支情况</span><a class="headerlink" href="#id13" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">case 没覆盖所有分支情况</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos"> 4</span><span class="w">     </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">sel</span><span class="p">)</span>
-<span class="linenos"> 5</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b00</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
-<span class="linenos"> 6</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b01</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
-<span class="linenos"> 7</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b10</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
-<span class="hll"><span class="linenos"> 8</span><span class="w">         </span><span class="c1">// 2'b11 没有 default 处理</span>
+<span class="linenos"> 5</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b00</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="linenos"> 6</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b01</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b10</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="hll"><span class="linenos"> 8</span><span class="w">         </span><span class="c1">// 2&#39;b11 没有 default 处理</span>
 </span><span class="linenos"> 9</span><span class="w">     </span><span class="k">endcase</span>
 <span class="linenos">10</span><span class="w"> </span><span class="k">end</span>
 </pre></div>
@@ -171,14 +171,14 @@
 </div>
 <p>正确使用如下，对于其他的分支可以赋值默认值</p>
 <div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">default 覆盖其他的分支</span><a class="headerlink" href="#id14" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">default 覆盖其他的分支</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos"> 4</span><span class="w">     </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">sel</span><span class="p">)</span>
-<span class="linenos"> 5</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b00</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
-<span class="linenos"> 6</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b01</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
-<span class="linenos"> 7</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b10</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="linenos"> 5</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b00</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="linenos"> 6</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b01</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b10</span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
 <span class="hll"><span class="linenos"> 8</span><span class="w">         </span><span class="k">default</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span>
 </span><span class="linenos"> 9</span><span class="w">     </span><span class="k">endcase</span>
 <span class="linenos">10</span><span class="w"> </span><span class="k">end</span>
@@ -187,16 +187,16 @@
 </div>
 <p>同样，如果有 default ，但有分支没给所有目标信号赋值：</p>
 <div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">default 覆盖其他的分支</span><a class="headerlink" href="#id15" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">default 覆盖其他的分支</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w"> </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos"> 4</span><span class="w">     </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">sel</span><span class="p">)</span>
-<span class="linenos"> 5</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b00</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos"> 5</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b00</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos"> 6</span><span class="w">             </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span>
 <span class="linenos"> 7</span><span class="w">             </span><span class="c1">// y 没赋值</span>
 <span class="hll"><span class="linenos"> 8</span><span class="w">         </span><span class="k">end</span>
-</span><span class="linenos"> 9</span><span class="w">         </span><span class="mh">2</span><span class="mb">'b01</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+</span><span class="linenos"> 9</span><span class="w">         </span><span class="mh">2</span><span class="mb">&#39;b01</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
 <span class="linenos">10</span><span class="w">             </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="p">;</span>
 <span class="linenos">11</span><span class="w">             </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="p">;</span>
 <span class="linenos">12</span><span class="w">         </span><span class="k">end</span>
@@ -217,11 +217,11 @@
 </div></section>
 </section>
 <section id="dd">
-<h2>D锁存器和D触发器<a class="headerlink" href="#dd" title="链接到此标题。"></a></h2>
+<h2>D锁存器和D触发器<a class="headerlink" href="#dd" title="Link to this heading"></a></h2>
 <p>存储单元种类有很多，功能和用途都不太一样，在之后的课程中我们会接触到更丰富的存储单元，
 我们本次实验只介绍锁存器和寄存器电路。</p>
 <section id="d-d-latch">
-<h3>D锁存器 (D-Latch)<a class="headerlink" href="#d-d-latch" title="链接到此标题。"></a></h3>
+<h3>D锁存器 (D-Latch)<a class="headerlink" href="#d-d-latch" title="Link to this heading"></a></h3>
 <figure class="align-center">
 <img alt="D-Latch" src="../_images/D-Latch.png" />
 </figure>
@@ -229,7 +229,7 @@
 它基于 S-R 锁存器，但没有“无效”状态问题。输入端的反相器确保 S 和 R 输入始终相反，以避免两者都为 1 的无效状态。</p>
 </section>
 <section id="d-d-flip-flop">
-<h3>D触发器 (D Flip Flop)<a class="headerlink" href="#d-d-flip-flop" title="链接到此标题。"></a></h3>
+<h3>D触发器 (D Flip Flop)<a class="headerlink" href="#d-d-flip-flop" title="Link to this heading"></a></h3>
 <p>D触发器由两个D锁存器构成，如下图电路结构所示：</p>
 <figure class="align-center">
 <img alt="D-FlipFlop" src="../_images/D-FlipFlop.png" />
@@ -238,26 +238,26 @@
 整个电路只在使能信号上升沿时保存信号。</p>
 </section>
 <section id="id2">
-<h3>为什么不推荐你使用锁存器<a class="headerlink" href="#id2" title="链接到此标题。"></a></h3>
+<h3>为什么不推荐你使用锁存器<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>在实际的数字电路芯片中，会使用锁存器电路，但通常是比较高级的用法，对于初学者，应该尽量避免使用锁存器。</p>
 <section id="id3">
-<h4>锁存器容易导致时序难以分析<a class="headerlink" href="#id3" title="链接到此标题。"></a></h4>
+<h4>锁存器容易导致时序难以分析<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
 <p>锁存器是电平触发的，对电平敏感，在使能期间输入信号的任何抖动都会实时传到输出。
 这增加时序分析难度，并容易引入竞争冒险。</p>
 <p>相比之下，触发器（Flip-Flop）是边沿触发的，仅在时钟边沿采样一次，更容易保证稳定性。</p>
 </section>
 <section id="id4">
-<h4>锁存器会破坏同步时序体系<a class="headerlink" href="#id4" title="链接到此标题。"></a></h4>
+<h4>锁存器会破坏同步时序体系<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
 <p>现代数字电路系统（ASIC / FPGA ）采用严格的同步时序设计，使用全局主时钟，所有信号只在时钟边沿采样。
 锁存器的电平触发会显著增加时钟设计难度。</p>
 </section>
 <section id="fpga">
-<h4>锁存器在 FPGA 中实现代价更高<a class="headerlink" href="#fpga" title="链接到此标题。"></a></h4>
+<h4>锁存器在 FPGA 中实现代价更高<a class="headerlink" href="#fpga" title="Link to this heading"></a></h4>
 <p>在我们的 FPGA 中提供了大量的触发器 (Flip-Flop)，但不直接提供锁存器电路，因此锁存器电路通常使用 LUT + 触发器实现，
 因此实现锁存器会消耗更多的资源。</p>
 </section>
 <section id="id5">
-<h4>什么时候会使用锁存器<a class="headerlink" href="#id5" title="链接到此标题。"></a></h4>
+<h4>什么时候会使用锁存器<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
 <p>可以在定时电路中引入延迟、作为缓冲区，或在特定间隔采集数据。</p>
 <p>在高速电路中，可以通过锁存器的透明窗口，慢的路径可以“借用”下一段的时间，提高总体时钟频率。</p>
 <p>在低功耗设计中，锁存器由于比触发器的晶体管数量更少，面积更小，功耗更低。</p>
@@ -266,9 +266,9 @@
 </section>
 </section>
 <section id="id6">
-<h2>简单时序逻辑电路设计<a class="headerlink" href="#id6" title="链接到此标题。"></a></h2>
+<h2>简单时序逻辑电路设计<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
 <section id="id7">
-<h3>时钟分频计数器<a class="headerlink" href="#id7" title="链接到此标题。"></a></h3>
+<h3>时钟分频计数器<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <p>假设我们的系统时钟为100Hz，想要获得一个1Hz的时钟，我们可以每个时钟都计数，
 从0计数到49，共0.5s，然后翻转信号来获得1Hz的时钟。</p>
 <figure class="align-center">
@@ -288,7 +288,7 @@
     只不过标志位信号不是用来当时钟使用，而是用作使能信号。</p>
 </div></section>
 <section id="id8">
-<h3>简单时序逻辑电路<a class="headerlink" href="#id8" title="链接到此标题。"></a></h3>
+<h3>简单时序逻辑电路<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <p>我们的 FPGA 板的晶振产生的时钟为 100Mhz ，需要将 100Mhz 的时钟分频为 1Hz ，或者创造一个 1Hz 的标志位信号。
 1Hz 的时钟方便演示操作，我们会将输出的信号显示在七段数码管上。</p>
 <p>我们的时钟管脚和复位按钮的管脚以及电路结构都在 <strong>Minisys硬件手册</strong> 中。</p>
@@ -302,7 +302,7 @@
 <p>复位按钮使用 S6 ，对应的管脚为 P20 ，从电路图中可以看出，当按键按下时 P20 输入高电平，
 松开按键时，P20 接地，输入低电平，所以复位可以设计为高电平有效。</p>
 <div class="literal-block-wrapper docutils container" id="id16">
-<div class="code-block-caption"><span class="caption-text">代码框架</span><a class="headerlink" href="#id16" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">代码框架</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">shift_reg</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 2</span><span class="w">     </span><span class="n">clk</span>
 <span class="linenos"> 3</span><span class="w">     </span><span class="p">,</span><span class="n">reset</span>
@@ -342,7 +342,7 @@
     <p>下面的代码框架给出了时钟和复位信号，请完善仿真代码框架，上板之前请完成好仿真。
     我们鼓励每次上板之前都完成仿真测试，而不是上板之后去Debug</p>
 </div><div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">仿真代码框架</span><a class="headerlink" href="#id17" title="链接到此段代码"></a></div>
+<div class="code-block-caption"><span class="caption-text">仿真代码框架</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="no">`timescale</span><span class="w"> </span><span class="mh">1</span><span class="n">ns</span><span class="o">/</span><span class="mh">1</span><span class="n">ps</span>
 <span class="linenos"> 2</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">tb</span><span class="p">;</span>
 <span class="linenos"> 3</span>
@@ -351,10 +351,10 @@
 <span class="linenos"> 6</span><span class="w"> </span><span class="c1">// coding here</span>
 <span class="linenos"> 7</span>
 <span class="linenos"> 8</span><span class="w"> </span><span class="k">initial</span><span class="w"> </span><span class="k">begin</span>
-<span class="linenos"> 9</span><span class="w">     </span><span class="n">clk</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="p">;</span>
-<span class="linenos">10</span><span class="w">     </span><span class="n">reset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b1</span><span class="p">;</span><span class="w">  </span><span class="c1">// reset active</span>
+<span class="linenos"> 9</span><span class="w">     </span><span class="n">clk</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="linenos">10</span><span class="w">     </span><span class="n">reset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span><span class="w">  </span><span class="c1">// reset active</span>
 <span class="linenos">11</span><span class="w">     </span><span class="p">#</span><span class="mh">1000</span>
-<span class="linenos">12</span><span class="w">     </span><span class="n">reset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="p">;</span>
+<span class="linenos">12</span><span class="w">     </span><span class="n">reset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
 <span class="linenos">13</span><span class="w"> </span><span class="k">end</span>
 <span class="linenos">14</span>
 <span class="linenos">15</span><span class="w"> </span><span class="c1">// clk freq is 100Mhz</span>
