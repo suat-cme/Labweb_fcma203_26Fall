@@ -6,17 +6,21 @@
 
 1. 实验准备
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1.1 Verilog HDL 语言基础
+Verilog HDL 语言基础
 -----------------------------------------------------------------------------
 Verilog 是一种用于描述、设计电路的 **硬件描述语言 HDL (Hardware Description Language)** 。理论课堂上已给出一些简单的示例和基本语法的讲解，建议同学们在实验前阅读 “教材附录 A” 熟悉 Verilog 的基本语法。
  
 
-1.2 Verilog 仿真器
+Verilog 仿真器
 -----------------------------------------------------------------------------
-常见的 Verilog 仿真器有 VCS 、modelsim 、Verilog-XL 、iverilog 、verilator 等。我们使用的是 Vivado 的 xsim 仿真器，为我们后续实验中使用 Xilinx 的 FPGA 教学实验板做准备。
+常见的 Verilog 仿真器有 VCS 、modelsim 、Verilog-XL 、iverilog 、verilator 等。我们使用的是 Xilinx 公司的 FPGA 集成设计环境 Vivado 中的 xsim 仿真器，为我们后续实验中使用 FPGA 教学实验板做准备。
 
 
-1.3 Verilog 代码编写环境
+实验室的台式机已安装 Vivado 2018.3 WebPACK 版本。该版本安装体积约 20 GB，比近几年约 100 GB 的版本更轻便，更适合我们的教学需求，且是无需许可证的版本。
+Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，基本都能够满足实验需求。
+
+
+Verilog 代码编写环境
 -----------------------------------------------------------------------------
 工欲善其事，必先利其器。
 一个好的代码 Coding 环境可以使得代码编写更加高效。Vivado 作为一个集成开发环境，当然也集成了代码编辑功能，不过辅助代码编写的各种插件仍然比不过 VC Code 中的丰富。
@@ -30,7 +34,7 @@ Verilog 是一种用于描述、设计电路的 **硬件描述语言 HDL (Hardwa
 2. 实验内容
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2.1 Verilog 描述全加器 Full Adder 
+Verilog 描述全加器 
 ------------------------------------------------------
 
 我们知道 Verilog 描述电路可以有很多模式：结构级描述、行为级描述等。以下给出一种全加器的 Verilog 实现方式：
@@ -58,37 +62,37 @@ Verilog 是一种用于描述、设计电路的 **硬件描述语言 HDL (Hardwa
 
 
 
-2.2 Verilog 描述超前进位加法器 Carry-look-ahead Adder
+Verilog 描述超前进位加法器 
 ------------------------------------------------------
 
-超前进位加法器是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。
+超前进位加法器 (Carry-look-ahead Adder) 是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。
 
-.. raw:: html
+.. admonition:: 必做内容1：Verilog 实现4位超前进位加法器
+   :class: mytodo
 
-   <div class="admonition mytodo">
-      <p class="admonition-title">必做内容1：Verilog 实现4位超前进位加法器 </p >
-      <p>以下图代码框架为基础，补全4位超前进位加法器的 Verilog实现，并保存为 .v 文件。<br>
-      虽然上图中的 "assign {cout, sum} = a + b + cin" 的赋值方式可以只用一行实现4位加法，但无法在具体实现方式上体现 “超前进位”，因此不允许使用这种连续赋值法。</p>
-   </div>
+   以下图代码框架为基础，补全4位超前进位加法器的 Verilog实现，并保存为 .v 文件。
+   虽然上图中的 "assign {cout, sum} = a + b + cin" 的赋值方式可以只用一行实现4位加法，但无法在具体实现方式上体现 “超前进位”，因此不允许使用这种连续赋值法。
 
-.. code-block:: v
-   :caption: 4位超前进位加法器代码框架
-   :emphasize-lines: 9-11
-   :linenos:
+   .. code-block:: v
+      :caption: 4位超前进位加法器代码框架
+      :emphasize-lines: 9-11
+      :linenos:
 
-   module cla_4bit(a, b, cin, sum, cout);
+      module cla_4bit(a, b, cin, sum, cout);
 
-      input a, b, cin;
-      output sum, cout;
+         input a, b, cin;
+         output sum, cout;
 
-      wire [3:0] a, b, sum;
-      wire cin, cout;
+         wire [3:0] a, b, sum;
+         wire cin, cout;
 
-      // Your codes should start from here.
+         // Your codes should start from here.
 
-      // End of your codes.
+         // End of your codes.
 
-   endmodule
+      endmodule
+
+
 
 .. raw:: html
 
@@ -98,7 +102,7 @@ Verilog 是一种用于描述、设计电路的 **硬件描述语言 HDL (Hardwa
    </div>
 
 
-2.3 为超前进位加法器模块的 Testbench 
+Testbench 编写 
 ------------------------------------------------------
 如何确定你设计的 Verilog 代码是正确的呢？对代码进行逻辑功能仿真！而用于仿真的代码文件被称为 Testbench 文件。 
 
@@ -109,7 +113,6 @@ Testbench 本身也描述了一个 module ，但是它没有端口，不需要�
    :alt: Testbench
    :scale: 20
    :align: center
-|
 
 我们从一个简单的全加器 Testbench 入手，了解一下 Testbench 的简单写法。
 
@@ -144,280 +147,189 @@ Testbench 本身也描述了一个 module ，但是它没有端口，不需要�
    endmodule
 
 
-回忆一下，在 Logisim 中，你可以把一个画布中的电路块设置输入输出端口，封装成模块，然后在另一个画布中放置这个模块。类似地，在 Verilog 中，你可以在一个模块中使用另一个模块，这就是模块的实例化。代码中间高亮的一大段，代表在 Testbench 顶层 module 中对 ``ref_fa`` 进行实例化，并指定了哪些信号连接到这个实例的输入输出端口。 例如：``.a`` 代表 ref_fa 中的 a 端口，后面括号中的 in[0] 是 ref_fa_tb 中的信号。
+回忆一下，在 Logisim 中，你可以把一个画布中的电路块设置输入输出端口，封装成模块，然后在另一个画布中放置这个模块。类似地，在 Verilog 中，你可以在一个模块中使用另一个模块，这就是模块的 **实例化** 。代码中间高亮的一大段，代表在 Testbench 顶层 module 中对 ``ref_fa`` 进行实例化，并指定了哪些信号连接到这个实例的输入输出端口。 例如：ref_fa 中的 a 端口``.a`` 代表 ，对应连接到 ref_fa_tb 中的信号 in[0]。
 
-Testbench 中一定会使用到 \`timescale [timeunit]/[timeprecision] 。用来表示仿真时间的基本单位和时间精度。
-``#100`` 也就是延迟 100个时间单位之后，再接着执行后面的语句。而时间精度代表最小的仿真尺度，对于 \`timescale 1ns/1ps 你写 ``#1.1111`` ，
-则延迟 1.1111 ns，但由于 0.0001 是 0.1 ps，时间精度没这么高，因此会四舍五入变成延迟 1.111 ns。
+Testbench 中的模拟了真实电路的运行过程。想象一下如果我们手握一个实体电路，要对它进行测试，势必会先给它一种输入信号的组合，观测输出，再换一种输入组合再观测，依次测完所有必要的输入信号组合。这种 “依次” 测试的过程在 Testbench 中也同样存在，即给输入信号的赋值加上了时间节点。代码第一行的 \`timescale [timeunit]/[timeprecision] 指定了仿真时间的基本单位和时间精度。initial 块中的 ``#100`` 代表延迟 100 个时间单位之后再执行后续语句。 for 循环中遍历所有的输入组合，每种组合维持100 个时间单位。而时间精度代表仿真中两步之间最小的时间间隔，例如：对于 \`timescale 1ns/1ps，initial 块中的 ``#1.1111`` 本应代表延迟 1.1111 ns，但由于精度只能到 1 ps 即 0.001 ns，因此延迟会舍入变成 1.111 ns。
 
-$stop 系统任务则是将仿真暂停，有点像是 Debug 打断点，你运行就会发现箭头指向 $stop ，仿真停下来了，可以手动继续运行仿真。
+$stop 系统任务会将仿真暂停，暂停后可以手动继续运行仿真。
 
-然后我们对 in[2:0] 信号进行驱动，也就是对它进行赋值操作，我们直接使用 for 循环进行遍历所有的输入情况，然后你可以对比
-所有的输入是否会得到正确的输出，即可完成 Testbench 仿真测试。
+
+
+.. raw:: html
+
+   <div class="admonition mycaution">
+         <p class="admonition-title"> Testbench 测试思路</p >
+      <p>4位超前进位加法器的 Testbench 也还是和全加器的 Testbench 一样写法吗？</p>
+      <p>这次的信号数量比较多，一共有 512 种输入组合，如果我们需要依次去看 512 次的波形，然后检查是否符合预期，这看起来太不智能了 ：( </p>
+      <p>我们可以找到一个能输出正确答案的参考电路 (reference)，再在 Testbench 中让软件对比待测电路 dut (Device Under Test) 和 reference 的结果是否一致，如有不一致就打印出来，不就省事多了？ </p>
+      <p> <strong>打印信息可以使用 $display() 函数，Vivado 会将信息显示在下方的 Tcl Console 中。</strong> 使用方法很像大家之前学过的 printf() 函数。 </p>
+
+   </div>
 
 .. raw:: html
 
    <div class="admonition mytodo">
       <p class="admonition-title">必做内容2：编写 Testbench </p >
-      <p>仿照上图全加器的 testbench 写法，为4位超前进位加法器编写 Testbench，并保存为 .v 文件。</p>
+      <p>参照全加器的 testbench 以及测试思路提示，为4位超前进位加法器编写 Testbench，并保存为 .v 文件。</p>
+      <p>命名规则最好类似于 tb_cla_4bit ，直观地指示出是用于测试什么模块的测试文件。<p>
    </div>
 
-2.4 Vivado 中建立工程并仿真
+
+
+
+Vivado 中建立工程并仿真
 ------------------------------------------------------
 
-
-第一个 Testbench 程序
-----------------------------------------
-
-
-
-Vivado 使用教程
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Vivado 是 Xilinx 公司的 FPGA 集成设计环境，本次实验我们将使用 Vivado 对 Verilog 设计进行仿真。
-我们推荐使用 Vivado 2018.3 ，安装 WebPACK 版本。
-该版本安装体积约 20 GB，而近几年的版本安装体积已经约 100 GB，WebPACK 是免费的，不需要许可证的版本，并且已经能够满足我们的实验需求。
-如果你此前已经安装 2015 年之后的版本，都是能够满足完成实验的。Vivado 不同的版本之间功能差异也比较小，在学习和使用上也不会造成困难。
-
-创建 adder 工程
--------------------------------
-
-打开 Vivado 软件，会来到 Vivado 软件初始界面
+打开 Vivado 软件，来到 Vivado 软件初始界面，如下图所示：
 
 .. figure:: ../picture/lab2/vivado_home.png
    :alt: vivado_home
    :align: center
 
 
-Vivado 软件很复杂，我们一点点来了解它。创建一个名为 adder 的新项目，并保存在合适的位置， **一定要是全英文的目录** 。
-勾选 ``Create project subdirectory`` 则会在保存新项目的地方创建一个项目名称的文件夹，用于存放项目的文件。
-你也可以手动创建一个项目名称的文件夹，作为保存项目的位置，就不勾选该选项了。
+创建一个新 project ，例如取名为 adder ，并保存在合适的位置， **一定要是全英文的路径** 。
+勾选 ``Create project subdirectory`` 则会在路径下创建一个以项目名称命名的文件夹，用于存放项目的文件。如果已手动创建了这个文件夹，就不用勾选该选项了。
 
 .. figure:: ../picture/lab2/vivado_genprj.png
    :alt: vivado_genprj
    :align: center
 
 
-来到器件选择页面， ``Family`` 系列选择 ``Artix-7`` ， ``Package`` 封装方式选择 ``fgg484`` ，
-然后选择 ``xc7a100tfgg484`` ，完成器件选择，其余的步骤直接下一步即可。
+硬件型号选择页面可以选择目标 FPGA 芯片型号， ``Family`` 系列选择 ``Artix-7`` ， ``Package`` 封装方式选择 ``fgg484`` ，
+然后选择 ``xc7a100tfgg484`` ，后续的步骤直接 “下一步” 即可。
 
 .. figure:: ../picture/lab2/vivado_device.png
    :alt: vivado_device
    :align: center
 
 
-完成创建项目，来到该项目初始页面，本次实验内容我们只需要关心红色方框标记出来的区域。
-左侧是 ``Flow Navigator`` 流程导航，我们完整的实验整个流程就是依次从上往下进行的。
-左上角是 ``项目管理`` ，目前由于正处于项目管理界面，因此 ``PROJECT MANAGER`` 是蓝色的。
+下图是项目初始页面，本次实验内容我们只需要关心红色方框标记出来的区域。
+左侧 ``Flow Navigator`` 显示了完整的设计、仿真、实现流程。
 
 .. figure:: ../picture/lab2/vivado_prj.png
    :alt: vivado_prj
    :align: center
 
 
-完成了加法器和 Testbench 程序的编写，我们就可以进行仿真验证了。
-
-首先需要将编写好的源代码添加到工程中，我们可以通过这两个地方添加源文件。
+随后需要将编写好的源代码添加到工程中，可以通过下图所示两个地方添加源文件。
 
 .. figure:: ../picture/lab2/add_source.png
    :alt: add_source
    :align: center
+   :scale: 65
 
 
-有三种类型的源文件，如下图所示，有 ``design source`` 设计文件、 ``simulation source`` 仿真文件和 ``constraints`` 约束文件。
-设计文件就是我们描述的电路，仿真文件就是 Testbench，约束文件下一次课才会使用。
+
+源文件共有三种类型： ``design source`` 设计文件（例如描述电路的 .v 文件）、 ``simulation source`` 仿真文件（例如 Testbench 的 .v 文件），和 ``constraints`` 约束文件。
 
 .. figure:: ../picture/lab2/source_type.png
    :alt: source_type
    :align: center
 
 
-依次添加设计文件和约束文件，添加完成之后，会自动更新源代码的结构，如下图所示。
+文件添加完成之后，软件会自动更新源代码的层级结构，如下图所示。 顶层文件会自动更新，并被标注了品字形图标。如果你想设置其他文件为顶层文件，可以对源文件右键 ``Set as Top`` 修改为顶层文件。
 
 .. figure:: ../picture/lab2/source_struct.png
    :alt: source_struct
    :align: center
+   :scale: 70
 
 
-源文件自动更新了顶层文件，如果你想修改顶层文件，可以对源文件右键 ``Set as Top`` 修改为顶层文件。点击行为仿真，即可进行仿真操作。
+
+点击 ``Run Behavioral Simulation``，即可进行仿真操作。
 
 .. figure:: ../picture/lab2/behavioral_simulation.png
    :alt: behavioral_simulation
    :align: center
+   :scale: 70
 
 
-打开仿真界面后，我们可以看到仿真产生的信号波形，如下图所示。
-
-序号1的播放键按钮用于运行仿真，序号2的按钮用于重启仿真。
-
-序号3的方框可以选择模块，序号4的方框可以添加模块中的信号显示波形。
-
-序号5的方框用以显示信号波形，序号6的两个放大镜按钮可以放大和缩小波形显示范围，序号7的按钮将显示完整的仿真波形信号。
+打开仿真界面后，我们可以看到仿真产生的信号波形，如下图所示：
+1号红色框标注的播放键按钮用于运行仿真，2号框的图标用于重启仿真。3号框中是模块层级，点击其中的一个模块就可以将此模块包含的信号显示到4号框中。从4号框中可以选择想要观测的信号，使其波形显示在5号框。6号框的两个放大镜按钮可以放大和缩小波形显示范围，7号所指的按钮用于显示完整的仿真波形信号。
 
 .. figure:: ../picture/lab2/vcd.png
    :alt: vcd
    :align: center
 
 
-观察波形，每个输入信号是否都对应着正确的输出信号。
-
-如果你有 ``$display`` 或者 ``$monitor`` 等函数，输出内容会显示在 Vivado 下方的 Tcl Console 中。
+观察波形，可以判断输出信号是否符合预期，即电路工作是否正确。如果你用了 ``$display()`` 或者 ``$monitor()`` 等函数，输出内容会显示在 Vivado 下方的 Tcl Console 中。
 
 .. figure:: ../picture/lab2/Hello_World.png
    :alt: Hello_World
    :align: center
 
 
-Carry-look-ahead 超前进位加法器
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-全加器你写好了，你很自信，这真的还需要测试吗？4位超前进位加法器你也写好了，这个也不难，只需要非常的细心。
-那这个需要写 Testbench 测试吗，你现在有信心认为代码一定是正确的吗？
-
-那该怎么写呢，还是和参考的 Testbench 一样吗，不过这次的信号数量特别多，真值表一共有512列，我需要依次去看
-512次的波形，然后检查是否符合预期吗，这看起来很蠢 : (
-
-.. raw:: html
-
-   <div class="admonition myhint">
-      <p class="admonition-title">一种 Testbench 测试思路</p >
-      <p>我们能否改造一下 ref_fa ，其使用 + 号运算符，看起来会得到正确的结果。那我们能否同时测试我们写的4位超前进位加法器模块
-      和改造好的4位 ref_fa 模块，每次对比一下输出的值是否相同。如果结果不相同则说明4位超前进位加法器模块有问题，
-      我们把参考机称为 ref (Reference) ，而我们的待测电路称为 dut (Device Under Test) ，原理如下图所示。
-      可以打印一句提示信息，这样就不用我们去一个个看波形了。<strong>打印信息可以使用 $display() 函数，Vivado 会将信息显示在下方的 Tcl Console 中。</strong>
-      使用方法很像 printf 函数，具体可以 STFW。</p>
-   </div>
-
-
-.. figure:: ../picture/lab2/Testbench.png
-   :alt: Testbench
-   :align: center
 
 
 .. raw:: html
 
    <div class="admonition mytodo">
-      <p class="admonition-title">测试4位超前进位加法器</p >
-      <p>你编写的这个4位超前进位加法器后续会用于组成更大位宽的加法器，
-      以及之后的实验中，请你好好测试你的代码，不要留下Bug。
-      编写一个 Testbench 用于测试你的4位超前进位加法器，
-      命名规则最好类似于 tb_cla_4bit ，这样很清晰的能够看得出这是用于测试什么模块的激励文件。</p>
+      <p class="admonition-title">必做内容3：仿真4位超前进位加法器</p >
+      <p>用你写的 Testbench 测试你写的4位 CLA 加法器，并把测试通过的截图附在实验报告中。</p>
+      <p>这个4位超前进位加法器会被用于组成更大位宽的加法器，以及后续的实验中，所以一定要 de 出所有的 bug。</p>
    </div>
 
 
 层次化超前进位加法器
 ------------------------
 
-理论课上已经讲过层次化超前进位加法器，这样可以显著提升加法器的性能，但是随着加法器位宽的提升，进位的计算会花费指数级增加的电路开销。
-因此对于32位、64位等更大位宽的加法器，可以将低位宽的加法器块之间用行波进位等方式连接。
+超前进位加法器可以显著提升加法器的性能，但是随着加法器位宽的增加，进位的计算会花费指数级增加的电路开销。因此对于32位、64位等更大位宽的加法器，可以将低位宽的加法器块之间用行波进位等方式连接。
 
 .. raw:: html
 
-   <div class="admonition mytodo">
-      <p class="admonition-title">16位层次化超前进位加法器</p >
-      <p>我们可以改造一下之前的4位超前进位加法器代码，将 generate 进位生成信号 g 和 propagate 进位传递信号 p 输出，
-      给第二级超前进位电路使用，组成16位层次化超前进位加法器。下面给出了代码框架。</p>
+   <div class="admonition myquestion">
+      <p class="admonition-title">选做内容：16位层次化超前进位加法器</p >
+      <p>我们可以改造一下之前的4位超前进位加法器代码，将 generate 进位生成信号 g 和 propagate 进位传递信号 p 输出，给第二级超前进位电路使用，组成16位层次化超前进位加法器。
    </div>
 
 
-.. code-block:: v
-   :caption: 16位层次化超前进位加法器
-   :emphasize-lines: 9-11
-   :linenos:
+.. admonition:: 思考：大型加法器的验证
+   :class: myquestion
 
-   module cla_16bit(a, b, cin, sum, cout);
+   当电路复杂度上升了，怎么验证呢？例如对于64位的加法器，难道需要将所有的情况都穷举，然后与 reference 比较结果吗？这将一共有 2^64 * 2^64 * 2 种情况，显然不可能。那我们该如何验证呢？
 
-      input a, b, cin;
-      output sum, cout;
+   下图代码给出了一种方案，自己阅读思考一下吧！
 
-      wire [15:0] a, b, sum;
-      wire cin, cout;
+   .. code-block:: v
+      :caption: 测试激励示例
+      :emphasize-lines: 2, 9-12
+      :linenos:
 
-      // Your codes should start from here.
+      initial  begin
+         for (integer i = 0; i < 100000; i = i + 1)  begin
+            a = $random;
+            b = $random;
+            cin = $random;
 
-      // End of your codes.
+            #100;
 
-   endmodule
-
-
-选择进位加法器
-------------------------
-
-选择进位加法器可以由3个16位加法器组成，低16位加法计算不变，另外两个加法器对高16位进行计算。一个进位假设为0，另一个假设为1，
-最后由低16位加法器实际计算出来的进位值输入 2-1 多路选通器（多路复用器），得到高16位的结果。这样可以有效减少了进位传播延迟。
-这种设计与超前进位加法器相比，所需的电路数量并非指数级增长，而是大约多花50%的电路开销，也是一种常见的加法器设计方法，可以用于组成位宽很大的加法器。
-
-.. figure:: ../picture/lab2/32bit_sel.png
-   :alt: 32bit_sel
-   :align: center
-
-
-.. raw:: html
-
-   <div class="admonition myoption">
-      <p class="admonition-title">设计32位层次化选择进位加法器</p >
-      <p>按照上图所示的选择进位加法器结构，将16位层次化超前进位加法器作为模块，
-      使用选择进位的方式，完成最终的32位的加法器模块。</p>
-   </div>
-
-
-.. raw:: html
-
-   <div class="admonition mycaution">
-      <p class="admonition-title">验证16位、32位加法器</p >
-      <p>电路复杂度又上升了，你不验证还有信心保证你的电路一定是正确的吗？
-      那么问题又来了，怎么验证呢？对于64位的加法器验证，难道将所有的情况都穷举，然后与64位的 ref_fa 比较结果吗？
-      我已经算不清输入有多少种情况了， 2^64 * 2^64 * 2 种情况，即便是使用无比强大的计算机仿真，
-      也不能轻松搞定，这看起来真的很蠢。</p>
-   </div>
-
-
-.. raw:: html
-
-   <div class="admonition myhint">
-      <p class="admonition-title">另一种 Testbench 测试思路</p >
-      <p>在其他编程语言中有生成随机数的函数， Verilog 也不例外，我们可以利用 $random 这个函数帮我们生成一些随机数，
-      帮助我们随机测试一些样例，然后循环10000次，或者100000次，或者更多。此外，对于一些特殊的情况，我们还可以手动地去测试，
-      以确保我们的电路符合要求。比如输入全0，全1；除法器我们可能需要对除0进行测试等。</p>
-   </div>
-
-
-.. code-block:: v
-   :caption: 测试激励示例
-   :emphasize-lines: 2, 9-12
-   :linenos:
-
-   initial  begin
-      for (integer i = 0; i < 100000; i = i + 1)  begin
-         a = $random;
-         b = $random;
-         cin = $random;
-
-         #100;
-
-         if ((ref_sum != dut_sum) || (ref_cout != dut_cout))   begin
-            $display("Print tests failed information");
-            $stop;   // 如果有错误暂停仿真
+            if ((ref_sum != dut_sum) || (ref_cout != dut_cout))   begin
+               $display("Print tests failed information");
+               $stop;   // 如果有错误暂停仿真
+            end
          end
       end
-   end
+
 
 
 .. raw:: html
 
    <div class="admonition myhint">
       <p class="admonition-title">有错误怎么去 Debug </p >
-      <p>更重要的可能是有错误怎么去 Debug，但毕竟这次加法器的原理和结构并不难。只要你仔仔细细对照公式或者电路，
-      就能得到正确的功能。但 Bug 是在所难免的，那么遇到错误了，怎么去 Debug 呢。
-      我们的改造的 ref_fa 可以认为是参考机、标准答案，当然前提是你设计正确。那么与参考机不同的输出结果就认为是有问题的，
-      这时候我们就可以查看我们打印的错误信息，或者查看错误的波形，手动验算一下，核对哪些信号有问题，就去检查相应的代码。</p>
-      <p>假如你觉得信号数量太多了，根本无从下手，对于你搭建的32位层次化选择进位加法器，我们建议你先把16位层次化超前进位加法器模块验证正确，
-      毕竟选择进位加法器的结构是很简单的，而16位层次化超前进位加法器模块稍微复杂一点。你直接验证32位层次化选择进位加法器，
-      可能没办法定位出问题出在32位的选择进位加法器结构，还是16位层次化超前进位加法器结构，甚至是4位的超前进位加法器。
-      <strong>所以好的办法当然是写一个模块验证一个，写一点代码验证一点，这样可以快速定位问题，也可能更早的暴露代码的Bug，</strong>
-      而不是写了1000行代码了，再去验证。
-      因此我们16位层次化超前进位加法器、32位层次化选择进位加法器并没有显式地让你设计完就做验证，是希望你能够一开始就养成好的习惯，自己设计好后主动去验证所有的代码模块，
-      而不是最后只能求助于老师、助教或者同学。</p>
+      <p>Bug 是在所难免的，那么遇到错误了，怎么去 Debug 呢？</p>
+      <p>如果电路的信号数量太多了，比如32位加法器，让你觉得根本无从下手，建议你先把小一些的模块，比如16位加法器模块验证正确，而要验证16位加法器又需要确保4位加法器是正确的。</p>
+      <p>所以一个好办法就是采取最中规中矩的方法：<strong>写一个模块验证一个，写一点代码验证一点。</strong>这样可以快速定位大工程中的问题，而不是等写了一千行代码了，再一起验证。</p>
    </div>
 
+3. 报告提交
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+请点击 `这里 <../files/Lab1_Report_26Fall.docx>`_ 下载实验报告模板。填写完成后，连同 Verilog 代码文件的压缩包，扫码提交（支持从微信聊天记录上传）。
+
+.. raw:: html
+
+   <p>Deadline ：<strong style="color: #d32f2f;">2026-9-20 23:59:59 前</strong>。</p>
+
+.. figure:: ../picture/lab1_adder/FCMA203_26Fall_Lab1QR.png
+   :alt: QRcode
+   :scale: 50
+   :align: center

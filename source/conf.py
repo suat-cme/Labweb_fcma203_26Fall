@@ -60,4 +60,11 @@ html_theme = 'sphinx_rtd_theme'
 
 html_static_path = ['_static']
 
+html_extra_path = ['files']
+
 html_css_files = ['custom.css']
+html_js_files = ['copy-code.js']
+
+# Custom CSS
+# margin-bottom: 0.5em;
+# padding-bottom: 4px;

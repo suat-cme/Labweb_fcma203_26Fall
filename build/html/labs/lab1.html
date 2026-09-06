@@ -8,16 +8,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>实验一 异或门 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=50368ce6" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=eb54e941" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=f115507d"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/translations.js?v=beaddf03"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/translations.js?v=540d3cec"></script>
+      <script src="../_static/copy-code.js?v=8d386ce0"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" /> 
@@ -72,7 +73,7 @@
            <div itemprop="articleBody">
              
   <section id="id1">
-<h1>实验一 异或门<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<h1>实验一 异或门<a class="headerlink" href="#id1" title="链接到此标题。"></a></h1>
 <p>异或门，英文为Exclusive-OR gate，简称XOR。当两个输入相同时，异或门的输出为0，反之为1。</p>
 <p>下图是异或门符号和真值表，包括逻辑门的3种符号：形状特征型符号（ANSI/IEEE Std 91-1984）、IEC矩形国标符号（IEC 60617-12）和不再使用的DIN符号（DIN 40700）。</p>
 <figure class="align-center">
@@ -81,10 +82,10 @@
 <p>图 Fig.1 异或门符号和真值表</p>
 <p>本次实验将使用Logisim仿真平台，通过与或非门电路相连实现，实现异或门等功能。最后在Logisim中自行设计搭建满足实验要求的电路，进行仿真测试，检查电路是否符合要求。</p>
 <section id="logisim">
-<h2>Logisim安装与教程<a class="headerlink" href="#logisim" title="Link to this heading"></a></h2>
+<h2>Logisim安装与教程<a class="headerlink" href="#logisim" title="链接到此标题。"></a></h2>
 <p>Logisim 是用于设计和仿真数字逻辑电路的图形化教学仿真工具。你可以摆放逻辑门电路或者电路模块，连接它们，来设计数字电路并仿真运行。本次实验我们将使用 Logisim 完成实验，后续实验课程将不使用它，但依然鼓励你使用它设计并搭建电路。它以一种直观的方式展现数字电路的设计与功能，方便你熟悉各种电路设计，为学习数字逻辑以及后续的实验课程奠定良好的基础。</p>
 <section id="id2">
-<h3>搭建 Logisim 环境<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<h3>搭建 Logisim 环境<a class="headerlink" href="#id2" title="链接到此标题。"></a></h3>
 <p>Logisim 一个开源的 (GPL) ，基于 Java 虚拟机运行的软件，它可以运行在Windows、macOS、Linux上。</p>
 <p>本实验推荐你在 <a class="reference external" href="https://github.com/logisim-evolution/logisim-evolution/releases">这里</a> 下载 logisim-evolution ，它是 Logisim 的升级版，提供了更丰富的模块组件，并且集成了 Java 环境。
 目前已经更新了 logisim-evolution 4.0.0 版本，打开链接有很多种后缀名的安装包： <code class="docutils literal notranslate"><span class="pre">.msi</span></code> 是 Windows 系统的安装文件， <code class="docutils literal notranslate"><span class="pre">.dmg</span></code> 是 macOS 系统的安装文件, <code class="docutils literal notranslate"><span class="pre">.deb</span></code> 是 debian 及其分支系统的安装文件， <code class="docutils literal notranslate"><span class="pre">.rpm</span></code> 是 Red Hat 及其分支系统的安装文件。
@@ -92,7 +93,7 @@
 本实验的内容不会对 Logisim 的版本有要求，你也可以自行选择安装的版本和方式。虽然只有实验一要求你使用 logisim 完成实验内容，但鼓励你多使用 Logisim ，可以加深你对基础电路的理解和印象。</p>
 </section>
 <section id="id4">
-<h3>熟悉 Logisim 界面<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<h3>熟悉 Logisim 界面<a class="headerlink" href="#id4" title="链接到此标题。"></a></h3>
 <figure class="align-center">
 <img alt="logisim界面" src="../_images/logisim.png" />
 </figure>
@@ -107,7 +108,7 @@
 </section>
 </section>
 <section id="id5">
-<h2>搭建异或门电路<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<h2>搭建异或门电路<a class="headerlink" href="#id5" title="链接到此标题。"></a></h2>
 <div class="admonition myhint">
   <p class="admonition-title">若 Logisim UI 崩溃</p>
   <p>如果你在使用 Logisim 的过程中遇到图形化界面崩溃，有严重的显示问题，影响使用该软件。
@@ -154,17 +155,17 @@
 <p>我使用 Splitter 完成了bit位倒序的操作，即 bit0 变成了 bit7 。</p>
 </section>
 <section id="id6">
-<h2>不同视角下的异或门<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<h2>不同视角下的异或门<a class="headerlink" href="#id6" title="链接到此标题。"></a></h2>
 <p>接下来我们通过一些实例，了解异或门是如何在我们的电路中扮演各种角色的。</p>
 <section id="adder">
-<h3>加法器 Adder<a class="headerlink" href="#adder" title="Link to this heading"></a></h3>
+<h3>加法器 Adder<a class="headerlink" href="#adder" title="链接到此标题。"></a></h3>
 <p>从真值表可以发现，异或门可以用于1位二进制数的加法运算，用于计算二进制加法的加和(Sum)位。
 0+0=0，0+1=1，1+0=1，1+1=0。
 在多位二进制数加法中还需要考虑进位(carry)位，
 在之后的实验中便会使用异或门组成半加器和全加器，在此便不过多介绍了。</p>
 </section>
 <section id="parity-check">
-<h3>奇偶校验 Parity Check<a class="headerlink" href="#parity-check" title="Link to this heading"></a></h3>
+<h3>奇偶校验 Parity Check<a class="headerlink" href="#parity-check" title="链接到此标题。"></a></h3>
 <p>对于2输入的异或门，当两个输入不一致时，或者说输入为奇数个1时，输出为1。对于多输入的与门、或门我们很容易理解，多输入与门依然是所有输入为1时，输出为1；而多输入或门只有全输入0，才输出0。
 多输入与门和或门我们可以使用多个2输入的与门和或门组成，多输入异或门同理，可以由多个2输入的异或门组成。</p>
 <div class="admonition myhint">
@@ -197,7 +198,7 @@
 在接收端使用奇偶校验，即可得知接收到的整体是否还是奇数个1或者偶数个1，这样便拥有一定的校验能力，能够在一定程度上判断接收数据的正确性。</p>
 </section>
 <section id="comparator">
-<h3>数值比较 Comparator<a class="headerlink" href="#comparator" title="Link to this heading"></a></h3>
+<h3>数值比较 Comparator<a class="headerlink" href="#comparator" title="链接到此标题。"></a></h3>
 <p>对于2输入的异或门，当两个输入不一致时，则输出为1，因此这可以看作1位二进制数的比较。
 如果两个多位二进制数要比较是否相等，则对应的每一位经过2输入异或门，相等的位对应的异或门输出为0，如果每个2输入异或门都输出为0，则这两个多位二进制数相等。</p>
 <div class="admonition mytodo">
@@ -206,7 +207,7 @@
    <strong>请将搭建完成的电路图截图保存，并放在实验报告中。</strong></p>
 </div></section>
 <section id="inverter">
-<h3>取反操作 Inverter<a class="headerlink" href="#inverter" title="Link to this heading"></a></h3>
+<h3>取反操作 Inverter<a class="headerlink" href="#inverter" title="链接到此标题。"></a></h3>
 <figure class="align-center">
 <img alt="xor_truthtable1" src="../_images/xor_truthtable1.png" />
 </figure>

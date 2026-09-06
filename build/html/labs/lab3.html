@@ -8,16 +8,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>实验三 加减法器设计 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=50368ce6" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=eb54e941" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=f115507d"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/translations.js?v=beaddf03"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/translations.js?v=540d3cec"></script>
+      <script src="../_static/copy-code.js?v=8d386ce0"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" /> 
@@ -72,9 +73,9 @@
            <div itemprop="articleBody">
              
   <section id="id1">
-<h1>实验三 加减法器设计<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<h1>实验三 加减法器设计<a class="headerlink" href="#id1" title="链接到此标题。"></a></h1>
 <section id="id2">
-<h2>加减法器<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<h2>加减法器<a class="headerlink" href="#id2" title="链接到此标题。"></a></h2>
 <p>如果参与运算的操作数都是补码，那么加法器是可以同时实现加法和减法操作的。
 <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">-</span> <span class="pre">B</span> <span class="pre">=</span> <span class="pre">A</span> <span class="pre">+</span> <span class="pre">(-B)</span></code> ，因此我们对B的补码进行取反加一操作，就能得到 -B，
 再让 A 与 -B 经过加法器相加，便完成了 A - B 的操作。</p>
@@ -90,7 +91,7 @@
    <p>使用实验二中的 cla_4bit 模块搭建层次化的 cla_8bit ，并仿真验证。
    然后按照上图的方式搭建能够实现减法操作的电路，完成最终的加法器设计并仿真验证。</p>
 </div><section id="id3">
-<h3>输出加法器结果<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<h3>输出加法器结果<a class="headerlink" href="#id3" title="链接到此标题。"></a></h3>
 <p>我们提供了一些源代码，能够让你的加法器能够在 FPGA 上输入输出。加法器的输入有 8bit 的 a 和 b，以及 sub 信号，因此需要
 17个输入，我们的 FPGA 上拥有 24 个用户拨码开关。</p>
 <figure class="align-center">
@@ -100,7 +101,7 @@
 我们提供了 7段数码管 的控制电路：seg_driver 模块，你需要做的是将你的加法器结果输出到 seg_driver 模块的 data 端口，
 data 端口是32位宽的端口，因为有 8个 7段数码管，因此可以16进制数显示32位宽的二进制数。</p>
 <div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">顶层模块代码框架</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">顶层模块代码框架</span><a class="headerlink" href="#id6" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 2</span><span class="w">     </span><span class="n">clk</span>
 <span class="linenos"> 3</span><span class="w">     </span><span class="p">,</span><span class="n">a</span>
@@ -127,7 +128,7 @@ data 端口是32位宽的端口，因为有 8个 7段数码管，因此可以16�
 </span><span class="linenos">24</span>
 <span class="linenos">25</span><span class="w"> </span><span class="n">seg_driver</span><span class="w"> </span><span class="n">u_seg_driver</span><span class="p">(</span>
 <span class="linenos">26</span><span class="w">     </span><span class="p">.</span><span class="n">clk</span><span class="w">     </span><span class="p">(</span><span class="n">clk</span><span class="p">)</span>
-<span class="hll"><span class="linenos">27</span><span class="w">     </span><span class="p">,.</span><span class="n">data</span><span class="w">   </span><span class="p">({</span><span class="mh">27</span><span class="mi">&#39;d0</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">})</span>
+<span class="hll"><span class="linenos">27</span><span class="w">     </span><span class="p">,.</span><span class="n">data</span><span class="w">   </span><span class="p">({</span><span class="mh">27</span><span class="mi">'d0</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">})</span>
 </span><span class="linenos">28</span><span class="w">     </span><span class="p">,.</span><span class="n">reset</span><span class="w">  </span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
 <span class="linenos">29</span><span class="w">     </span><span class="p">,.</span><span class="n">code</span><span class="w">   </span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 <span class="linenos">30</span><span class="w">     </span><span class="p">,.</span><span class="n">cs_o</span><span class="w">   </span><span class="p">(</span><span class="n">cs_o</span><span class="p">)</span>
@@ -145,7 +146,7 @@ data 端口是32位宽的端口，因为有 8个 7段数码管，因此可以16�
 </div></section>
 </section>
 <section id="logic-synthesis">
-<h2>逻辑综合 Logic Synthesis<a class="headerlink" href="#logic-synthesis" title="Link to this heading"></a></h2>
+<h2>逻辑综合 Logic Synthesis<a class="headerlink" href="#logic-synthesis" title="链接到此标题。"></a></h2>
 <p>我们都已经上手写过一些 Verilog 代码了，本次实验我们会使用修改并验证过的代码，在 FPGA 上运行我们设计的加减法器。</p>
 <p>那么 FPGA 是什么呢？ FPGA (Field-Programmable Gate Array) 可以翻译为现场可编程逻辑门阵列。
 我们写好的 Verilog 可以转换为我们熟悉的门电路，我们可以按照这些门电路的连线关系生产成专用的集成电路，
@@ -188,7 +189,7 @@ SLICEL 的 LUT 主要用于 Logic 逻辑功能，而 SLICEM 的 LUT 主要用于
 以及它们的连线关系，在后续的步骤会将这些基础电路单元映射到 FPGA 芯片上某些真实的电路单元。</p>
 </section>
 <section id="implementation">
-<h2>实现 Implementation<a class="headerlink" href="#implementation" title="Link to this heading"></a></h2>
+<h2>实现 Implementation<a class="headerlink" href="#implementation" title="链接到此标题。"></a></h2>
 <p>直接点击 <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">Implementation</span></code> 即可实现设计，其大致包含几个步骤：</p>
 <ul class="simple">
 <li><p>opt_design 逻辑优化，优化你的设计，使网表更利于时序与布线。</p></li>
@@ -203,15 +204,15 @@ SLICEL 的 LUT 主要用于 Logic 逻辑功能，而 SLICEM 的 LUT 主要用于
 <img alt="Layout" src="../_images/Layout.png" />
 </figure>
 <section id="i-o-planning">
-<h3>管脚绑定 I/O Planning<a class="headerlink" href="#i-o-planning" title="Link to this heading"></a></h3>
+<h3>管脚绑定 I/O Planning<a class="headerlink" href="#i-o-planning" title="链接到此标题。"></a></h3>
 <p>在这个界面，我们可以将顶层设计模块中的输入输出端口与芯片的真实的管脚进行绑定。
 有两种方法，一种是添加设计约束文件进行绑定，另一种是使用图形化界面进行绑定。
 当然我认为第一种更便捷，不过推荐你两种方法都尝试一次。</p>
 <section id="id4">
-<h4>方法一 添加设计约束文件<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<h4>方法一 添加设计约束文件<a class="headerlink" href="#id4" title="链接到此标题。"></a></h4>
 <p>我们以复位按键信号的管脚绑定为例 (时钟信号以后再讲) ，以下是约束语句的含义。</p>
 <div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">adder.xdc片段</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">adder.xdc片段</span><a class="headerlink" href="#id7" title="链接到此段代码"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">set_property</span> <span class="n">PACKAGE_PIN</span> <span class="n">P20</span> <span class="p">[</span><span class="n">get_ports</span> <span class="n">reset</span><span class="p">]</span>
 <span class="linenos">2</span> <span class="n">set_property</span> <span class="n">IOSTANDARD</span> <span class="n">LVCMOS33</span> <span class="p">[</span><span class="n">get_ports</span> <span class="n">reset</span><span class="p">]</span>
 </pre></div>
@@ -237,7 +238,7 @@ P20 管脚与 S6 按键电路相连，可以用来作为复位信号输入。</p
 </figure>
 </section>
 <section id="id5">
-<h4>方法二 使用图形化绑定管脚<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<h4>方法二 使用图形化绑定管脚<a class="headerlink" href="#id5" title="链接到此标题。"></a></h4>
 <p>在 <code class="docutils literal notranslate"><span class="pre">Implemented</span> <span class="pre">Design</span></code> 界面，也可以使用图形化的方式绑定管脚。</p>
 <figure class="align-center">
 <img alt="io_planning" src="../_images/io_planning.png" />
@@ -252,7 +253,7 @@ P20 管脚与 S6 按键电路相连，可以用来作为复位信号输入。</p
 </section>
 </section>
 <section id="open-hardware-manager">
-<h2>写入比特流 Open Hardware Manager<a class="headerlink" href="#open-hardware-manager" title="Link to this heading"></a></h2>
+<h2>写入比特流 Open Hardware Manager<a class="headerlink" href="#open-hardware-manager" title="链接到此标题。"></a></h2>
 <p>完成实现之后，点击 <code class="docutils literal notranslate"><span class="pre">Generate</span> <span class="pre">Bitstream</span></code> 会生成最后需要写入 FPGA 编程的文件，称之为比特流文件。
 如果在这一步报错，很可能是设计约束文件有错误，需要检查错误信息，设计约束文件是否错误。</p>
 <div class="admonition mycaution">
