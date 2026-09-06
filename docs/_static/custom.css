@@ -6,9 +6,70 @@
 }
 
 /* 缩小二、三级标题与后续内容之间的间距 */
-.rst-content h2,
+.rst-content h1 {
+    text-align: center;
+    margin-bottom: 0;
+    width: calc(100% + 4rem);
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: 18px 24px 8px;
+    background: #9b59b6;
+    color: #fff;
+}
+
+.rst-content h1 + p {
+    margin-top: 0;
+    margin-bottom: 20px;
+    width: calc(100% + 4rem);
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: 8px 24px 18px;
+    background: #9b59b6;
+    color: #fff;
+}
+
+.rst-content h2 {
+    margin-top: 26px;
+    margin-bottom: 10px;
+}
 .rst-content h3 {
     margin-bottom: 10px;
+}
+
+.rst-content h3::before {
+    content: "◆";
+    display: inline-block;
+    width: 1em;
+    margin-right: 0.35em;
+    color: #000;
+    font-size: 0.75em;
+    vertical-align: 0.08em;
+}
+
+/* 正文与三级标题中 bullet 后的文字对齐；框内段落保持原位 */
+.rst-content:has(h3) section > p,
+.rst-content:has(h3) figure,
+.rst-content:has(h3) .admonition,
+.rst-content:has(h3) .literal-block-wrapper,
+.rst-content:has(h3) blockquote,
+.rst-content:has(h3) table {
+    margin-left: 1.35em;
+}
+
+/* 标题说明段使用标题区的全宽背景，不受正文缩进规则影响 */
+.rst-content:has(h3) section > h1 + p {
+    margin-left: -2rem;
+}
+
+.rst-content:has(h3) .literal-block-wrapper {
+    width: auto;
+    margin-left: calc(10% + 0.675em);
+    margin-right: calc(10% - 0.675em);
+}
+
+/* 正文段间距 */
+.rst-content p {
+    margin-bottom: 12px;
 }
 
 /* 隐藏图片与代码框标题，保留代码行号 */
@@ -23,13 +84,13 @@
 .rst-content img {
     box-sizing: border-box;
     display: block;
-    max-width: 80%;
+    max-width: 85%;
     margin-left: auto;
     margin-right: auto;
     height: auto !important;
-    padding: 8px;
+    padding: 2px;
     border: 1px solid #cbd5e1;
-    border-radius: 12px;
+    border-radius: 6px;
     background-color: #fff;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
@@ -195,6 +256,71 @@
     border-color: #3c3c3c;
 }
 
+/* 缩小提示框内嵌代码框，并保持居中 */
+.rst-content .literal-block-wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 所有提示框内的代码框以提示框为基准居中 */
+.rst-content .admonition .literal-block-wrapper {
+    width: calc(80% + 30px);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+    padding-bottom: 0;
+}
+
+.rst-content .admonition .literal-block-wrapper > div[class^="highlight"] {
+    margin-bottom: 0;
+}
+
+.rst-content .admonition:has(> .literal-block-wrapper) {
+    padding-bottom: 4px;
+}
+
+/* 代码框右上角复制按钮 */
+.rst-content .literal-block-wrapper,
+.rst-content div[class^="highlight"] {
+    position: relative;
+}
+
+.copy-code-button {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    z-index: 1;
+    padding: 4px 8px;
+    border: 1px solid #666;
+    border-radius: 4px;
+    background: #3c3c3c;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.copy-code-button:hover {
+    background: #505050;
+}
+
+.copy-code-button.is-copied {
+    background: #4a4a4a;
+    border-color: #777;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .rst-content .literal-block-wrapper {
+        width: 100%;
+    }
+
+    .rst-content .admonition .literal-block-wrapper {
+        width: calc(100% + 24px);
+    }
+}
+
 /* 打开实验后显示其全部子目录，不随小节跳转而折叠 */
 .wy-menu-vertical li.toctree-l1.current > ul ul {
     display: block !important;
@@ -231,7 +357,7 @@
 /* 增加目录字距，并补偿末尾字距以保持视觉居中 */
 .wy-menu-vertical p.caption .caption-text {
     display: inline-block;
-    letter-spacing: 0.4em;
+    letter-spacing: 1.0em;
     text-indent: 0.4em;
 }
 
@@ -252,6 +378,16 @@
     }
     .wy-nav-content {
         padding: 0 1rem !important;
+    }
+    .rst-content h1,
+    .rst-content h1 + p {
+        width: calc(100% + 2rem);
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+
+    .rst-content:has(h3) section > h1 + p {
+        margin-left: -1rem;
     }
 }
 
@@ -307,7 +443,7 @@
 }
 
 .rst-content .admonition.mytodo > .admonition-title {
-  background: #f0b37e;
+    background: #d9823b;
 }
 
 .rst-content .admonition.mytodo,
@@ -325,9 +461,3 @@
   background: #F2DEDE;
 }
 
-/* 缩短上方空白，增加下方空白 
-.figure {
-    margin-top: 0 ;
-    margin-bottom: 10em ;
-}
-*/
