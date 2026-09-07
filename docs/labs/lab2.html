@@ -176,54 +176,54 @@
 <h3>创建 adder 工程<a class="headerlink" href="#adder" title="链接到此标题。"></a></h3>
 <p>打开 Vivado 软件，会来到 Vivado 软件初始界面</p>
 <figure class="align-center">
-<img alt="vivado_home" src="../_images/vivado_home.png" />
+<img alt="vivado_home" src="../_images/vivado_home1.png" />
 </figure>
 <p>Vivado 软件很复杂，我们一点点来了解它。创建一个名为 adder 的新项目，并保存在合适的位置， <strong>一定要是全英文的目录</strong> 。
 勾选 <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">project</span> <span class="pre">subdirectory</span></code> 则会在保存新项目的地方创建一个项目名称的文件夹，用于存放项目的文件。
 你也可以手动创建一个项目名称的文件夹，作为保存项目的位置，就不勾选该选项了。</p>
 <figure class="align-center">
-<img alt="vivado_genprj" src="../_images/vivado_genprj.png" />
+<img alt="vivado_genprj" src="../_images/vivado_genprj1.png" />
 </figure>
 <p>来到器件选择页面， <code class="docutils literal notranslate"><span class="pre">Family</span></code> 系列选择 <code class="docutils literal notranslate"><span class="pre">Artix-7</span></code> ， <code class="docutils literal notranslate"><span class="pre">Package</span></code> 封装方式选择 <code class="docutils literal notranslate"><span class="pre">fgg484</span></code> ，
 然后选择 <code class="docutils literal notranslate"><span class="pre">xc7a100tfgg484</span></code> ，完成器件选择，其余的步骤直接下一步即可。</p>
 <figure class="align-center">
-<img alt="vivado_device" src="../_images/vivado_device.png" />
+<img alt="vivado_device" src="../_images/vivado_device1.png" />
 </figure>
 <p>完成创建项目，来到该项目初始页面，本次实验内容我们只需要关心红色方框标记出来的区域。
 左侧是 <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">Navigator</span></code> 流程导航，我们完整的实验整个流程就是依次从上往下进行的。
 左上角是 <code class="docutils literal notranslate"><span class="pre">项目管理</span></code> ，目前由于正处于项目管理界面，因此 <code class="docutils literal notranslate"><span class="pre">PROJECT</span> <span class="pre">MANAGER</span></code> 是蓝色的。</p>
 <figure class="align-center">
-<img alt="vivado_prj" src="../_images/vivado_prj.png" />
+<img alt="vivado_prj" src="../_images/vivado_prj1.png" />
 </figure>
 <p>完成了加法器和 Testbench 程序的编写，我们就可以进行仿真验证了。</p>
 <p>首先需要将编写好的源代码添加到工程中，我们可以通过这两个地方添加源文件。</p>
 <figure class="align-center">
-<img alt="add_source" src="../_images/add_source.png" />
+<img alt="add_source" src="../_images/add_source1.png" />
 </figure>
 <p>有三种类型的源文件，如下图所示，有 <code class="docutils literal notranslate"><span class="pre">design</span> <span class="pre">source</span></code> 设计文件、 <code class="docutils literal notranslate"><span class="pre">simulation</span> <span class="pre">source</span></code> 仿真文件和 <code class="docutils literal notranslate"><span class="pre">constraints</span></code> 约束文件。
 设计文件就是我们描述的电路，仿真文件就是 Testbench，约束文件下一次课才会使用。</p>
 <figure class="align-center">
-<img alt="source_type" src="../_images/source_type.png" />
+<img alt="source_type" src="../_images/source_type1.png" />
 </figure>
 <p>依次添加设计文件和约束文件，添加完成之后，会自动更新源代码的结构，如下图所示。</p>
 <figure class="align-center">
-<img alt="source_struct" src="../_images/source_struct.png" />
+<img alt="source_struct" src="../_images/source_struct1.png" />
 </figure>
 <p>源文件自动更新了顶层文件，如果你想修改顶层文件，可以对源文件右键 <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">as</span> <span class="pre">Top</span></code> 修改为顶层文件。点击行为仿真，即可进行仿真操作。</p>
 <figure class="align-center">
-<img alt="behavioral_simulation" src="../_images/behavioral_simulation.png" />
+<img alt="behavioral_simulation" src="../_images/behavioral_simulation1.png" />
 </figure>
 <p>打开仿真界面后，我们可以看到仿真产生的信号波形，如下图所示。</p>
 <p>序号1的播放键按钮用于运行仿真，序号2的按钮用于重启仿真。</p>
 <p>序号3的方框可以选择模块，序号4的方框可以添加模块中的信号显示波形。</p>
 <p>序号5的方框用以显示信号波形，序号6的两个放大镜按钮可以放大和缩小波形显示范围，序号7的按钮将显示完整的仿真波形信号。</p>
 <figure class="align-center">
-<img alt="vcd" src="../_images/vcd.png" />
+<img alt="vcd" src="../_images/vcd1.png" />
 </figure>
 <p>观察波形，每个输入信号是否都对应着正确的输出信号。</p>
 <p>如果你有 <code class="docutils literal notranslate"><span class="pre">$display</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">$monitor</span></code> 等函数，输出内容会显示在 Vivado 下方的 Tcl Console 中。</p>
 <figure class="align-center">
-<img alt="Hello_World" src="../_images/Hello_World.png" />
+<img alt="Hello_World" src="../_images/Hello_World1.png" />
 </figure>
 </section>
 </section>

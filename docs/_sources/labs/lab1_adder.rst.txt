@@ -255,7 +255,7 @@ Vivado 中建立工程并仿真
 
 打开 Vivado 软件，来到 Vivado 软件初始界面，如下图所示：
 
-.. figure:: ../picture/lab2/vivado_home.png
+.. figure:: ../picture/lab1_adder/vivado_home.png
    :alt: vivado_home
    :align: center
 
@@ -263,7 +263,7 @@ Vivado 中建立工程并仿真
 创建一个新 project ，例如取名为 adder ，并保存在合适的位置， **一定要是全英文的路径** 。
 勾选 ``Create project subdirectory`` 则会在路径下创建一个以项目名称命名的文件夹，用于存放项目的文件。如果已手动创建了这个文件夹，就不用勾选该选项了。
 
-.. figure:: ../picture/lab2/vivado_genprj.png
+.. figure:: ../picture/lab1_adder/vivado_genprj.png
    :alt: vivado_genprj
    :align: center
 
@@ -271,7 +271,7 @@ Vivado 中建立工程并仿真
 硬件型号选择页面可以选择目标 FPGA 芯片型号， ``Family`` 系列选择 ``Artix-7`` ， ``Package`` 封装方式选择 ``fgg484`` ，
 然后选择 ``xc7a100tfgg484`` ，后续的步骤直接 “下一步” 即可。
 
-.. figure:: ../picture/lab2/vivado_device.png
+.. figure:: ../picture/lab1_adder/vivado_device.png
    :alt: vivado_device
    :align: center
 
@@ -279,14 +279,14 @@ Vivado 中建立工程并仿真
 下图是项目初始页面，本次实验内容我们只需要关心红色方框标记出来的区域。
 左侧 ``Flow Navigator`` 显示了完整的设计、仿真、实现流程。
 
-.. figure:: ../picture/lab2/vivado_prj.png
+.. figure:: ../picture/lab1_adder/vivado_prj.png
    :alt: vivado_prj
    :align: center
 
 
 随后需要将编写好的源代码添加到工程中，可以通过下图所示两个地方添加源文件。
 
-.. figure:: ../picture/lab2/add_source.png
+.. figure:: ../picture/lab1_adder/add_source.png
    :alt: add_source
    :align: center
    :scale: 65
@@ -295,14 +295,14 @@ Vivado 中建立工程并仿真
 
 源文件共有三种类型： ``design source`` 设计文件（例如描述电路的 .v 文件）、 ``simulation source`` 仿真文件（例如 Testbench 的 .v 文件），和 ``constraints`` 约束文件。
 
-.. figure:: ../picture/lab2/source_type.png
+.. figure:: ../picture/lab1_adder/source_type.png
    :alt: source_type
    :align: center
 
 
 文件添加完成之后，软件会自动更新源代码的层级结构，如下图所示。 顶层文件会自动更新，并被标注了品字形图标。如果你想设置其他文件为顶层文件，可以对源文件右键 ``Set as Top`` 修改为顶层文件。
 
-.. figure:: ../picture/lab2/source_struct.png
+.. figure:: ../picture/lab1_adder/source_struct.png
    :alt: source_struct
    :align: center
    :scale: 70
@@ -311,7 +311,7 @@ Vivado 中建立工程并仿真
 
 点击 ``Run Behavioral Simulation``，即可进行仿真操作。
 
-.. figure:: ../picture/lab2/behavioral_simulation.png
+.. figure:: ../picture/lab1_adder/behavioral_simulation.png
    :alt: behavioral_simulation
    :align: center
    :scale: 70
@@ -320,14 +320,14 @@ Vivado 中建立工程并仿真
 打开仿真界面后，我们可以看到仿真产生的信号波形，如下图所示：
 1号红色框标注的播放键按钮用于运行仿真，2号框的图标用于重启仿真。3号框中是模块层级，点击其中的一个模块就可以将此模块包含的信号显示到4号框中。从4号框中可以选择想要观测的信号，使其波形显示在5号框。6号框的两个放大镜按钮可以放大和缩小波形显示范围，7号所指的按钮用于显示完整的仿真波形信号。
 
-.. figure:: ../picture/lab2/vcd.png
+.. figure:: ../picture/lab1_adder/vcd.png
    :alt: vcd
    :align: center
 
 
 观察波形，可以判断输出信号是否符合预期，即电路工作是否正确。如果你用了 ``$display()`` 或者 ``$monitor()`` 等函数，输出内容会显示在 Vivado 下方的 Tcl Console 中。
 
-.. figure:: ../picture/lab2/Hello_World.png
+.. figure:: ../picture/lab1_adder/Hello_World.png
    :alt: Hello_World
    :align: center
 
