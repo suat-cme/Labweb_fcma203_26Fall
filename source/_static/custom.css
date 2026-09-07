@@ -29,21 +29,24 @@
 }
 
 .rst-content h2 {
-    margin-top: 26px;
+    font-size: 28px;
+    margin-top: 36px;
     margin-bottom: 10px;
 }
 .rst-content h3 {
+    margin-top: 24px;
     margin-bottom: 10px;
 }
 
 .rst-content h3::before {
-    content: "◆";
+    content: "";
     display: inline-block;
-    width: 1em;
-    margin-right: 0.35em;
-    color: #000;
-    font-size: 0.75em;
-    vertical-align: 0.08em;
+    width: 0.25em;
+    height: 0.9em;
+    margin-right: 0.7625em;
+    border-radius: 999px;
+    background: #9b59b6;
+    vertical-align: -0.05em;
 }
 
 /* 正文与三级标题中 bullet 后的文字对齐；框内段落保持原位 */
@@ -65,6 +68,24 @@
     width: auto;
     margin-left: calc(10% + 0.675em);
     margin-right: calc(10% - 0.675em);
+}
+
+/* 首页课程简介使用紫色圆点，与页首配色呼应 */
+.rst-content ul.course-intro {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.rst-content ul.course-intro > li {
+    list-style-type: disc;
+}
+
+.rst-content ul.course-intro > li::marker {
+    color: #9b59b6;
+}
+
+.rst-content ul.course-intro > li > p {
+    margin-bottom: 4px;
 }
 
 /* 正文段间距 */
@@ -352,13 +373,29 @@
 .wy-menu-vertical p.caption {
     font-size: 20px;
     text-align: center;
+    color: #fff;
 }
 
 /* 增加目录字距，并补偿末尾字距以保持视觉居中 */
 .wy-menu-vertical p.caption .caption-text {
     display: inline-block;
-    letter-spacing: 1.0em;
-    text-indent: 0.4em;
+    letter-spacing: 1.4em;
+    text-indent: 1.4em;
+}
+
+/* 侧栏标题与搜索区域和页面标题使用同一紫色 */
+.wy-side-nav-search {
+    background-color: #9b59b6;
+}
+
+.wy-side-nav-search input[type="text"] {
+    border-color: #8e44ad;
+}
+
+.wy-side-nav-search input[type="text"]:focus {
+    border-color: #8e44ad;
+    outline-color: #8e44ad;
+    box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
 }
 
 /* 确保导航栏正常显示 */
@@ -389,6 +426,78 @@
     .rst-content:has(h3) section > h1 + p {
         margin-left: -1rem;
     }
+}
+
+/* 插件安装说明：原生折叠框，支持鼠标与键盘操作 */
+.rst-content .installation-details {
+    margin: 16px 0 24px 1.35em;
+    border: 1px solid #00b8d4;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.rst-content .installation-details > summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    background: #e3f7fb;
+    color: #252525;
+    font-weight: 700;
+    line-height: 1.5;
+    cursor: pointer;
+    list-style: none;
+}
+
+.rst-content .installation-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.rst-content .installation-details > summary::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    margin-left: auto;
+    flex-shrink: 0;
+    border-right: 2px solid #00b8d4;
+    border-bottom: 2px solid #00b8d4;
+    transform: rotate(-45deg);
+}
+
+.rst-content .installation-details[open] > summary::after {
+    transform: rotate(45deg);
+}
+
+.rst-content .installation-details > summary:focus-visible {
+    outline: 2px solid #007c91;
+    outline-offset: -3px;
+}
+
+.rst-content .installation-details-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 20px;
+    height: 20px;
+    color: #00b8d4;
+}
+
+.rst-content .installation-details-content {
+    padding: 16px 14px;
+}
+
+/* 正文起点与标题文字对齐：标题内边距 16px + 图标 20px + 间距 12px */
+.rst-content .installation-details-content > p {
+    padding-left: 34px;
+}
+
+.rst-content .installation-details-content > figure {
+    margin-left: 0;
+}
+
+.rst-content .installation-details-content > :last-child {
+    margin-bottom: 0;
 }
 
 /* override the logo for admonition */
@@ -443,10 +552,14 @@
 }
 
 .rst-content .admonition.mytodo > .admonition-title {
-    background: #d9823b;
+    background: #9b59b6;
+    color: #fff;
 }
 
-.rst-content .admonition.mytodo,
+.rst-content .admonition.mytodo {
+    background: #f3eaf7;
+}
+
 .rst-content .admonition.myread {
   background: #ffedcc;
 }

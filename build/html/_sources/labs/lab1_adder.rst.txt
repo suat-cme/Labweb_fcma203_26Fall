@@ -29,7 +29,74 @@ Verilog 代码编写环境
 这里建议使用 ``VS Code`` ， 配合 ``Verilog-HDL/SystemVerilog/Bluespec SystemVerilog`` + ``ctags`` 插件。这两个插件可以为 Verilog 等语言提供基础的高亮和语法框架支持，还可以提供 ``动态语法检查`` 、鼠标悬停查看信号定义、跳转信号和模块等功能。
 
 
-如果你经常写代码，安装插件对你来说肯定不陌生，网上也有不少教程。你可以在 `这里 <https://zhuanlan.zhihu.com/p/393000934>`_ 的相关段落学习配置教程。
+如果你经常写代码，安装插件对你来说肯定不陌生，展开下列框查看简单步骤。
+
+
+.. raw:: html
+
+   <details class="installation-details">
+   <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>VS Code 插件安装简易流程</summary>
+   <div class="installation-details-content">
+
+Vscode 中安装 Verilog-HDL/SystemVerilog.
+
+.. figure:: ../picture/lab1_adder/verilog插件.png
+   :alt: verilog插件
+   :align: center
+   :scale: 80
+
+Vscode 中安装 CTags Support.
+
+.. figure:: ../picture/lab1_adder/ctags_support.png
+   :alt: ctags_support
+   :align: center
+   :scale: 80
+
+安装 Universal Ctags，登录网站 https://github.com/universal-ctags/ctags-win32/releases ， 选个合适的版本安装。
+
+.. figure:: ../picture/lab1_adder/ctags_zip.png
+   :alt: ctags_zip
+   :align: center
+   :scale: 90
+
+解压刚才下载的压缩包，记住解压后的文件所存放的根目录。
+
+.. figure:: ../picture/lab1_adder/ctags_folder.png
+   :alt: ctags_folder
+   :align: center
+   :scale: 90
+
+配置用户环境变量，将刚才记住的根目录加入到 Path 值中。
+
+.. figure:: ../picture/lab1_adder/账户环境变量.png
+   :alt: 账户环境变量
+   :align: center
+   :scale: 80
+
+.. figure:: ../picture/lab1_adder/编辑账户环境变量.png
+   :alt: 编辑账户环境变量
+   :align: center
+
+在 VScode 的 File -> Preferences -> Setting 中搜索Verilog 。对 Verilog > Ctags: Path 、 Verilog > Linting: Linter 进行配置。
+
+.. figure:: ../picture/lab1_adder/path.png
+   :alt: path
+   :align: center
+
+.. figure:: ../picture/lab1_adder/linter.png
+   :alt: linter
+   :align: center
+   :scale: 90
+
+
+
+.. raw:: html
+
+   </div>
+   </details>
+
+
+网上也有不少教程，你可以在 `这里 <https://zhuanlan.zhihu.com/p/393000934>`_ 学习更多插件的配置。
 
 2. 实验内容
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -180,6 +247,12 @@ $stop 系统任务会将仿真暂停，暂停后可以手动继续运行仿真�
 Vivado 中建立工程并仿真
 ------------------------------------------------------
 
+.. raw:: html
+
+   <details class="installation-details">
+   <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>工程建立与仿真流程</summary>
+   <div class="installation-details-content">
+
 打开 Vivado 软件，来到 Vivado 软件初始界面，如下图所示：
 
 .. figure:: ../picture/lab2/vivado_home.png
@@ -259,9 +332,12 @@ Vivado 中建立工程并仿真
    :align: center
 
 
-
-
 .. raw:: html
+
+   </div>
+   </details>
+
+
 
    <div class="admonition mytodo">
       <p class="admonition-title">必做内容3：仿真4位超前进位加法器</p >
