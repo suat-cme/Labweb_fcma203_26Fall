@@ -338,7 +338,9 @@
     }
 
     .rst-content .admonition .literal-block-wrapper {
-        width: calc(100% + 24px);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 }
 
@@ -448,6 +450,24 @@
     line-height: 1.5;
     cursor: pointer;
     list-style: none;
+}
+
+/* 根据原生折叠状态切换标题提示 */
+.rst-content .installation-details-toggle {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 400;
+    color: #52656b;
+    white-space: nowrap;
+}
+
+.rst-content .installation-details .when-open,
+.rst-content .installation-details[open] .when-closed {
+    display: none;
+}
+
+.rst-content .installation-details[open] .when-open {
+    display: inline;
 }
 
 .rst-content .installation-details > summary::-webkit-details-marker {
