@@ -46,7 +46,7 @@
               <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lab1_adder.html">实验一 加法器设计</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lab2_shifter_backup.html">实验二 移位器设计与FPGA实现</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab2_shifter.html">实验二 移位器设计与FPGA实现</a></li>
 </ul>
 
         </div>
@@ -96,7 +96,7 @@
 <p>我们提供了一些源代码，能够让你的加法器能够在 FPGA 上输入输出。加法器的输入有 8bit 的 a 和 b，以及 sub 信号，因此需要
 17个输入，我们的 FPGA 上拥有 24 个用户拨码开关。</p>
 <figure class="align-center">
-<img alt="minisys" src="../_images/minisys.png" />
+<img alt="minisys" src="../_images/minisys1.png" />
 </figure>
 <p>我们计划使用 7段数码管 显示你的加法器结果，拨码开关作为你的加法器二进制输入，每一个开关代表一位二进制数。
 我们提供了 7段数码管 的控制电路：seg_driver 模块，你需要做的是将你的加法器结果输出到 seg_driver 模块的 data 端口，

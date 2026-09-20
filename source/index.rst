@@ -15,7 +15,7 @@
    :hidden:
 
    实验一 加法器设计 <labs/lab1_adder>
-   实验二 移位器设计与FPGA实现 <labs/lab2_shifter_backup>
+   实验二 移位器设计与FPGA实现 <labs/lab2_shifter>
 ..   实验三 加减法器设计 <labs/lab3>
    实验四 桶形移位器设计 <labs/lab4>
    实验五 时序逻辑电路设计 <labs/lab5>

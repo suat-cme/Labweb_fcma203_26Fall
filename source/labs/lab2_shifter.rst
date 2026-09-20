@@ -1,12 +1,15 @@
 实验二 移位器设计与 FPGA 实现
 ==========================================
 
-本实验中，我们将使用 Verilog 的各种基础语法完成加法器电路设计，并对电路进行仿真以测试电路的功能。
+
+本实验中，我们将设计一个由时钟信号控制的移位器，并经过仿真、综合、实现，最终在FPGA开发板上运行。
 
 
-1. 实验准备 - 认识 FPGA
+1. 实验准备
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+认识 FPGA
+-------------------------------
 上一次实验我们体验了设计与仿真的流程，那么通过了功能仿真的电路设计要怎样以“硬件”电路的形式呈现呢？
 
    * 一种途径是专用集成电路 (ASIC, Application-Specific Integrated Circuit)，即将电路以版图的形式交付给晶圆厂进行生产。
@@ -32,163 +35,156 @@
    :align: center
 
 
+电路的 FPGA 实现流程
+-------------------------------
 Vivado 软件为逻辑电路设计提供了从代码到最终 CLB 实现的整套流程的自动化工具，大致分为仿真 -> 综合 -> 实现 -> 编程 几个步骤。
 
-   * **综合** (Synthesis) 是把 HDL 代码映射为逻辑结构的过程，Vivado 综合器将可综合的语法转换为 LUT、多路选通器、加法器、寄存器、存储器等 FPGA 内部的基本电路。
-   * **实现** (Implementation) 是根据综合的结果，进行布局布线，决定到底把逻辑电路放到 FPGA 芯片的哪个位置。
-   * **编程** (Program) 是将布局布线的结果生成 bitstream 文件，并使用这个文件对 FPGA 中的 LUT 和互联开关等进行实际的改写。编程完成后，便实现了逻辑的“硬件”化。
+   * **综合** (Synthesis) ：把 HDL 代码映射为逻辑结构的过程，Vivado 综合器将可综合的语法转换为 LUT、多路选通器、加法器、寄存器、存储器等 FPGA 内部的基本电路。
+   * **实现** (Implementation) ：根据综合的结果，进行布局布线，决定到底把逻辑电路放到 FPGA 芯片的哪个位置。
+   * **编程** (Program) ：将布局布线的结果生成 bitstream 文件，并使用这个文件对 FPGA 中的 LUT 和互联开关等进行实际的改写。编程完成后，便实现了逻辑的“硬件”化。
 
 .. figure:: ../picture/lab2_shifter/flow.png
    :alt: flow
    :align: center
 
 
-
 2. 实验内容
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+移位器设计与仿真
+-------------------------------
+对于一个多位二进制数，我们可以将其向左或向右移动若干位，移位方式主要有：
+
+    * 左移 (Shift Left)：将二进制数的每一位向左移动，右侧补零。左移相当于乘以2的幂。
+    * 逻辑右移 (Logical Shift Right)：将二进制数的每一位向右移动，左侧补零。逻辑右移相当于除以2的幂。
+    * 算术右移 (Arithmetic Shift Right)：将有符号二进制数的每一位向右移动，左侧补符号位（最高位），保持数值的符号不变。
 
 
-
-Verilog 描述全加器 
-------------------------------------------------------
-
-我们知道 Verilog 描述电路可以有很多模式：结构级描述、行为级描述等。以下给出一种全加器的 Verilog 实现方式：
-
-.. code-block:: v
-   :caption: 全加器 (Full Adder) 的一种 Verilog 实现
-   :emphasize-lines: 13
-   :linenos:
-
-   module ref_fa (
-       a       // <<i<<
-      ,b       // <<i<<
-      ,cin     // <<i<<
-      ,sum     // >>o>>
-      ,cout    // >>o>>
-   );
-      input a, b, cin;
-      output sum, cout;
-      wire a, b, cin;
-      wire sum, cout;
-
-      assign {cout, sum} = a + b + cin;
-
-   endmodule
-
-
-
-Verilog 描述超前进位加法器 
-------------------------------------------------------
-
-超前进位加法器 (Carry-look-ahead Adder) 是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。
-
-.. admonition:: 必做内容1：Verilog 实现4位超前进位加法器
+.. admonition:: 必做内容1：移位器设计
    :class: mytodo
 
-   以下图代码框架为基础，补全4位超前进位加法器的 Verilog实现，并保存为 .v 文件。
-   虽然上图中的 "assign {cout, sum} = a + b + cin" 的赋值方式可以只用一行实现4位加法，但无法在具体实现方式上体现 “超前进位”，因此不允许使用这种连续赋值法。
+   设计一个16位移位器，能够根据输入的操作码（op）选择不同的移位方式，将输入数据（data）在每个时钟周期内移动一位，直到达到指定的移位量（shamt），最终在输出端（out）得到结果。
+
+   另外，我们还需要一个开始 start 信号，在开始信号被置位后，输入的 op、data、shamt 信号将被寄存起来，不再受到输入端变化的影响，移位器开始进行移位。下一次 start 被置位时，这些信号将被重新寄存，进行新一轮的移位。
+
+
+    .. code-block:: v
+        :caption: 移位器代码框架
+        :linenos:
+
+        module shifter (
+            clk         
+            ,start      
+            ,data       
+            ,shamt      
+            ,op         
+            ,out        
+        );
+
+            input   clk, start, data, shamt, op;
+            output  out;
+
+            // clk freq is 100Mhz
+            wire    clk, start;
+            wire    [15:0]  data, out;
+            wire    [3:0]   shamt;
+            wire    [1:0]   op;
+
+            // Your codes should start from here.
+            // ......
+            // End of your codes.
+            
+        endmodule
+
+
+.. admonition:: 必做内容2：移位器仿真
+   :class: mytodo
+
+   编写 testbench 来验证移位器模块的功能。三种移位方式、不同移位量、start信号功能，都需要测试。
+   
+   测试代码示例如下：
 
    .. code-block:: v
-      :caption: 4位超前进位加法器代码框架
-      :emphasize-lines: 9-11
-      :linenos:
+        :caption: 仿真代码示例
+        :linenos:
 
-      module cla_4bit(a, b, cin, sum, cout);
+        `timescale 1ns/1ps
+        module tb_shifter;
 
-         input a, b, cin;
-         output sum, cout;
+        reg   clk, start;
 
-         wire [3:0] a, b, sum;
-         wire cin, cout;
+        // Your codes should start from here.
+        // ......
+        // End of your codes.
 
-         // Your codes should start from here.
+        initial begin
+            clk <= 1'b0;
+            start <= 1'b1;  // start active
+            rgba(58, 40, 40, 0)
+            start <= 1'b0;
+        end
 
-         // End of your codes.
+        // clk freq is 100Mhz
+        always #5 clk <= ~clk;
 
-      endmodule
-
-
-
-.. raw:: html
-
-   <div class="admonition myquestion">
-      <p class="admonition-title">思考：多位加法器的代码实现</p >
-      <p>多位加法器的实现方式有很多，行波进位加法器、选择进位加法器、超前进位加法器、进位旁路加法器等，当然还有此次禁止使用的朴实无华的 + 号运算符实现的加法器，如何判断哪种代码实现更好呢？</p>
-   </div>
+        endmodule
 
 
-Testbench 编写 
+移位器的 FPGA 实现 
 ------------------------------------------------------
-如何确定你设计的 Verilog 代码是正确的呢？对代码进行逻辑功能仿真！而用于仿真的代码文件被称为 Testbench 文件。 
+FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中我们将使用板载的按键、拨码开关和 7 段数码管来实现移位器的输入输出功能。
 
-
-Testbench 本身也描述了一个 module ，但是它没有端口，不需要和外界相连。在 这个testbench module 的内部生成一些信号，作为待测试模块（如 ref_fa 模块）的输入，然后观察待测试模块的输出信号是否符合预期。Testbench 也可以使用 $display() 函数打印一些信息，帮助我们判断电路是否正确。
-
-.. figure:: ../picture/lab1_adder/Testbench.png
-   :alt: Testbench
-   :scale: 20
+.. figure:: ../picture/lab2_shifter/minisys.png
+   :alt: minisys
    :align: center
 
-我们从一个简单的全加器 Testbench 入手，了解一下 Testbench 的简单写法。
+具体的映射关系如下：
+
+   * 按键 S6 ：作为 start 信号的输入。
+   * 拨码开关 SW[15:0] ：作为数据 data 的二进制输入，每一个开关代表一个二进制位。
+   * 拨码开关 SW[19:16] ：作为位移量 shamt 的输入。
+   * 拨码开关 SW[21:20] ：作为位移方式 op 的输入。
+   * 7 段数码管 ：作为 out 的输出，每个数码管可以表示一个十六进制数，即 4bit 二进制数。
+
+信号与按键的对应关系、信号与拨码开关的对应关系比较直接，后续 implementation 阶段将在 **约束文件** 中体现。而 out 信号和 7 段数码管的显示则需要通过一个控制电路来实现，因此在 verilog 编码阶段就必须完成。我们提供了 7 段数码管显示十六进制数的代码 `seg.v (点击下载) <../seg.v>`_ 和数码管的驱动程序 `seg_driver.v (点击下载) <../seg_driver.v>`_ 。请将这两个 .v 文件加到你的 project 中，并按下列代码示例的结构，在 **top** module 中将你设计的 **shifter_16bit** module 和 **seg_driver** module 都进行实例化，并将移位器的输出 out 连接到 seg_driver 模块的 data 端口。
 
 .. code-block:: v
-   :caption: 全加器的简单 Testbench
-   :emphasize-lines: 1, 6-12, 21
+   :caption: 顶层模块代码框架
+   :emphasize-lines: 13, 18
    :linenos:
 
-   `timescale 1ns/1ps
-   module ref_fa_tb ();
-      reg [2:0] in;
-      wire sum, cout;
+    module top (
+      ... // complete port definition
+    );
 
-      ref_fa u_ref_fa (
-          .a       (in[0]) // <<i<<
-         ,.b       (in[1]) // <<i<<
-         ,.cin     (in[2]) // <<i<<
-         ,.sum     (sum)   // >>o>>
-         ,.cout    (cout)  // >>o>>
+      ... // complete variable definition
+
+      shifter_16bit u_shifter_16bit(
+         .clk     (clk)
+         ,.start  (reset)
+         ,.data   (data)
+         ,.shamt  (shamt)
+         ,.op     (op)
+         ,.out    (out)
       );
 
-      initial  begin
-         in = 3'b0;
-         #100;
-         for (integer i = 0; i < 8; i = i + 1)  begin
-            in = in + 1;
-            #100;
-         end
-         $stop;
-      end
+      seg_driver u_seg_driver(
+         .clk     (clk)
+         ,.data   ({16'd0, out}) // connect shifter output to seg_driver data port, with 16 bits of zero padding to match the 32-bit width
+         ,.reset  (reset)
+         ,.code   (code)
+         ,.cs_o   (cs_o)
+      );
 
-   endmodule
+    endmodule
 
-
-回忆一下，在 Logisim 中，你可以把一个画布中的电路块设置输入输出端口，封装成模块，然后在另一个画布中放置这个模块。类似地，在 Verilog 中，你可以在一个模块中使用另一个模块，这就是模块的 **实例化** 。代码中间高亮的一大段，代表在 Testbench 顶层 module 中对 ``ref_fa`` 进行实例化，并指定了哪些信号连接到这个实例的输入输出端口。 例如：ref_fa 中的 a 端口``.a`` 代表 ，对应连接到 ref_fa_tb 中的信号 in[0]。
-
-Testbench 中的模拟了真实电路的运行过程。想象一下如果我们手握一个实体电路，要对它进行测试，势必会先给它一种输入信号的组合，观测输出，再换一种输入组合再观测，依次测完所有必要的输入信号组合。这种 “依次” 测试的过程在 Testbench 中也同样存在，即给输入信号的赋值加上了时间节点。代码第一行的 \`timescale [timeunit]/[timeprecision] 指定了仿真时间的基本单位和时间精度。initial 块中的 ``#100`` 代表延迟 100 个时间单位之后再执行后续语句。 for 循环中遍历所有的输入组合，每种组合维持100 个时间单位。而时间精度代表仿真中两步之间最小的时间间隔，例如：对于 \`timescale 1ns/1ps，initial 块中的 ``#1.1111`` 本应代表延迟 1.1111 ns，但由于精度只能到 1 ps 即 0.001 ns，因此延迟会舍入变成 1.111 ns。
-
-$stop 系统任务会将仿真暂停，暂停后可以手动继续运行仿真。
+修改完成的代码
 
 
 
-.. raw:: html
 
-   <div class="admonition mycaution">
-         <p class="admonition-title"> Testbench 测试思路</p >
-      <p>4位超前进位加法器的 Testbench 也还是和全加器的 Testbench 一样写法吗？</p>
-      <p>这次的信号数量比较多，一共有 512 种输入组合，如果我们需要依次去看 512 次的波形，然后检查是否符合预期，这看起来太不智能了 ：( </p>
-      <p>我们可以找到一个能输出正确答案的参考电路 (reference)，再在 Testbench 中让软件对比待测电路 dut (Device Under Test) 和 reference 的结果是否一致，如有不一致就打印出来，不就省事多了？ </p>
-      <p> <strong>打印信息可以使用 $display() 函数，Vivado 会将信息显示在下方的 Tcl Console 中。</strong> 使用方法很像大家之前学过的 printf() 函数。 </p>
 
-   </div>
 
-.. raw:: html
-
-   <div class="admonition mytodo">
-      <p class="admonition-title">必做内容2：编写 Testbench </p >
-      <p>参照全加器的 testbench 以及测试思路提示，为4位超前进位加法器编写 Testbench，并保存为 .v 文件。</p>
-      <p>命名规则最好类似于 tb_cla_4bit ，直观地指示出是用于测试什么模块的测试文件。<p>
-   </div>
 
 
 
@@ -287,18 +283,6 @@ Vivado 中建立工程并仿真
    </details>
 
 
-
-   <div class="admonition mytodo">
-      <p class="admonition-title">必做内容3：仿真4位超前进位加法器</p >
-      <p>用你写的 Testbench 测试你写的4位 CLA 加法器，并把测试通过的截图附在实验报告中。</p>
-      <p>这个4位超前进位加法器会被用于组成更大位宽的加法器，以及后续的实验中，所以一定要 de 出所有的 bug。</p>
-   </div>
-
-
-层次化超前进位加法器
-------------------------
-
-超前进位加法器可以显著提升加法器的性能，但是随着加法器位宽的增加，进位的计算会花费指数级增加的电路开销。因此对于32位、64位等更大位宽的加法器，可以将低位宽的加法器块之间用行波进位等方式连接。
 
 .. raw:: html
 
