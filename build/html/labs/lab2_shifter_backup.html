@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>实验一 加法器设计 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
+  <title>实验二 移位器设计与 FPGA 实现 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=14531fe9" />
@@ -22,8 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
-    <link rel="next" title="实验二 移位器设计与 FPGA 实现" href="lab2_shifter_backup.html" />
-    <link rel="prev" title="《数字逻辑与计算机组成》实验" href="../index.html" /> 
+    <link rel="prev" title="实验一 加法器设计" href="lab1_adder.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,25 +46,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">实验一 加法器设计</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id2">1. 实验准备</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#verilog-hdl">Verilog HDL 语言基础</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#verilog">Verilog 仿真器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Verilog 代码编写环境</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">2. 实验内容</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Verilog 描述全加器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">Verilog 描述超前进位加法器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab1_adder.html">实验一 加法器设计</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">实验二 移位器设计与FPGA实现</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">1. 实验准备 - 认识 FPGA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">2. 实验内容</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#verilog">Verilog 描述全加器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Verilog 描述超前进位加法器</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#testbench">Testbench 编写</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#vivado">Vivado 中建立工程并仿真</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">层次化超前进位加法器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">层次化超前进位加法器</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">3. 报告提交</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">3. 报告提交</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="lab2_shifter_backup.html">实验二 移位器设计与FPGA实现</a></li>
 </ul>
 
         </div>
@@ -82,9 +76,9 @@
           <div role="navigation" aria-label="页面导航">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">实验一 加法器设计</li>
+      <li class="breadcrumb-item active">实验二 移位器设计与 FPGA 实现</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/labs/lab1_adder.rst.txt" rel="nofollow"> 查看页面源码</a>
+            <a href="../_sources/labs/lab2_shifter_backup.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -92,76 +86,50 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="id1">
-<h1>实验一 加法器设计<a class="headerlink" href="#id1" title="链接到此标题。"></a></h1>
+  <section id="fpga">
+<h1>实验二 移位器设计与 FPGA 实现<a class="headerlink" href="#fpga" title="链接到此标题。"></a></h1>
 <p>本实验中，我们将使用 Verilog 的各种基础语法完成加法器电路设计，并对电路进行仿真以测试电路的功能。</p>
+<section id="id1">
+<h2>1. 实验准备 - 认识 FPGA<a class="headerlink" href="#id1" title="链接到此标题。"></a></h2>
+<p>上一次实验我们体验了设计与仿真的流程，那么通过了功能仿真的电路设计要怎样以“硬件”电路的形式呈现呢？</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>一种途径是专用集成电路 (ASIC, Application-Specific Integrated Circuit)，即将电路以版图的形式交付给晶圆厂进行生产。</p></li>
+<li><p>另一种途径是利用可编程逻辑器件 (PLD, Programmable Logic Device) 实现，允许用户对硬件连线进行编程达到预期功能。FPGA (Field-Programmable Gate Array，现场可编程逻辑门阵列) 就是一种比较常用的可编程逻辑硬件实现方式。</p></li>
+</ul>
+</div></blockquote>
+<p>回忆一下理论课堂上的内容，由香农展开定理得知，任一逻辑函数都可以由多重 <strong>多路选泽择</strong> 实现。这使得 <strong>查找表</strong> (LUT, Look-Up Table) 结构可以作为一个通用的待编程的逻辑模块。下图所示的简易 LUT 可以实现任意一个 2 输入、1 输出的逻辑功能，只需要在多路选择器的输入端配置相应的信号就可以。例如实现 <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">^</span> <span class="pre">b</span></code> 的异或逻辑，4 个输入端从上至下分别配置为 0、1、1、0 即可。类似地，实现 <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">(a</span> <span class="pre">&amp;</span> <span class="pre">b)</span> <span class="pre">|</span> <span class="pre">c</span></code> 的逻辑功能可以通过配置一个 3 输入 LUT 的输入端实现，这些配置信息将被保存起来。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/lut_xor.png"><img alt="lut_xor" height="237" src="../_images/lut_xor.png" width="469" />
+</a>
+</figure>
+<p>本课程实验用的是 Xilinx 的 FPGA 芯片及其开发板，主芯片为 <code class="docutils literal notranslate"><span class="pre">xc7a100tfgg484</span></code> ，LUT 一般设计为 6 输入，即需要 64bit 的存储器来存储 6 个变量所有的可能组合，这个查找表也可以作为两个 5 输入的查找表或拆分成更小的查找表来使用，因此这些 6 输入查找表 (LUT6) 可以完成复杂的逻辑功能。</p>
+<figure class="align-center">
+<img alt="minisys_ori" src="../_images/minisys_ori.png" />
+</figure>
+<p>芯片中一个真实的可配置逻辑块 (CLB) 的结构。一个 CLB 中又包含两种SLICE ：SLICEL 和 SLICEM 。这两种 SLICE 只有 LUT 部分不一样，其余部分一样。SLICEL 的 LUT 主要用于 Logic 实现；而 SLICEM 的 LUT 还可以用于 Memory 结构，例如分布式 RAM 或者移位寄存器等。除了 LUT 之外，一个 CLB 中还包括其他专用电路部分，例如多路选通器、加法器以及寄存器。</p>
+<figure class="align-center">
+<img alt="CLBLM" src="../_images/CLBLM.png" />
+</figure>
+<p>Vivado 软件为逻辑电路设计提供了从代码到最终 CLB 实现的整套流程的自动化工具，大致分为仿真 -&gt; 综合 -&gt; 实现 -&gt; 编程 几个步骤。</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>综合</strong> (Synthesis) 是把 HDL 代码映射为逻辑结构的过程，Vivado 综合器将可综合的语法转换为 LUT、多路选通器、加法器、寄存器、存储器等 FPGA 内部的基本电路。</p></li>
+<li><p><strong>实现</strong> (Implementation) 是根据综合的结果，进行布局布线，决定到底把逻辑电路放到 FPGA 芯片的哪个位置。</p></li>
+<li><p><strong>编程</strong> (Program) 是将布局布线的结果生成 bitstream 文件，并使用这个文件对 FPGA 中的 LUT 和互联开关等进行实际的改写。编程完成后，便实现了逻辑的“硬件”化。</p></li>
+</ul>
+</div></blockquote>
+<figure class="align-center">
+<img alt="flow" src="../_images/flow.png" />
+</figure>
+</section>
 <section id="id2">
-<h2>1. 实验准备<a class="headerlink" href="#id2" title="链接到此标题。"></a></h2>
-<section id="verilog-hdl">
-<h3>Verilog HDL 语言基础<a class="headerlink" href="#verilog-hdl" title="链接到此标题。"></a></h3>
-<p>Verilog 是一种用于描述、设计电路的 <strong>硬件描述语言 HDL (Hardware Description Language)</strong> 。理论课堂上已给出一些简单的示例和基本语法的讲解，建议同学们在实验前阅读 “教材附录 A” 熟悉 Verilog 的基本语法。</p>
-</section>
+<h2>2. 实验内容<a class="headerlink" href="#id2" title="链接到此标题。"></a></h2>
 <section id="verilog">
-<h3>Verilog 仿真器<a class="headerlink" href="#verilog" title="链接到此标题。"></a></h3>
-<p>常见的 Verilog 仿真器有 VCS 、modelsim 、Verilog-XL 、iverilog 、verilator 等。我们使用的是 Xilinx 公司的 FPGA 集成设计环境 Vivado 中的 xsim 仿真器，为我们后续实验中使用 FPGA 教学实验板做准备。</p>
-<p>实验室的台式机已安装 Vivado 2018.3 WebPACK 版本。该版本安装体积约 20 GB，比近几年约 100 GB 的版本更轻便，更适合我们的教学需求，且是无需许可证的版本。
-Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，基本都能够满足实验需求。</p>
-</section>
-<section id="id3">
-<h3>Verilog 代码编写环境<a class="headerlink" href="#id3" title="链接到此标题。"></a></h3>
-<p>工欲善其事，必先利其器。
-一个好的代码 Coding 环境可以使得代码编写更加高效。Vivado 作为一个集成开发环境，当然也集成了代码编辑功能，不过辅助代码编写的各种插件仍然比不过 VC Code 中的丰富。</p>
-<p>这里建议使用 <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">Code</span></code> ， 配合 <code class="docutils literal notranslate"><span class="pre">Verilog-HDL/SystemVerilog/Bluespec</span> <span class="pre">SystemVerilog</span></code> + <code class="docutils literal notranslate"><span class="pre">ctags</span></code> 插件。这两个插件可以为 Verilog 等语言提供基础的高亮和语法框架支持，还可以提供 <code class="docutils literal notranslate"><span class="pre">动态语法检查</span></code> 、鼠标悬停查看信号定义、跳转信号和模块等功能。</p>
-<p>如果你经常写代码，安装插件对你来说肯定不陌生，展开下列框查看简单步骤。</p>
-<details class="installation-details">
-<summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>VS Code 插件安装简易流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
-<div class="installation-details-content"><p>Vscode 中安装 Verilog-HDL/SystemVerilog.</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/verilog插件.png"><img alt="verilog插件" height="318" src="../_images/verilog%E6%8F%92%E4%BB%B6.png" width="693" />
-</a>
-</figure>
-<p>Vscode 中安装 CTags Support.</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/ctags_support.png"><img alt="ctags_support" height="374" src="../_images/ctags_support.png" width="714" />
-</a>
-</figure>
-<p>安装 Universal Ctags，登录网站 <a class="reference external" href="https://github.com/universal-ctags/ctags-win32/releases">https://github.com/universal-ctags/ctags-win32/releases</a> ， 选个合适的版本安装。</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/ctags_zip.png"><img alt="ctags_zip" height="904" src="../_images/ctags_zip.png" width="1138" />
-</a>
-</figure>
-<p>解压刚才下载的压缩包，记住解压后的文件所存放的根目录。</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/ctags_folder.png"><img alt="ctags_folder" height="314" src="../_images/ctags_folder.png" width="703" />
-</a>
-</figure>
-<p>配置用户环境变量，将刚才记住的根目录加入到 Path 值中。</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/账户环境变量.png"><img alt="账户环境变量" height="738" src="../_images/%E8%B4%A6%E6%88%B7%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.png" width="540" />
-</a>
-</figure>
-<figure class="align-center">
-<img alt="编辑账户环境变量" src="../_images/%E7%BC%96%E8%BE%91%E8%B4%A6%E6%88%B7%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.png" />
-</figure>
-<p>在 VScode 的 File -&gt; Preferences -&gt; Setting 中搜索Verilog 。对 Verilog &gt; Ctags: Path 、 Verilog &gt; Linting: Linter 进行配置。</p>
-<figure class="align-center">
-<img alt="path" src="../_images/path.png" />
-</figure>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/linter.png"><img alt="linter" height="231" src="../_images/linter.png" width="679" />
-</a>
-</figure>
-</div>
-</details><p>网上也有不少教程，你可以在 <a class="reference external" href="https://zhuanlan.zhihu.com/p/393000934">这里</a> 学习更多插件的配置。</p>
-</section>
-</section>
-<section id="id5">
-<h2>2. 实验内容<a class="headerlink" href="#id5" title="链接到此标题。"></a></h2>
-<section id="id6">
-<h3>Verilog 描述全加器<a class="headerlink" href="#id6" title="链接到此标题。"></a></h3>
+<h3>Verilog 描述全加器<a class="headerlink" href="#verilog" title="链接到此标题。"></a></h3>
 <p>我们知道 Verilog 描述电路可以有很多模式：结构级描述、行为级描述等。以下给出一种全加器的 Verilog 实现方式：</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">全加器 (Full Adder) 的一种 Verilog 实现</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">全加器 (Full Adder) 的一种 Verilog 实现</span><a class="headerlink" href="#id7" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">ref_fa</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 2</span><span class="w">    </span><span class="n">a</span><span class="w">       </span><span class="c1">// &lt;&lt;i&lt;&lt;</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="p">,</span><span class="n">b</span><span class="w">       </span><span class="c1">// &lt;&lt;i&lt;&lt;</span>
@@ -181,15 +149,15 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 </div>
 </div>
 </section>
-<section id="id7">
-<h3>Verilog 描述超前进位加法器<a class="headerlink" href="#id7" title="链接到此标题。"></a></h3>
+<section id="id3">
+<h3>Verilog 描述超前进位加法器<a class="headerlink" href="#id3" title="链接到此标题。"></a></h3>
 <p>超前进位加法器 (Carry-look-ahead Adder) 是一种进位链延迟更短的加法器，我们已经在理论课上学习了4位超前进位加法器的原理。</p>
 <div class="mytodo admonition">
 <p class="admonition-title">必做内容1：Verilog 实现4位超前进位加法器</p>
 <p>以下图代码框架为基础，补全4位超前进位加法器的 Verilog实现，并保存为 .v 文件。
 虽然上图中的 &quot;assign {cout, sum} = a + b + cin&quot; 的赋值方式可以只用一行实现4位加法，但无法在具体实现方式上体现 “超前进位”，因此不允许使用这种连续赋值法。</p>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">4位超前进位加法器代码框架</span><a class="headerlink" href="#id12" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">4位超前进位加法器代码框架</span><a class="headerlink" href="#id8" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">cla_4bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">);</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
@@ -220,8 +188,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 </a>
 </figure>
 <p>我们从一个简单的全加器 Testbench 入手，了解一下 Testbench 的简单写法。</p>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">全加器的简单 Testbench</span><a class="headerlink" href="#id13" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">全加器的简单 Testbench</span><a class="headerlink" href="#id9" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="no">`timescale</span><span class="w"> </span><span class="mh">1</span><span class="n">ns</span><span class="o">/</span><span class="mh">1</span><span class="n">ps</span>
 </span><span class="linenos"> 2</span><span class="k">module</span><span class="w"> </span><span class="n">ref_fa_tb</span><span class="w"> </span><span class="p">();</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="mh">2</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">in</span><span class="p">;</span>
@@ -325,8 +293,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
    <p>用你写的 Testbench 测试你写的4位 CLA 加法器，并把测试通过的截图附在实验报告中。</p>
    <p>这个4位超前进位加法器会被用于组成更大位宽的加法器，以及后续的实验中，所以一定要 de 出所有的 bug。</p>
 </div></section>
-<section id="id8">
-<h3>层次化超前进位加法器<a class="headerlink" href="#id8" title="链接到此标题。"></a></h3>
+<section id="id4">
+<h3>层次化超前进位加法器<a class="headerlink" href="#id4" title="链接到此标题。"></a></h3>
 <p>超前进位加法器可以显著提升加法器的性能，但是随着加法器位宽的增加，进位的计算会花费指数级增加的电路开销。因此对于32位、64位等更大位宽的加法器，可以将低位宽的加法器块之间用行波进位等方式连接。</p>
 <div class="admonition myquestion">
    <p class="admonition-title">选做内容：16位层次化超前进位加法器</p >
@@ -335,8 +303,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 <p class="admonition-title">思考：大型加法器的验证</p>
 <p>当电路复杂度上升了，怎么验证呢？例如对于64位的加法器，难道需要将所有的情况都穷举，然后与 reference 比较结果吗？这将一共有 2^64 * 2^64 * 2 种情况，显然不可能。那我们该如何验证呢？</p>
 <p>下图代码给出了一种方案，自己阅读思考一下吧！</p>
-<div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">测试激励示例</span><a class="headerlink" href="#id14" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">测试激励示例</span><a class="headerlink" href="#id10" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">initial</span><span class="w">  </span><span class="k">begin</span>
 <span class="hll"><span class="linenos"> 2</span><span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">integer</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">100000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">  </span><span class="k">begin</span>
 </span><span class="linenos"> 3</span><span class="w">      </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">$random</span><span class="p">;</span>
@@ -362,8 +330,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
    <p>所以一个好办法就是采取最中规中矩的方法：<strong>写一个模块验证一个，写一点代码验证一点。</strong>这样可以快速定位大工程中的问题，而不是等写了一千行代码了，再一起验证。</p>
 </div></section>
 </section>
-<section id="id9">
-<h2>3. 报告提交<a class="headerlink" href="#id9" title="链接到此标题。"></a></h2>
+<section id="id5">
+<h2>3. 报告提交<a class="headerlink" href="#id5" title="链接到此标题。"></a></h2>
 <p>请点击 <a class="reference external" href="../Lab1_Report_26Fall.docx">这里</a> 下载实验报告模板。填写完成后，连同 Verilog 代码文件的压缩包，扫码提交（支持从微信聊天记录上传）。</p>
 <p>Deadline ：<strong style="color: #d32f2f;">2026-9-20 23:59:59 前</strong>。</p><figure class="align-center">
 <a class="reference internal image-reference" href="../_images/FCMA203_26Fall_Lab1QR.png"><img alt="QRcode" height="464" src="../_images/FCMA203_26Fall_Lab1QR.png" width="320" />
@@ -376,8 +344,7 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
-        <a href="../index.html" class="btn btn-neutral float-left" title="《数字逻辑与计算机组成》实验" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
-        <a href="lab2_shifter_backup.html" class="btn btn-neutral float-right" title="实验二 移位器设计与 FPGA 实现" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="lab1_adder.html" class="btn btn-neutral float-left" title="实验一 加法器设计" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
     </div>
 
   <hr/>
