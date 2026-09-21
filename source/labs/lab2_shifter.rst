@@ -167,7 +167,7 @@ FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中
 
       shifter_16bit u_shifter_16bit(
          .clk     (clk)
-         ,.start  (reset)
+         ,.start  (start)
          ,.data   (data)
          ,.shamt  (shamt)
          ,.op     (op)
@@ -177,7 +177,7 @@ FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中
       seg_driver u_seg_driver(
          .clk     (clk)
          ,.data   ({16'd0, out}) // connect shifter output to seg_driver data port, with 16 bits of zero padding to match the 32-bit width
-         ,.reset  (reset)
+         ,.reset  (start)
          ,.code   (code)
          ,.cs_o   (cs_o)
       );
@@ -267,44 +267,34 @@ FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中
    <div class="installation-details-content">
 
 
-之前说到，按键与代码模块中信号的对应关系、拨码开关与代码模块中信号的对应关系比较直接，管脚设置 (I/O Planning) 这个步骤就是建立这种对应关系。
+我们之前提及，按键与代码模块中信号的对应关系、拨码开关与代码模块中信号的对应关系比较直接，管脚设置 (I/O Planning) 这个步骤就是建立这种对应关系。
 I/O Planning 有两种方法，一种是添加设计约束文件 (constraint file, .xdc) ，另一种是使用图形化界面。
 推荐你两种方法都尝试一下。
 
 **方法1：添加设计约束文件**
 
+我们以 S6 按键信号的管脚绑定为例，下图展示了 S6 按键和芯片的 P20 管脚的电路连接。当按下 S6 按键时，P20 管脚连接 3.3V 电平，输入为逻辑 “1”；当松开 S6 时，P20 接地，输入为逻辑 “0”。
 
-我们以 S6 按键信号的管脚绑定为例，以下是约束语句的含义。
+.. figure:: ../picture/lab2_shifter/S6.png
+   :alt: S6
+   :align: center
+   :scale: 60
+
+
+假设我们在 top 模块中将 P20 的信号对应为 start 信号，那么约束语句应如下所示：
 
 .. code-block::
    :caption: shifter.xdc片段
    :linenos:
 
-    set_property PACKAGE_PIN P20 [get_ports reset]
-    set_property IOSTANDARD LVCMOS33 [get_ports reset]
+    set_property PACKAGE_PIN P20 [get_ports start]
+    set_property IOSTANDARD LVCMOS33 [get_ports start]
 
 
-第一行是指定顶层端口 reset 输入信号与 FPGA 封装管脚 P20 相连，通过 FPGA 硬件手册我们知道，
-P20 管脚与 S6 按键电路相连，可以用来作为复位信号输入。
+第一行指定了 start 信号与 P20 管脚相连。第二行指定 start 端口的 I/O 电气标准设置为 LVCMOS33，这个是依据 S6 按键电路的高电平电压是3.3V 决定的，否则电气标准不匹配可能会导致功能失效，甚至对芯片、硬件电路等造成损伤。
 
-第二行是指定 reset 端口的 I/O 电气标准设置为 LVCMOS33，这个是依据 S6 按键电路的高电平电压是3.3V，
-否则电气标准不匹配可能会导致功能失效，甚至对芯片、硬件电路等造成损伤。
+我们给出了一个设计约束文件的模板 `shifter.xdc (点击下载) <C:/FileShare/Labweb_fcma203_26Fall/source/files/shifter.xdc>`_ ，包含了 7 段数码管、时钟信号、start信号、拨码开关的管脚对应。Vivado 约束文件的后缀名为 ``.xdc`` ，代表 Xilinx Deisgn Constraints ，你可下载并在添加源文件的地方选择 ``Add Deisgn Constraints`` 添加约束文件，并在添加后右键点击约束文件，选择 ``Set as Target Constraint File``，文件名后面会出现 **(target)** ，表明这个约束文件作为目标约束文件。当然你也可以进行修改，前提是从手册中获得管脚信息。
 
-我们给出了一个设计约束文件的模板，主要是本次实验有部分电路是我们提供的，用于演示加减法结果。
-因此你可以对拨码输入等按键进行更改，所有的电路以及管脚信息都在 FPGA 硬件手册中。
-
-以下图为例，展示了 S6 按键的电路信息。
-
-.. figure:: ../picture/lab2_shifter/S6.png
-   :alt: S6
-   :align: center
-
-S6 按键被我作为 ``reset`` 复位信号输入到 FPGA 内部，当按下 S6 按键时，P20 管脚连接 3.3V 电平，输入为逻辑1；
-当松开 S6 时，P20 接地，输入为逻辑0。
-
-完成设计如约束文件的编写后，在添加源文件的地方选择 ``Add Deisgn Constraints`` 添加约束文件，Vivado 约束文件的后缀名为 ``.xdc`` ，
-代表 Xilinx Deisgn Constraints ，约束文件添加后，可以右键点击约束文件，选择 ``Set as Target Constraint File``，确保该文件作为目标的
-约束文件，文件名后面会出现 **(target)** ，标明这个约束文件作为目标约束文件。
 
 .. figure:: ../picture/lab2_shifter/Constraints.png
    :alt: Constraints
@@ -319,14 +309,9 @@ S6 按键被我作为 ``reset`` 复位信号输入到 FPGA 内部，当按下 S6
    :alt: io_planning
    :align: center
 
-在下方的 ``Package Pin`` 和 ``I/O Std`` 中填入正确的信息。 
-本次实验的最好是按照我们给的设计约束文件进行管脚绑定，当然你能够根据 FPGA 硬件手册自由修改按键绑定也没问题。
+在下方的 ``Package Pin`` 和 ``I/O Std`` 中填入正确的信息。 完成图形化的管脚绑定后，快捷键 ``ctrl + s`` 保存设计约束文件。打开这个文件你会发现其实通过图形化方式生成的设计约束文件与直接编写添加约束文件异曲同工。因此建议使用约束文件，因此可以偷懒，使用一个模板进行修少量修改。
 
-完成图形化的管脚绑定后，快捷键 ``ctrl + s`` 保存设计约束文件，你可以存放在指定的位置，然后查看，你会发现其实通过这种方式生成的
-设计约束文件与我们给的设计约束文件没有区别，因此你可以手动编写设计约束文件，最简单的办法就是使用模板进行修改。
-
-完成设计约束文件后，由于更新了源文件，需要重新进行综合与实现。再次实现完成之后，观察版图，你会发现这次使用的电路单元应该与之前没有约束文件时是不同的。
-因为我们有了管脚约束之后，会重新布局布线，与 FPGA 真实的封装管脚相连。
+完成设计约束文件后，由于更新了源文件，需要重新进行综合与实现。再次实现完成之后，观察右侧图，你会发现这次使用的电路单元应该与之前没有约束文件时是不同的。这是因为有了管脚约束之后，会重新布局布线，与 FPGA 真实的封装管脚相连。
 
 .. raw:: html
 
@@ -341,6 +326,9 @@ S6 按键被我作为 ``reset`` 复位信号输入到 FPGA 内部，当按下 S6
    <details class="installation-details">
    <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>编程流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
    <div class="installation-details-content">
+
+下载安装驱动
+
 
 点击 ``Generate Bitstream`` 会生成最后需要写入 FPGA 编程的文件，称之为比特流文件。
 如果在这一步报错，很可能是设计约束文件有错误，需要检查错误信息，设计约束文件是否错误。
@@ -437,7 +425,7 @@ S6 按键被我作为 ``reset`` 复位信号输入到 FPGA 内部，当按下 S6
 
    * 实验报告：请点击 `这里 <C:/FileShare/Labweb_fcma203_26Fall/source/files/Lab2_Report_26Fall.docx>`_ 下载实验报告模板
    * ``.v`` 文件压缩包：包含设计文件和仿真文件
-   * 演示视频：录制三种位移方式的演示视频，要求将学生证包含在镜头内
+   * 演示视频：录制三种位移方式的演示视频，要求将学生卡包含在镜头内
 
 填写完成后，三者一同扫码提交（支持从微信聊天记录上传）。
 
