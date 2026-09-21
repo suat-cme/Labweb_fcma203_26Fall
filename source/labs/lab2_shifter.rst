@@ -15,14 +15,14 @@
    * 一种途径是专用集成电路 (ASIC, Application-Specific Integrated Circuit)，即将电路以版图的形式交付给晶圆厂进行生产。
    * 另一种途径是利用可编程逻辑器件 (PLD, Programmable Logic Device) 实现，允许用户对硬件连线进行编程达到预期功能。FPGA (Field-Programmable Gate Array，现场可编程逻辑门阵列) 就是一种比较常用的可编程逻辑硬件实现方式。
 
-回忆一下理论课堂上的内容，由香农展开定理得知，任一逻辑函数都可以由多重 **多路选泽择** 实现。这使得 **查找表** (LUT, Look-Up Table) 结构可以作为一个通用的待编程的逻辑模块。下图所示的简易 LUT 可以实现任意一个 2 输入、1 输出的逻辑功能，只需要在多路选择器的输入端配置相应的信号就可以。例如实现 ``y = a ^ b`` 的异或逻辑，4 个输入端从上至下分别配置为 0、1、1、0 即可。类似地，实现 ``y = (a & b) | c`` 的逻辑功能可以通过配置一个 3 输入 LUT 的输入端实现，这些配置信息将被保存起来。
+回忆一下理论课堂上的内容，由香农展开定理得知，任一逻辑函数都可以由多重 **多路选择器** 实现。这使得 **查找表** (LUT, Look-Up Table) 结构可以作为一个通用的待编程的逻辑模块。下图所示的简易 LUT 可以实现任意一个 2 输入、1 输出的逻辑功能，只需要在多路选择器的输入端配置相应的信号就可以。例如实现 ``y = a ^ b`` 的异或逻辑，4 个输入端从上至下分别配置为 0、1、1、0 即可。类似地，实现 ``y = (a & b) | c`` 的逻辑功能可以通过配置一个 3 输入 LUT 的输入端实现，这些配置信息将被保存起来。
 
 .. figure:: ../picture/lab2_shifter/lut_xor.png
    :alt: lut_xor
    :align: center
    :scale: 60
 
-本课程实验用的是 Xilinx 的 FPGA 芯片及其开发板，主芯片为 ``xc7a100tfgg484`` ，LUT 一般设计为 6 输入，即需要 64bit 的存储器来存储 6 个变量所有的可能组合，这个查找表也可以作为两个 5 输入的查找表或拆分成更小的查找表来使用，因此这些 6 输入查找表 (LUT6) 可以完成复杂的逻辑功能。
+本课程实验用的是 Xilinx 的 FPGA 芯片及其开发板， `点击下载手册 <C:/FileShare/Labweb_fcma203_26Fall/source/files/Minisys硬件手册1.1.pdf>`_ 。主芯片为 ``xc7a100tfgg484`` ，LUT 一般设计为 6 输入，即需要 64bit 的存储器来存储 6 个变量所有的可能组合，这个查找表也可以作为两个 5 输入的查找表或拆分成更小的查找表来使用，因此这些 6 输入查找表 (LUT6) 可以完成复杂的逻辑功能。
 
 .. figure:: ../picture/lab2_shifter/minisys_ori.png
    :alt: minisys_ori
@@ -130,8 +130,12 @@ Vivado 软件为逻辑电路设计提供了从代码到最终 CLB 实现的整�
         endmodule
 
 
-移位器的 FPGA 实现 
+适应于 FPGA 实现的移位器设计修改  
 ------------------------------------------------------
+仿真通过的代码还不能直接移植到 FPGA 芯片中，还需要考虑两个重要的问题：一是代码中的信号和板载模块的对应，二是时钟 clock 信号的匹配。需要针对这两个问题对代码进行补充和修改。
+
+**修改1：代码中的信号和板载模块的对应**
+
 FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中我们将使用板载的按键、拨码开关和 7 段数码管来实现移位器的输入输出功能。
 
 .. figure:: ../picture/lab2_shifter/minisys.png
@@ -146,7 +150,9 @@ FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中
    * 拨码开关 SW[21:20] ：作为位移方式 op 的输入。
    * 7 段数码管 ：作为 out 的输出，每个数码管可以表示一个十六进制数，即 4bit 二进制数。
 
-信号与按键的对应关系、信号与拨码开关的对应关系比较直接，后续 implementation 阶段将在 **约束文件** 中体现。而 out 信号和 7 段数码管的显示则需要通过一个控制电路来实现，因此在 verilog 编码阶段就必须完成。我们提供了 7 段数码管显示十六进制数的代码 `seg.v (点击下载) <../seg.v>`_ 和数码管的驱动程序 `seg_driver.v (点击下载) <../seg_driver.v>`_ 。请将这两个 .v 文件加到你的 project 中，并按下列代码示例的结构，在 **top** module 中将你设计的 **shifter_16bit** module 和 **seg_driver** module 都进行实例化，并将移位器的输出 out 连接到 seg_driver 模块的 data 端口。
+按键与代码模块中信号的对应关系、拨码开关与代码模块中信号的对应关系，都比较直接，将在后续 implementation 阶段 **约束文件** 中体现。
+
+而 out 信号和 7 段数码管的显示则需要通过一个控制电路来实现，因此在 verilog 编码阶段就必须完成。我们提供了 7 段数码管显示十六进制数的代码 `seg.v (点击下载) <../seg.v>`_ 和数码管的驱动程序 `seg_driver.v (点击下载) <../seg_driver.v>`_ 。请将这两个 .v 文件加到你的 project 中，并按下列代码示例的结构，在 **top** module 中将你设计的 **shifter_16bit** module 和 **seg_driver** module 都进行实例化，并将移位器的输出 out 连接到 seg_driver 模块的 data 端口。
 
 .. code-block:: v
    :caption: 顶层模块代码框架
@@ -178,109 +184,203 @@ FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中
 
     endmodule
 
-修改完成的代码
+
+**修改2：clock 信号的匹配**
+
+板载的 clock 信号是由晶振 (下图红框) 产生，标称频率为 100MHz，对应端口序号为 Y18。如果我们直接把 Y18 出来的 clock 信号用于移位器，那么移位将会是 1 秒钟 100 万次，相信我们的眼睛都没有这个能力辨别。因此需要在 **shifter_16bit** module 内部对高频时钟进行分频，将 100MHz 的时钟分频为 1 Hz，以适应我们的生物极限。
+
+.. figure:: ../picture/lab2_shifter/crystaloscillator.png
+   :alt: XTAL
+   :align: center
+   :scale: 40
+
+分频电路的原理可以由计数器实现。举个例子，如果我们想把 100Hz 分频为 1Hz 时钟，可以对每个原始时钟进行计数，从 0 计数到 49 后翻转信号来获得 1Hz 的时钟。
+
+.. figure:: ../picture/lab2_shifter/clk_div1.png
+   :alt: clk_div1
+   :align: center
 
 
 
 
-
-
-
-
-
-
-Vivado 中建立工程并仿真
+移位器的 FPGA 实现 
 ------------------------------------------------------
+代码修改完成后，便可以开始 **综合** -> **实现** -> **编程** 的流程了。
 
 .. raw:: html
 
    <details class="installation-details">
-   <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>工程建立与仿真流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
+   <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>综合流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
    <div class="installation-details-content">
 
-打开 Vivado 软件，来到 Vivado 软件初始界面，如下图所示：
+在 ``Flow Navigator`` 中点击 ``Run Synthesis`` 开始综合，综合完成之后会弹窗，可以直接关闭弹窗。
 
-.. figure:: ../picture/lab1_adder/vivado_home.png
-   :alt: vivado_home
+综合之后的设计可以打开 ``Open Synthesis Design`` 栏，里面有很多内容，我们暂时只关心 ``Schematic`` 电路原理图部分。
+点击打开电路原理图，我们可以看到 HDL 转换之后的电路原理图，如下图所示。
+
+.. figure:: ../picture/lab2_shifter/Schematic.png
+   :alt: Schematic
    :align: center
 
-
-创建一个新 project ，例如取名为 adder ，并保存在合适的位置， **一定要是全英文的路径** 。
-勾选 ``Create project subdirectory`` 则会在路径下创建一个以项目名称命名的文件夹，用于存放项目的文件。如果已手动创建了这个文件夹，就不用勾选该选项了。
-
-.. figure:: ../picture/lab1_adder/vivado_genprj.png
-   :alt: vivado_genprj
-   :align: center
-
-
-硬件型号选择页面可以选择目标 FPGA 芯片型号， ``Family`` 系列选择 ``Artix-7`` ， ``Package`` 封装方式选择 ``fgg484`` ，
-然后选择 ``xc7a100tfgg484`` ，后续的步骤直接 “下一步” 即可。
-
-.. figure:: ../picture/lab1_adder/vivado_device.png
-   :alt: vivado_device
-   :align: center
-
-
-下图是项目初始页面，本次实验内容我们只需要关心红色方框标记出来的区域。
-左侧 ``Flow Navigator`` 显示了完整的设计、仿真、实现流程。
-
-.. figure:: ../picture/lab1_adder/vivado_prj.png
-   :alt: vivado_prj
-   :align: center
-
-
-随后需要将编写好的源代码添加到工程中，可以通过下图所示两个地方添加源文件。
-
-.. figure:: ../picture/lab1_adder/add_source.png
-   :alt: add_source
-   :align: center
-   :scale: 65
-
-
-
-源文件共有三种类型： ``design source`` 设计文件（例如描述电路的 .v 文件）、 ``simulation source`` 仿真文件（例如 Testbench 的 .v 文件），和 ``constraints`` 约束文件。
-
-.. figure:: ../picture/lab1_adder/source_type.png
-   :alt: source_type
-   :align: center
-
-
-文件添加完成之后，软件会自动更新源代码的层级结构，如下图所示。 顶层文件会自动更新，并被标注了品字形图标。如果你想设置其他文件为顶层文件，可以对源文件右键 ``Set as Top`` 修改为顶层文件。
-
-.. figure:: ../picture/lab1_adder/source_struct.png
-   :alt: source_struct
-   :align: center
-   :scale: 70
-
-
-
-点击 ``Run Behavioral Simulation``，即可进行仿真操作。
-
-.. figure:: ../picture/lab1_adder/behavioral_simulation.png
-   :alt: behavioral_simulation
-   :align: center
-   :scale: 70
-
-
-打开仿真界面后，我们可以看到仿真产生的信号波形，如下图所示：
-1号红色框标注的播放键按钮用于运行仿真，2号框的图标用于重启仿真。3号框中是模块层级，点击其中的一个模块就可以将此模块包含的信号显示到4号框中。从4号框中可以选择想要观测的信号，使其波形显示在5号框。6号框的两个放大镜按钮可以放大和缩小波形显示范围，7号所指的按钮用于显示完整的仿真波形信号。
-
-.. figure:: ../picture/lab1_adder/vcd.png
-   :alt: vcd
-   :align: center
-
-
-观察波形，可以判断输出信号是否符合预期，即电路工作是否正确。如果你用了 ``$display()`` 或者 ``$monitor()`` 等函数，输出内容会显示在 Vivado 下方的 Tcl Console 中。
-
-.. figure:: ../picture/lab1_adder/Hello_World.png
-   :alt: Hello_World
-   :align: center
-
+点击模块左上角的加号可以展开模块内部的细节，仔细查看可以发现有 LUT2、LUT5、LUT6、CARRY4、FDCE 等熟悉的基础电路单元，以及输入输出部分的很多 BUF 缓冲器等。说明 Vivado 综合器已经将你写的 Verilog 代码用 FPGA 器件上面的基础电路单元来搭建了。
 
 .. raw:: html
 
    </div>
    </details>
+
+
+
+.. raw:: html
+
+   <details class="installation-details">
+   <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>实现流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
+   <div class="installation-details-content">
+
+直接点击 ``Run Implementation`` ，其大致包含几个步骤：
+
+   - opt_design 逻辑优化，优化电路设计，使其更利于满足时序要求与布线。
+   - place_design 布局，将电路原理图映射到 FPGA 电路单元。
+   - route_design 布线，将这些电路单元通过数据通路连接起来。
+
+在 Implementation 完成实现之后，可以直接关闭弹窗。
+实现之后的设计可以点击 ``Open Implemented Design`` ，右侧会显示下图，
+其中高亮的部分是被实际使用的通用模块部分，如果放大仔细查看使用了什么具体电路单元，
+会发现一些熟悉的单元名字。
+
+.. figure:: ../picture/lab2_shifter/Layout.png
+   :alt: Layout
+   :align: center
+
+.. raw:: html
+
+   </div>
+   </details>
+
+
+
+
+.. raw:: html
+
+   <details class="installation-details">
+   <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>管脚设置流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
+   <div class="installation-details-content">
+
+
+之前说到，按键与代码模块中信号的对应关系、拨码开关与代码模块中信号的对应关系比较直接，管脚设置 (I/O Planning) 这个步骤就是建立这种对应关系。
+I/O Planning 有两种方法，一种是添加设计约束文件 (constraint file, .xdc) ，另一种是使用图形化界面。
+推荐你两种方法都尝试一下。
+
+**方法1：添加设计约束文件**
+
+
+我们以 S6 按键信号的管脚绑定为例，以下是约束语句的含义。
+
+.. code-block::
+   :caption: shifter.xdc片段
+   :linenos:
+
+    set_property PACKAGE_PIN P20 [get_ports reset]
+    set_property IOSTANDARD LVCMOS33 [get_ports reset]
+
+
+第一行是指定顶层端口 reset 输入信号与 FPGA 封装管脚 P20 相连，通过 FPGA 硬件手册我们知道，
+P20 管脚与 S6 按键电路相连，可以用来作为复位信号输入。
+
+第二行是指定 reset 端口的 I/O 电气标准设置为 LVCMOS33，这个是依据 S6 按键电路的高电平电压是3.3V，
+否则电气标准不匹配可能会导致功能失效，甚至对芯片、硬件电路等造成损伤。
+
+我们给出了一个设计约束文件的模板，主要是本次实验有部分电路是我们提供的，用于演示加减法结果。
+因此你可以对拨码输入等按键进行更改，所有的电路以及管脚信息都在 FPGA 硬件手册中。
+
+以下图为例，展示了 S6 按键的电路信息。
+
+.. figure:: ../picture/lab2_shifter/S6.png
+   :alt: S6
+   :align: center
+
+S6 按键被我作为 ``reset`` 复位信号输入到 FPGA 内部，当按下 S6 按键时，P20 管脚连接 3.3V 电平，输入为逻辑1；
+当松开 S6 时，P20 接地，输入为逻辑0。
+
+完成设计如约束文件的编写后，在添加源文件的地方选择 ``Add Deisgn Constraints`` 添加约束文件，Vivado 约束文件的后缀名为 ``.xdc`` ，
+代表 Xilinx Deisgn Constraints ，约束文件添加后，可以右键点击约束文件，选择 ``Set as Target Constraint File``，确保该文件作为目标的
+约束文件，文件名后面会出现 **(target)** ，标明这个约束文件作为目标约束文件。
+
+.. figure:: ../picture/lab2_shifter/Constraints.png
+   :alt: Constraints
+   :align: center
+
+**方法2：使用图形化绑定管脚**
+
+
+在 ``Implemented Design`` 界面，也可以使用图形化的方式绑定管脚。
+
+.. figure:: ../picture/lab2_shifter/io_planning.png
+   :alt: io_planning
+   :align: center
+
+在下方的 ``Package Pin`` 和 ``I/O Std`` 中填入正确的信息。 
+本次实验的最好是按照我们给的设计约束文件进行管脚绑定，当然你能够根据 FPGA 硬件手册自由修改按键绑定也没问题。
+
+完成图形化的管脚绑定后，快捷键 ``ctrl + s`` 保存设计约束文件，你可以存放在指定的位置，然后查看，你会发现其实通过这种方式生成的
+设计约束文件与我们给的设计约束文件没有区别，因此你可以手动编写设计约束文件，最简单的办法就是使用模板进行修改。
+
+完成设计约束文件后，由于更新了源文件，需要重新进行综合与实现。再次实现完成之后，观察版图，你会发现这次使用的电路单元应该与之前没有约束文件时是不同的。
+因为我们有了管脚约束之后，会重新布局布线，与 FPGA 真实的封装管脚相连。
+
+.. raw:: html
+
+   </div>
+   </details>
+
+
+
+
+.. raw:: html
+
+   <details class="installation-details">
+   <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>编程流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
+   <div class="installation-details-content">
+
+点击 ``Generate Bitstream`` 会生成最后需要写入 FPGA 编程的文件，称之为比特流文件。
+如果在这一步报错，很可能是设计约束文件有错误，需要检查错误信息，设计约束文件是否错误。
+
+.. raw:: html
+
+   <div class="admonition mycaution">
+      <p class="admonition-title">驱动安装</p >
+      <p>请仔细检查你的驱动程序是否安装，如果没有安装，请按照 Vivado 安装教程安装驱动程序，否则电脑无法检测到 FPGA ，无法对 FPGA 进行编程。</p>
+   </div>
+
+
+将 FPGA 的 USB 接口与 电脑相连，打开电源开关， FPGA 将通电并发光，如下图所示。
+
+.. figure:: ../picture/lab2_shifter/poweron.png
+   :alt: poweron
+   :align: center
+
+最后点击 ``Open Hardware Manager`` ，再点击 ``Open Target`` ，点击 ``Auto Connect`` 自动连接设备。
+
+.. figure:: ../picture/lab2_shifter/hardware_manager.png
+   :alt: hardware_manager
+   :align: center
+
+
+如上图所示，成功连接 FPGA 后会在 ``Hardware`` 栏显示 FPGA 的状态和信息。
+点击编程设备，然后直接点击编程，等待编程进度条完毕。
+
+点击 ``Program Device`` 后默认会自动选择好比特流文件，如下图所示。
+如果你不小心删除了，可以手动选取生成的比特流文件，在工程目录的 ``<工程名>.runs//impl_1/<顶层模块名>.bit`` 。
+
+编程完成 FPGA 之后，即可尝试波动用户拨码开关，观察 7段数码管 的结果。
+
+.. raw:: html
+
+   </div>
+   </details>
+
+
+
 
 
 
@@ -332,13 +432,20 @@ Vivado 中建立工程并仿真
 
 3. 报告提交
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-请点击 `这里 <../Lab1_Report_26Fall.docx>`_ 下载实验报告模板。填写完成后，连同 Verilog 代码文件的压缩包，扫码提交（支持从微信聊天记录上传）。
+
+本次实验需要提交：
+
+   * 实验报告：请点击 `这里 <C:/FileShare/Labweb_fcma203_26Fall/source/files/Lab2_Report_26Fall.docx>`_ 下载实验报告模板
+   * ``.v`` 文件压缩包：包含设计文件和仿真文件
+   * 演示视频：录制三种位移方式的演示视频，要求将学生证包含在镜头内
+
+填写完成后，三者一同扫码提交（支持从微信聊天记录上传）。
 
 .. raw:: html
 
-   <p>Deadline ：<strong style="color: #d32f2f;">2026-9-20 23:59:59 前</strong>。</p>
+   <p>Deadline ：<strong style="color: #d32f2f;">2026-10-04 23:59:59 前</strong>。</p>
 
-.. figure:: ../picture/lab1_adder/FCMA203_26Fall_Lab1QR.png
+.. figure:: ../picture/lab2_shifter/FCMA203_26Fall_Lab2QR.png
    :alt: QRcode
    :scale: 50
    :align: center

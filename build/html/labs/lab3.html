@@ -183,7 +183,7 @@ SLICEL 的 LUT 主要用于 Logic 逻辑功能，而 SLICEM 的 LUT 主要用于
 <p>综合之后的设计可以打开 <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Synthesis</span> <span class="pre">Design</span></code> 栏，里面有很多内容，我们暂时只关心 <code class="docutils literal notranslate"><span class="pre">Schematic</span></code> 电路原理图部分。
 点击打开电路原理图，我们可以看到 HDL 转换之后的电路原理图，如下图所示。</p>
 <figure class="align-center">
-<img alt="Schematic" src="../_images/Schematic.png" />
+<img alt="Schematic" src="../_images/Schematic1.png" />
 </figure>
 <p>点击模块左上角的加号可以展开模块内部的细节，仔细查看可以发现有 LUT2、LUT5、LUT6、CARRY4、FDCE 等熟悉的基础电路单元。
 以及输入输出部分的很多 BUF 缓冲器等。Vivado 综合器将你写的 Verilog 代码变成了 FPGA 器件上面的基础电路单元，
@@ -202,7 +202,7 @@ SLICEL 的 LUT 主要用于 Logic 逻辑功能，而 SLICEM 的 LUT 主要用于
 其中高亮的部分是我们实际使用的电路单元，可以放大仔细查看我们使用的具体的电路单元，
 会发现之前电路原理图中的熟悉的单元名字。</p>
 <figure class="align-center">
-<img alt="Layout" src="../_images/Layout.png" />
+<img alt="Layout" src="../_images/Layout1.png" />
 </figure>
 <section id="i-o-planning">
 <h3>管脚绑定 I/O Planning<a class="headerlink" href="#i-o-planning" title="链接到此标题。"></a></h3>
@@ -227,7 +227,7 @@ P20 管脚与 S6 按键电路相连，可以用来作为复位信号输入。</p
 因此你可以对拨码输入等按键进行更改，所有的电路以及管脚信息都在 FPGA 硬件手册中。</p>
 <p>以下图为例，展示了 S6 按键的电路信息。</p>
 <figure class="align-center">
-<img alt="S6" src="../_images/S6.png" />
+<img alt="S6" src="../_images/S61.png" />
 </figure>
 <p>S6 按键被我作为 <code class="docutils literal notranslate"><span class="pre">reset</span></code> 复位信号输入到 FPGA 内部，当按下 S6 按键时，P20 管脚连接 3.3V 电平，输入为逻辑1；
 当松开 S6 时，P20 接地，输入为逻辑0。</p>
@@ -235,14 +235,14 @@ P20 管脚与 S6 按键电路相连，可以用来作为复位信号输入。</p
 代表 Xilinx Deisgn Constraints ，约束文件添加后，可以右键点击约束文件，选择 <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">as</span> <span class="pre">Target</span> <span class="pre">Constraint</span> <span class="pre">File</span></code>，确保该文件作为目标的
 约束文件，文件名后面会出现 <strong>(target)</strong> ，标明这个约束文件作为目标约束文件。</p>
 <figure class="align-center">
-<img alt="Constraints" src="../_images/Constraints.png" />
+<img alt="Constraints" src="../_images/Constraints1.png" />
 </figure>
 </section>
 <section id="id5">
 <h4>方法二 使用图形化绑定管脚<a class="headerlink" href="#id5" title="链接到此标题。"></a></h4>
 <p>在 <code class="docutils literal notranslate"><span class="pre">Implemented</span> <span class="pre">Design</span></code> 界面，也可以使用图形化的方式绑定管脚。</p>
 <figure class="align-center">
-<img alt="io_planning" src="../_images/io_planning.png" />
+<img alt="io_planning" src="../_images/io_planning1.png" />
 </figure>
 <p>在下方的 <code class="docutils literal notranslate"><span class="pre">Package</span> <span class="pre">Pin</span></code> 和 <code class="docutils literal notranslate"><span class="pre">I/O</span> <span class="pre">Std</span></code> 中填入正确的信息。
 本次实验的最好是按照我们给的设计约束文件进行管脚绑定，当然你能够根据 FPGA 硬件手册自由修改按键绑定也没问题。</p>
@@ -262,11 +262,11 @@ P20 管脚与 S6 按键电路相连，可以用来作为复位信号输入。</p
    <p>请仔细检查你的驱动程序是否安装，如果没有安装，请按照 Vivado 安装教程安装驱动程序，否则电脑无法检测到 FPGA ，无法对 FPGA 进行编程。</p>
 </div><p>将 FPGA 的 USB 接口与 电脑相连，打开电源开关， FPGA 将通电并发光，如下图所示。</p>
 <figure class="align-center">
-<img alt="poweron" src="../_images/poweron.png" />
+<img alt="poweron" src="../_images/poweron1.png" />
 </figure>
 <p>最后点击 <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Hardware</span> <span class="pre">Manager</span></code> ，再点击 <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Target</span></code> ，点击 <code class="docutils literal notranslate"><span class="pre">Auto</span> <span class="pre">Connect</span></code> 自动连接设备。</p>
 <figure class="align-center">
-<img alt="hardware_manager" src="../_images/hardware_manager.png" />
+<img alt="hardware_manager" src="../_images/hardware_manager1.png" />
 </figure>
 <p>如上图所示，成功连接 FPGA 后会在 <code class="docutils literal notranslate"><span class="pre">Hardware</span></code> 栏显示 FPGA 的状态和信息。
 点击编程设备，然后直接点击编程，等待编程进度条完毕。</p>
