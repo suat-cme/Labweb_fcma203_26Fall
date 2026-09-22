@@ -161,8 +161,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 <section id="id6">
 <h3>Verilog 描述全加器<a class="headerlink" href="#id6" title="链接到此标题。"></a></h3>
 <p>我们知道 Verilog 描述电路可以有很多模式：结构级描述、行为级描述等。以下给出一种全加器的 Verilog 实现方式：</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">全加器 (Full Adder) 的一种 Verilog 实现</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">全加器 (Full Adder) 的一种 Verilog 实现</span><a class="headerlink" href="#id10" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">ref_fa</span><span class="w"> </span><span class="p">(</span>
 <span class="linenos"> 2</span><span class="w">    </span><span class="n">a</span><span class="w">       </span><span class="c1">// &lt;&lt;i&lt;&lt;</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="p">,</span><span class="n">b</span><span class="w">       </span><span class="c1">// &lt;&lt;i&lt;&lt;</span>
@@ -189,8 +189,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 <p class="admonition-title">必做内容1：Verilog 实现4位超前进位加法器</p>
 <p>以下图代码框架为基础，补全4位超前进位加法器的 Verilog实现，并保存为 .v 文件。
 虽然上图中的 &quot;assign {cout, sum} = a + b + cin&quot; 的赋值方式可以只用一行实现4位加法，但无法在具体实现方式上体现 “超前进位”，因此不允许使用这种连续赋值法。</p>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">4位超前进位加法器代码框架</span><a class="headerlink" href="#id12" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">4位超前进位加法器代码框架</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">cla_4bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">cout</span><span class="p">);</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cin</span><span class="p">;</span>
@@ -221,8 +221,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 </a>
 </figure>
 <p>我们从一个简单的全加器 Testbench 入手，了解一下 Testbench 的简单写法。</p>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">全加器的简单 Testbench</span><a class="headerlink" href="#id13" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">全加器的简单 Testbench</span><a class="headerlink" href="#id12" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="no">`timescale</span><span class="w"> </span><span class="mh">1</span><span class="n">ns</span><span class="o">/</span><span class="mh">1</span><span class="n">ps</span>
 </span><span class="linenos"> 2</span><span class="k">module</span><span class="w"> </span><span class="n">ref_fa_tb</span><span class="w"> </span><span class="p">();</span>
 <span class="linenos"> 3</span><span class="w">   </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="mh">2</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">in</span><span class="p">;</span>
@@ -336,8 +336,8 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 <p class="admonition-title">思考：大型加法器的验证</p>
 <p>当电路复杂度上升了，怎么验证呢？例如对于64位的加法器，难道需要将所有的情况都穷举，然后与 reference 比较结果吗？这将一共有 2^64 * 2^64 * 2 种情况，显然不可能。那我们该如何验证呢？</p>
 <p>下图代码给出了一种方案，自己阅读思考一下吧！</p>
-<div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">测试激励示例</span><a class="headerlink" href="#id14" title="链接到此段代码"></a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">测试激励示例</span><a class="headerlink" href="#id13" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">initial</span><span class="w">  </span><span class="k">begin</span>
 <span class="hll"><span class="linenos"> 2</span><span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">integer</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">100000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">  </span><span class="k">begin</span>
 </span><span class="linenos"> 3</span><span class="w">      </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">$random</span><span class="p">;</span>
@@ -365,7 +365,14 @@ Vivado 不同的版本之间功能差异比较小，2015 年之后的版本，�
 </section>
 <section id="id9">
 <h2>3. 报告提交<a class="headerlink" href="#id9" title="链接到此标题。"></a></h2>
-<p>请点击 <a class="reference external" href="../../../source/lab1/Lab1_Report_26Fall.docx">这里</a> 下载实验报告模板。填写完成后，连同 Verilog 代码文件的压缩包，扫码提交（支持从微信聊天记录上传）。</p>
+<p>本次实验需要提交：</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>实验报告：<a class="reference download internal" download="" href="../_downloads/b9271e44b77fd6dcc38e9dba6dda2a16/Lab1_Report_26Fall.docx"><code class="xref download docutils literal notranslate"><span class="pre">下载实验报告模板</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.v</span></code> 文件压缩包：包含设计文件和仿真文件</p></li>
+</ul>
+</div></blockquote>
+<p>两项一同扫码提交（支持从微信聊天记录上传）。</p>
 <p>Deadline ：<strong style="color: #d32f2f;">2026-9-20 23:59:59 前</strong>。</p><figure class="align-center">
 <a class="reference internal image-reference" href="../_images/FCMA203_26Fall_Lab1QR.png"><img alt="QRcode" height="464" src="../_images/FCMA203_26Fall_Lab1QR.png" width="320" />
 </a>
