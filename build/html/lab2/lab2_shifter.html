@@ -22,7 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
-    <link rel="prev" title="实验一 加法器设计" href="lab1_adder.html" /> 
+    <link rel="prev" title="实验一 加法器设计" href="../lab1/lab1_adder.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,7 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="lab1_adder.html">实验一 加法器设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab1/lab1_adder.html">实验一 加法器设计</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">实验二 移位器设计与FPGA实现</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">1. 实验准备</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id2">认识 FPGA</a></li>
@@ -80,7 +80,7 @@
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">实验二 移位器设计与 FPGA 实现</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/labs/lab2_shifter.rst.txt" rel="nofollow"> 查看页面源码</a>
+            <a href="../_sources/lab2/lab2_shifter.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -108,7 +108,7 @@
 <a class="reference internal image-reference" href="../_images/lut_xor.png"><img alt="lut_xor" height="237" src="../_images/lut_xor.png" width="469" />
 </a>
 </figure>
-<p>本课程实验用的是 Xilinx 的 FPGA 芯片及其开发板， <a class="reference external" href="C:/FileShare/Labweb_fcma203_26Fall/source/files/Minisys硬件手册1.1.pdf">点击下载手册</a> 。主芯片为 <code class="docutils literal notranslate"><span class="pre">xc7a100tfgg484</span></code> ，LUT 一般设计为 6 输入，即需要 64bit 的存储器来存储 6 个变量所有的可能组合，这个查找表也可以作为两个 5 输入的查找表或拆分成更小的查找表来使用，因此这些 6 输入查找表 (LUT6) 可以完成复杂的逻辑功能。</p>
+<p>本课程实验用的是 Xilinx 的 FPGA 芯片及其开发板， <a class="reference external" href="../../../source/lab2/Minisys硬件手册1.1.pdf">点击下载手册</a> 。主芯片为 <code class="docutils literal notranslate"><span class="pre">xc7a100tfgg484</span></code> ，LUT 一般设计为 6 输入，即需要 64bit 的存储器来存储 6 个变量所有的可能组合，这个查找表也可以作为两个 5 输入的查找表或拆分成更小的查找表来使用，因此这些 6 输入查找表 (LUT6) 可以完成复杂的逻辑功能。</p>
 <figure class="align-center">
 <img alt="minisys_ori" src="../_images/minisys_ori.png" />
 </figure>
@@ -229,7 +229,7 @@
 </ul>
 </div></blockquote>
 <p>按键与代码模块中信号的对应关系、拨码开关与代码模块中信号的对应关系，都比较直接，将在后续 implementation 阶段 <strong>约束文件</strong> 中体现。</p>
-<p>而 out 信号和 7 段数码管的显示则需要通过一个控制电路来实现，因此在 verilog 编码阶段就必须完成。我们提供了 7 段数码管显示十六进制数的代码 <a class="reference external" href="../seg.v">seg.v (点击下载)</a> 和数码管的驱动程序 <a class="reference external" href="../seg_driver.v">seg_driver.v (点击下载)</a> 。请将这两个 .v 文件加到你的 project 中，并按下列代码示例的结构，在 <strong>top</strong> module 中将你设计的 <strong>shifter_16bit</strong> module 和 <strong>seg_driver</strong> module 都进行实例化，并将移位器的输出 out 连接到 seg_driver 模块的 data 端口。</p>
+<p>而 out 信号和 7 段数码管的显示则需要通过一个控制电路来实现，因此在 verilog 编码阶段就必须完成。我们提供了 7 段数码管显示十六进制数的代码 <a class="reference external" href="../../../source/lab2/seg.v">seg.v (点击下载)</a> 和数码管的驱动程序 <a class="reference external" href="../../../source/lab2/seg_driver.v">seg_driver.v (点击下载)</a> 。请将这两个 .v 文件加到你的 project 中，并按下列代码示例的结构，在 <strong>top</strong> module 中将你设计的 <strong>shifter_16bit</strong> module 和 <strong>seg_driver</strong> module 都进行实例化，并将移位器的输出 out 连接到 seg_driver 模块的 data 端口。</p>
 <div class="literal-block-wrapper docutils container" id="id13">
 <div class="code-block-caption"><span class="caption-text">顶层模块代码框架</span><a class="headerlink" href="#id13" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="p">(</span>
@@ -273,6 +273,10 @@
 <section id="id8">
 <h3>移位器的 FPGA 实现<a class="headerlink" href="#id8" title="链接到此标题。"></a></h3>
 <p>代码修改完成后，便可以开始 <strong>综合</strong> -&gt; <strong>实现</strong> -&gt; <strong>编程</strong> 的流程了。</p>
+<div class="mytodo admonition">
+<p class="admonition-title">必做内容3：移位器的 FPGA 实现与演示</p>
+<p>跟随下列步骤完成 FPGA 的实现，并在开发板上进行拨码测试。拨码测试必须包含对三种移位方式、不同移位量、start信号功能的测试。</p>
+</div>
 <details class="installation-details">
 <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>综合流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
 <div class="installation-details-content"><p>在 <code class="docutils literal notranslate"><span class="pre">Flow</span> <span class="pre">Navigator</span></code> 中点击 <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">Synthesis</span></code> 开始综合，综合完成之后会弹窗，可以直接关闭弹窗。</p>
@@ -321,7 +325,7 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
 </div>
 </div>
 <p>第一行指定了 start 信号与 P20 管脚相连。第二行指定 start 端口的 I/O 电气标准设置为 LVCMOS33，这个是依据 S6 按键电路的高电平电压是3.3V 决定的，否则电气标准不匹配可能会导致功能失效，甚至对芯片、硬件电路等造成损伤。</p>
-<p>我们给出了一个设计约束文件的模板 <a class="reference external" href="C:/FileShare/Labweb_fcma203_26Fall/source/files/shifter.xdc">shifter.xdc (点击下载)</a> ，包含了 7 段数码管、时钟信号、start信号、拨码开关的管脚对应。Vivado 约束文件的后缀名为 <code class="docutils literal notranslate"><span class="pre">.xdc</span></code> ，代表 Xilinx Deisgn Constraints ，你可下载并在添加源文件的地方选择 <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">Deisgn</span> <span class="pre">Constraints</span></code> 添加约束文件，并在添加后右键点击约束文件，选择 <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">as</span> <span class="pre">Target</span> <span class="pre">Constraint</span> <span class="pre">File</span></code>，文件名后面会出现 <strong>(target)</strong> ，表明这个约束文件作为目标约束文件。当然你也可以进行修改，前提是从手册中获得管脚信息。</p>
+<p>我们给出了一个设计约束文件的模板 <a class="reference external" href="../../../source/lab2/shifter.xdc">shifter.xdc (点击下载)</a> ，包含了 7 段数码管、时钟信号、start信号、拨码开关的管脚对应。Vivado 约束文件的后缀名为 <code class="docutils literal notranslate"><span class="pre">.xdc</span></code> ，代表 Xilinx Deisgn Constraints ，你可下载并在添加源文件的地方选择 <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">Deisgn</span> <span class="pre">Constraints</span></code> 添加约束文件，并在添加后右键点击约束文件，选择 <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">as</span> <span class="pre">Target</span> <span class="pre">Constraint</span> <span class="pre">File</span></code>，文件名后面会出现 <strong>(target)</strong> ，表明这个约束文件作为目标约束文件。当然你也可以进行修改，前提是从手册中获得管脚信息。</p>
 <figure class="align-center">
 <img alt="Constraints" src="../_images/Constraints.png" />
 </figure>
@@ -367,13 +371,13 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
 <p>本次实验需要提交：</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>实验报告：请点击 <a class="reference external" href="C:/FileShare/Labweb_fcma203_26Fall/source/files/Lab2_Report_26Fall.docx">这里</a> 下载实验报告模板</p></li>
+<li><p>实验报告：请点击 <a class="reference external" href="../../../source/lab2/Lab2_Report_26Fall.docx">这里</a> 下载实验报告模板</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">.v</span></code> 文件压缩包：包含设计文件和仿真文件</p></li>
-<li><p>演示视频：录制三种位移方式的演示视频，要求将学生卡包含在镜头内</p></li>
+<li><p>演示视频：录制一个演示视频，要求将学生卡放置在镜头内，包含三种位移方式的演示，时长不超过 3 分钟</p></li>
 </ul>
 </div></blockquote>
 <p>填写完成后，三者一同扫码提交（支持从微信聊天记录上传）。</p>
-<p>Deadline ：<strong style="color: #d32f2f;">2026-10-04 23:59:59 前</strong>。</p><figure class="align-center">
+<p>Deadline ：<strong style="color: #d32f2f;">2026-10-04 23:59:59 </strong>。</p><figure class="align-center">
 <a class="reference internal image-reference" href="../_images/FCMA203_26Fall_Lab2QR.png"><img alt="QRcode" height="464" src="../_images/FCMA203_26Fall_Lab2QR.png" width="320" />
 </a>
 </figure>
@@ -384,7 +388,7 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
-        <a href="lab1_adder.html" class="btn btn-neutral float-left" title="实验一 加法器设计" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../lab1/lab1_adder.html" class="btn btn-neutral float-left" title="实验一 加法器设计" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
     </div>
 
   <hr/>

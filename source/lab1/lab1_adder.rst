@@ -40,50 +40,50 @@ Verilog 代码编写环境
 
 Vscode 中安装 Verilog-HDL/SystemVerilog.
 
-.. figure:: ../picture/lab1_adder/verilog插件.png
+.. figure:: ./pics/verilog插件.png
    :alt: verilog插件
    :align: center
    :scale: 80
 
 Vscode 中安装 CTags Support.
 
-.. figure:: ../picture/lab1_adder/ctags_support.png
+.. figure:: ./pics/ctags_support.png
    :alt: ctags_support
    :align: center
    :scale: 80
 
 安装 Universal Ctags，登录网站 https://github.com/universal-ctags/ctags-win32/releases ， 选个合适的版本安装。
 
-.. figure:: ../picture/lab1_adder/ctags_zip.png
+.. figure:: ./pics/ctags_zip.png
    :alt: ctags_zip
    :align: center
    :scale: 90
 
 解压刚才下载的压缩包，记住解压后的文件所存放的根目录。
 
-.. figure:: ../picture/lab1_adder/ctags_folder.png
+.. figure:: ./pics/ctags_folder.png
    :alt: ctags_folder
    :align: center
    :scale: 90
 
 配置用户环境变量，将刚才记住的根目录加入到 Path 值中。
 
-.. figure:: ../picture/lab1_adder/账户环境变量.png
+.. figure:: ./pics/账户环境变量.png
    :alt: 账户环境变量
    :align: center
    :scale: 80
 
-.. figure:: ../picture/lab1_adder/编辑账户环境变量.png
+.. figure:: ./pics/编辑账户环境变量.png
    :alt: 编辑账户环境变量
    :align: center
 
 在 VScode 的 File -> Preferences -> Setting 中搜索Verilog 。对 Verilog > Ctags: Path 、 Verilog > Linting: Linter 进行配置。
 
-.. figure:: ../picture/lab1_adder/path.png
+.. figure:: ./pics/path.png
    :alt: path
    :align: center
 
-.. figure:: ../picture/lab1_adder/linter.png
+.. figure:: ./pics/linter.png
    :alt: linter
    :align: center
    :scale: 90
@@ -176,7 +176,7 @@ Testbench 编写
 
 Testbench 本身也描述了一个 module ，但是它没有端口，不需要和外界相连。在 这个testbench module 的内部生成一些信号，作为待测试模块（如 ref_fa 模块）的输入，然后观察待测试模块的输出信号是否符合预期。Testbench 也可以使用 $display() 函数打印一些信息，帮助我们判断电路是否正确。
 
-.. figure:: ../picture/lab1_adder/Testbench.png
+.. figure:: ./pics/Testbench.png
    :alt: Testbench
    :scale: 20
    :align: center
@@ -255,7 +255,7 @@ Vivado 中建立工程并仿真
 
 打开 Vivado 软件，来到 Vivado 软件初始界面，如下图所示：
 
-.. figure:: ../picture/lab1_adder/vivado_home.png
+.. figure:: ./pics/vivado_home.png
    :alt: vivado_home
    :align: center
 
@@ -263,7 +263,7 @@ Vivado 中建立工程并仿真
 创建一个新 project ，例如取名为 adder ，并保存在合适的位置， **一定要是全英文的路径** 。
 勾选 ``Create project subdirectory`` 则会在路径下创建一个以项目名称命名的文件夹，用于存放项目的文件。如果已手动创建了这个文件夹，就不用勾选该选项了。
 
-.. figure:: ../picture/lab1_adder/vivado_genprj.png
+.. figure:: ./pics/vivado_genprj.png
    :alt: vivado_genprj
    :align: center
 
@@ -271,7 +271,7 @@ Vivado 中建立工程并仿真
 硬件型号选择页面可以选择目标 FPGA 芯片型号， ``Family`` 系列选择 ``Artix-7`` ， ``Package`` 封装方式选择 ``fgg484`` ，
 然后选择 ``xc7a100tfgg484`` ，后续的步骤直接 “下一步” 即可。
 
-.. figure:: ../picture/lab1_adder/vivado_device.png
+.. figure:: ./pics/vivado_device.png
    :alt: vivado_device
    :align: center
 
@@ -279,14 +279,14 @@ Vivado 中建立工程并仿真
 下图是项目初始页面，本次实验内容我们只需要关心红色方框标记出来的区域。
 左侧 ``Flow Navigator`` 显示了完整的设计、仿真、实现流程。
 
-.. figure:: ../picture/lab1_adder/vivado_prj.png
+.. figure:: ./pics/vivado_prj.png
    :alt: vivado_prj
    :align: center
 
 
 随后需要将编写好的源代码添加到工程中，可以通过下图所示两个地方添加源文件。
 
-.. figure:: ../picture/lab1_adder/add_source.png
+.. figure:: ./pics/add_source.png
    :alt: add_source
    :align: center
    :scale: 65
@@ -295,14 +295,14 @@ Vivado 中建立工程并仿真
 
 源文件共有三种类型： ``design source`` 设计文件（例如描述电路的 .v 文件）、 ``simulation source`` 仿真文件（例如 Testbench 的 .v 文件），和 ``constraints`` 约束文件。
 
-.. figure:: ../picture/lab1_adder/source_type.png
+.. figure:: ./pics/source_type.png
    :alt: source_type
    :align: center
 
 
 文件添加完成之后，软件会自动更新源代码的层级结构，如下图所示。 顶层文件会自动更新，并被标注了品字形图标。如果你想设置其他文件为顶层文件，可以对源文件右键 ``Set as Top`` 修改为顶层文件。
 
-.. figure:: ../picture/lab1_adder/source_struct.png
+.. figure:: ./pics/source_struct.png
    :alt: source_struct
    :align: center
    :scale: 70
@@ -311,7 +311,7 @@ Vivado 中建立工程并仿真
 
 点击 ``Run Behavioral Simulation``，即可进行仿真操作。
 
-.. figure:: ../picture/lab1_adder/behavioral_simulation.png
+.. figure:: ./pics/behavioral_simulation.png
    :alt: behavioral_simulation
    :align: center
    :scale: 70
@@ -320,14 +320,14 @@ Vivado 中建立工程并仿真
 打开仿真界面后，我们可以看到仿真产生的信号波形，如下图所示：
 1号红色框标注的播放键按钮用于运行仿真，2号框的图标用于重启仿真。3号框中是模块层级，点击其中的一个模块就可以将此模块包含的信号显示到4号框中。从4号框中可以选择想要观测的信号，使其波形显示在5号框。6号框的两个放大镜按钮可以放大和缩小波形显示范围，7号所指的按钮用于显示完整的仿真波形信号。
 
-.. figure:: ../picture/lab1_adder/vcd.png
+.. figure:: ./pics/vcd.png
    :alt: vcd
    :align: center
 
 
 观察波形，可以判断输出信号是否符合预期，即电路工作是否正确。如果你用了 ``$display()`` 或者 ``$monitor()`` 等函数，输出内容会显示在 Vivado 下方的 Tcl Console 中。
 
-.. figure:: ../picture/lab1_adder/Hello_World.png
+.. figure:: ./pics/Hello_World.png
    :alt: Hello_World
    :align: center
 
@@ -399,13 +399,13 @@ Vivado 中建立工程并仿真
 
 3. 报告提交
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-请点击 `这里 <../Lab1_Report_26Fall.docx>`_ 下载实验报告模板。填写完成后，连同 Verilog 代码文件的压缩包，扫码提交（支持从微信聊天记录上传）。
+请点击 `这里 <../../../source/lab1/Lab1_Report_26Fall.docx>`_ 下载实验报告模板。填写完成后，连同 Verilog 代码文件的压缩包，扫码提交（支持从微信聊天记录上传）。
 
 .. raw:: html
 
    <p>Deadline ：<strong style="color: #d32f2f;">2026-9-20 23:59:59 前</strong>。</p>
 
-.. figure:: ../picture/lab1_adder/FCMA203_26Fall_Lab1QR.png
+.. figure:: ./pics/FCMA203_26Fall_Lab1QR.png
    :alt: QRcode
    :scale: 50
    :align: center
