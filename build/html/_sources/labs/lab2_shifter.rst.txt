@@ -15,7 +15,9 @@
    * 一种途径是专用集成电路 (ASIC, Application-Specific Integrated Circuit)，即将电路以版图的形式交付给晶圆厂进行生产。
    * 另一种途径是利用可编程逻辑器件 (PLD, Programmable Logic Device) 实现，允许用户对硬件连线进行编程达到预期功能。FPGA (Field-Programmable Gate Array，现场可编程逻辑门阵列) 就是一种比较常用的可编程逻辑硬件实现方式。
 
-回忆一下理论课堂上的内容，由香农展开定理得知，任一逻辑函数都可以由多重 **多路选择器** 实现。这使得 **查找表** (LUT, Look-Up Table) 结构可以作为一个通用的待编程的逻辑模块。下图所示的简易 LUT 可以实现任意一个 2 输入、1 输出的逻辑功能，只需要在多路选择器的输入端配置相应的信号就可以。例如实现 ``y = a ^ b`` 的异或逻辑，4 个输入端从上至下分别配置为 0、1、1、0 即可。类似地，实现 ``y = (a & b) | c`` 的逻辑功能可以通过配置一个 3 输入 LUT 的输入端实现，这些配置信息将被保存起来。
+回忆一下理论课堂上的内容，由香农展开定理得知，任一逻辑函数都可以由多重 **多路选择器** 实现。这使得 **查找表** (LUT, Look-Up Table) 结构可以作为一个通用的待编程的逻辑模块。
+
+下图所示的简易 LUT 可以实现任意一个 2 输入、1 输出的逻辑功能，只需要在多路选择器的输入端配置相应的信号就可以。例如实现 ``y = a ^ b`` 的异或逻辑，4 个输入端从上至下分别配置为 0、1、1、0 即可。类似地，实现 ``y = (a & b) | c`` 的逻辑功能可以通过配置一个 3 输入 LUT 的输入端实现，这些配置信息将被保存起来。
 
 .. figure:: ../picture/lab2_shifter/lut_xor.png
    :alt: lut_xor
@@ -327,16 +329,10 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
    <summary><span class="installation-details-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" focusable="false"><path d="M2 5h10M12 16H7a5.5 5.5 0 0 0 0 11h5M22 27h6"/><path d="M22 5h3a5.5 5.5 0 0 1 0 11h-3" stroke-dasharray="1.2 1.2"/><g fill="currentColor" stroke="none"><circle cx="17" cy="5" r="4"/><circle cx="17" cy="16" r="4"/><circle cx="17" cy="27" r="4"/><path d="M28 23l4 4-4 4z"/></g></svg></span>编程流程<span class="installation-details-toggle"><span class="when-closed">（点击展开）</span><span class="when-open">（点击折叠）</span></span></summary>
    <div class="installation-details-content">
 
-点击 ``Generate Bitstream`` 会生成最后需要写入 FPGA 编程的文件，称之为比特流文件。
-如果在这一步报错，很可能是设计约束文件有错误，需要检查错误信息，设计约束文件是否错误。
 
-.. raw:: html
 
-   <div class="admonition mycaution">
-      <p class="admonition-title">驱动安装</p >
-      <p>请仔细检查你的驱动程序是否安装，如果没有安装，请按照 Vivado 安装教程安装驱动程序，否则电脑无法检测到 FPGA ，无法对 FPGA 进行编程。</p>
-   </div>
-
+点击 ``Generate Bitstream`` 会生成比特流文件，这是最后需要写入 FPGA 进行编程的文件。
+如果在这一步报错，很可能是设计约束文件有错误，具体需要查看错误提示信息。
 
 将 FPGA 的 USB 接口与 电脑相连，打开电源开关， FPGA 将通电并发光，如下图所示。
 
@@ -344,20 +340,31 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
    :alt: poweron
    :align: center
 
-最后点击 ``Open Hardware Manager`` ，再点击 ``Open Target`` ，点击 ``Auto Connect`` 自动连接设备。
+点击软件界面 ``Open Hardware Manager`` -> ``Open Target`` -> ``Auto Connect`` ，自动连接设备。成功连接 FPGA 后会在 ``Hardware`` 栏显示 FPGA 的状态和信息，如下图所示。点击 ``Program Device`` ，软件默认会自动选择一个比特流文件。
+也可以手动选取生成的比特流文件，一般在工程目录的 ``<工程名>.runs/impl_1/<顶层模块名>.bit`` 。然后点击编程，等待编程进度条完毕。
 
 .. figure:: ../picture/lab2_shifter/hardware_manager.png
    :alt: hardware_manager
    :align: center
 
 
-如上图所示，成功连接 FPGA 后会在 ``Hardware`` 栏显示 FPGA 的状态和信息。
-点击编程设备，然后直接点击编程，等待编程进度条完毕。
+.. admonition:: 安装 Vivado 驱动
+   :class: mycaution
 
-点击 ``Program Device`` 后默认会自动选择好比特流文件，如下图所示。
-如果你不小心删除了，可以手动选取生成的比特流文件，在工程目录的 ``<工程名>.runs//impl_1/<顶层模块名>.bit`` 。
+   Auto connect 那一步能检测到 FPGA 板子的前提，是 Vivado 的驱动程序已经安装。如果没有安装，请按图示的路径找到并安装 Vivado 驱动程序，否则电脑无法检测到 FPGA 板，无法进行编程。
+   
+   .. figure:: ../picture/lab2_shifter/vivado_driver.png
+      :alt: vivado_driver1
+      :align: center
+      :scale: 55
 
-编程完成 FPGA 之后，即可尝试波动用户拨码开关，观察 7段数码管 的结果。
+   .. figure:: ../picture/lab2_shifter/vivado_driver2.png
+      :alt: vivado_driver1
+      :align: center
+      :scale: 60
+
+
+编程完成 FPGA 之后，即可拨动拨码开关、按S6按键，观察 7 段数码管的移位动作。
 
 .. raw:: html
 
@@ -365,55 +372,6 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
    </details>
 
 
-
-
-
-
-.. raw:: html
-
-   <div class="admonition myquestion">
-      <p class="admonition-title">选做内容：16位层次化超前进位加法器</p >
-      <p>我们可以改造一下之前的4位超前进位加法器代码，将 generate 进位生成信号 g 和 propagate 进位传递信号 p 输出，给第二级超前进位电路使用，组成16位层次化超前进位加法器。
-   </div>
-
-
-.. admonition:: 思考：大型加法器的验证
-   :class: myquestion
-
-   当电路复杂度上升了，怎么验证呢？例如对于64位的加法器，难道需要将所有的情况都穷举，然后与 reference 比较结果吗？这将一共有 2^64 * 2^64 * 2 种情况，显然不可能。那我们该如何验证呢？
-
-   下图代码给出了一种方案，自己阅读思考一下吧！
-
-   .. code-block:: v
-      :caption: 测试激励示例
-      :emphasize-lines: 2, 9-12
-      :linenos:
-
-      initial  begin
-         for (integer i = 0; i < 100000; i = i + 1)  begin
-            a = $random;
-            b = $random;
-            cin = $random;
-
-            #100;
-
-            if ((ref_sum != dut_sum) || (ref_cout != dut_cout))   begin
-               $display("Print tests failed information");
-               $stop;   // 如果有错误暂停仿真
-            end
-         end
-      end
-
-
-
-.. raw:: html
-
-   <div class="admonition myhint">
-      <p class="admonition-title">有错误怎么去 Debug </p >
-      <p>Bug 是在所难免的，那么遇到错误了，怎么去 Debug 呢？</p>
-      <p>如果电路的信号数量太多了，比如32位加法器，让你觉得根本无从下手，建议你先把小一些的模块，比如16位加法器模块验证正确，而要验证16位加法器又需要确保4位加法器是正确的。</p>
-      <p>所以一个好办法就是采取最中规中矩的方法：<strong>写一个模块验证一个，写一点代码验证一点。</strong>这样可以快速定位大工程中的问题，而不是等写了一千行代码了，再一起验证。</p>
-   </div>
 
 3. 报告提交
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
