@@ -63,7 +63,49 @@ html_static_path = ['_static']
 html_extra_path = ['files']
 
 html_css_files = ['custom.css']
-html_js_files = ['copy-code.js']
+html_js_files = ['copy-code.js', 'download-files.js']
+
+
+def write_download_script(app, exception):
+    """Embed download bytes so downloads also work on local file:// pages."""
+    if exception is not None or app.builder.format != 'html':
+        return
+
+    import base64
+    import json
+    from pathlib import Path
+
+    files = {
+        name: base64.b64encode(
+            (Path(app.srcdir) / 'lab2' / name).read_bytes()
+        ).decode('ascii')
+        for name in ('seg.v', 'seg_driver.v', 'shifter.xdc')
+    }
+    script = "const verilogDownloads = " + json.dumps(files) + ";\n" + r"""
+document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[download]');
+    if (!link) return;
+    const filename = new URL(link.href).pathname.split('/').pop();
+    if (!Object.prototype.hasOwnProperty.call(verilogDownloads, filename)) return;
+    event.preventDefault();
+    const bytes = Uint8Array.from(atob(verilogDownloads[filename]), c => c.charCodeAt(0));
+    const url = URL.createObjectURL(new Blob([bytes], {type: 'application/octet-stream'}));
+    const download = document.createElement('a');
+    download.href = url;
+    download.download = filename;
+    document.body.appendChild(download);
+    download.click();
+    download.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+"""
+    destination = Path(app.outdir) / '_static' / 'download-files.js'
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(script, encoding='utf-8')
+
+
+def setup(app):
+    app.connect('build-finished', write_download_script)
 
 # Custom CSS
 # margin-bottom: 0.5em;

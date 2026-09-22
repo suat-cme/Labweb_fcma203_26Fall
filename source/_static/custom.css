@@ -594,3 +594,19 @@
   background: #F2DEDE;
 }
 
+
+/* Place download icons after the complete link label. */
+.rst-content code.download span:first-child::before,
+.rst-content tt.download span:first-child::before {
+  content: none;
+}
+
+.rst-content code.download::after,
+.rst-content tt.download::after {
+  content: "\f019";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
+  margin-left: 4px;
+}

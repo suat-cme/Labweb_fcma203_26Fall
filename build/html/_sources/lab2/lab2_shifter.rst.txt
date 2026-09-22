@@ -24,7 +24,7 @@
    :align: center
    :scale: 60
 
-本课程实验用的是 Xilinx 的 FPGA 芯片及其开发板， `点击下载手册 <../../../source/lab2/Minisys硬件手册1.1.pdf>`_ 。主芯片为 ``xc7a100tfgg484`` ，LUT 一般设计为 6 输入，即需要 64bit 的存储器来存储 6 个变量所有的可能组合，这个查找表也可以作为两个 5 输入的查找表或拆分成更小的查找表来使用，因此这些 6 输入查找表 (LUT6) 可以完成复杂的逻辑功能。
+本课程实验用的是 Xilinx 的 FPGA 芯片及其开发板， :download:`点击下载手册 <Minisys硬件手册1.1.pdf>` 。主芯片为 ``xc7a100tfgg484`` ，LUT 一般设计为 6 输入，即需要 64bit 的存储器来存储 6 个变量所有的可能组合，这个查找表也可以作为两个 5 输入的查找表或拆分成更小的查找表来使用，因此这些 6 输入查找表 (LUT6) 可以完成复杂的逻辑功能。
 
 .. figure:: ./pics/minisys_ori.png
    :alt: minisys_ori
@@ -154,7 +154,7 @@ FPGA 开发板上提供了各类信号输入和输出的模块，在本实验中
 
 按键与代码模块中信号的对应关系、拨码开关与代码模块中信号的对应关系，都比较直接，将在后续 implementation 阶段 **约束文件** 中体现。
 
-而 out 信号和 7 段数码管的显示则需要通过一个控制电路来实现，因此在 verilog 编码阶段就必须完成。我们提供了 7 段数码管显示十六进制数的代码 `seg.v (点击下载) <../../../source/lab2/seg.v>`_ 和数码管的驱动程序 `seg_driver.v (点击下载) <../../../source/lab2/seg_driver.v>`_ 。请将这两个 .v 文件加到你的 project 中，并按下列代码示例的结构，在 **top** module 中将你设计的 **shifter_16bit** module 和 **seg_driver** module 都进行实例化，并将移位器的输出 out 连接到 seg_driver 模块的 data 端口。
+而 out 信号和 7 段数码管的显示则需要通过一个控制电路来实现，因此在 verilog 编码阶段就必须完成。我们提供了 7 段数码管显示十六进制数的代码 :download:`seg.v (点击下载) <seg.v>` 和数码管的驱动程序 :download:`seg_driver.v (点击下载) <seg_driver.v>` 。请将这两个 .v 文件加到你的 project 中，并按下列代码示例的结构，在 **top** module 中将你设计的 **shifter_16bit** module 和 **seg_driver** module 都进行实例化，并将移位器的输出 out 连接到 seg_driver 模块的 data 端口。
 
 .. code-block:: v
    :caption: 顶层模块代码框架
@@ -301,7 +301,7 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
 
 第一行指定了 start 信号与 P20 管脚相连。第二行指定 start 端口的 I/O 电气标准设置为 LVCMOS33，这个是依据 S6 按键电路的高电平电压是3.3V 决定的，否则电气标准不匹配可能会导致功能失效，甚至对芯片、硬件电路等造成损伤。
 
-我们给出了一个设计约束文件的模板 `shifter.xdc (点击下载) <../../../source/lab2/shifter.xdc>`_ ，包含了 7 段数码管、时钟信号、start信号、拨码开关的管脚对应。Vivado 约束文件的后缀名为 ``.xdc`` ，代表 Xilinx Deisgn Constraints ，你可下载并在添加源文件的地方选择 ``Add Deisgn Constraints`` 添加约束文件，并在添加后右键点击约束文件，选择 ``Set as Target Constraint File``，文件名后面会出现 **(target)** ，表明这个约束文件作为目标约束文件。当然你也可以进行修改，前提是从手册中获得管脚信息。
+我们给出了一个设计约束文件的模板 :download:`shifter.xdc (点击下载) <shifter.xdc>` ，包含了 7 段数码管、时钟信号、start信号、拨码开关的管脚对应。Vivado 约束文件的后缀名为 ``.xdc`` ，代表 Xilinx Deisgn Constraints ，你可下载并在添加源文件的地方选择 ``Add Deisgn Constraints`` 添加约束文件，并在添加后右键点击约束文件，选择 ``Set as Target Constraint File``，文件名后面会出现 **(target)** ，表明这个约束文件作为目标约束文件。当然你也可以进行修改，前提是从手册中获得管脚信息。
 
 
 .. figure:: ./pics/Constraints.png
@@ -384,7 +384,7 @@ I/O Planning 有两种方法，一种是添加设计约束文件 (constraint fil
 
 本次实验需要提交：
 
-   * 实验报告：请点击 `这里 <../../../source/lab2/Lab2_Report_26Fall.docx>`_ 下载实验报告模板
+   * 实验报告：:download:`下载实验报告模板 <Lab2_Report_26Fall.docx>` 
    * ``.v`` 文件压缩包：包含设计文件和仿真文件
    * 演示视频：录制一个演示视频，要求将学生卡放置在镜头内，包含三种位移方式的演示，时长不超过 3 分钟
 
