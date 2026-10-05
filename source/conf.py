@@ -63,7 +63,7 @@ html_static_path = ['_static']
 html_extra_path = ['files']
 
 html_css_files = ['custom.css']
-html_js_files = ['copy-code.js', 'download-files.js']
+html_js_files = ['copy-code.js', 'download-files.js', 'image-viewer.js']
 
 
 def write_download_script(app, exception):

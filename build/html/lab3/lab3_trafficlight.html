@@ -9,7 +9,7 @@
   <title>实验三 交通灯有限状态机设计与 FPGA 实现 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e62fc3ed" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ee66a2cc" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -19,7 +19,8 @@
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=540d3cec"></script>
       <script src="../_static/copy-code.js?v=8d386ce0"></script>
-      <script src="../_static/download-files.js"></script>
+      <script src="../_static/download-files.js?v=7753ecd0"></script>
+      <script src="../_static/image-viewer.js?v=a22a8b11"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
@@ -93,7 +94,7 @@
 <h2>1. 交通灯控制功能描述<a class="headerlink" href="#id1" title="链接到此标题。"></a></h2>
 <p>假设我们要为一个十字路口设计交通灯控制电路，要求如下：</p>
 <blockquote>
-<div><p><strong>道路及车流</strong></p>
+<div><p class="trafficlight-list-label"><strong>道路及车流</strong></p>
 <ul class="simple">
 <li><p>路口有东西向和南北向这两条交叉的道路；</p></li>
 <li><p>有自西向东、自东向西、自北向南、自南向北四个方向驶入路口的车流。</p></li>
@@ -102,41 +103,44 @@
 <a class="reference internal image-reference" href="../_images/cross.png"><img alt="cross" height="623" src="../_images/cross.png" width="628" />
 </a>
 </figure>
-<p><strong>交通灯颜色</strong></p>
+<p class="trafficlight-list-label"><strong>交通灯颜色</strong></p>
 <ul class="simple">
 <li><p>每组交通灯有红、黄、绿三种颜色；</p></li>
 <li><p>红灯亮时禁止通行，绿灯亮时允许通行，黄灯亮时提示减速。</p></li>
 </ul>
-<p><strong>直行与左转独立控制</strong></p>
+<p class="trafficlight-list-label"><strong>直行与左转独立控制</strong></p>
 <ul class="simple">
 <li><p>每个方向驶入的车流设两组交通灯，一组控制直行车流，另一组控制左转车流；</p></li>
 <li><p>右转车流无特殊控制，只需减速慢行、礼让行人即可。</p></li>
 </ul>
-<p><strong>四对交通灯的控制</strong></p>
-<ul>
+<p class="trafficlight-list-label"><strong>四对交通灯的控制</strong></p>
+<ul class="simple">
 <li><p>共 8 组交通灯，其中对向的交通灯两两相配：颜色相同，且同时亮起；</p></li>
-<li><dl>
-<dt>共有 4 对交通灯需要控制，即：</dt><dd><p>东西向直行：自西入路口和自东入路口的直行车流的交通灯相同；</p>
-<p>东西向左转：自西入路口和自东入路口的左转车流的交通灯相同；</p>
-<p>南北向直行：自北入路口和自南入路口的直行车流的交通灯相同；</p>
-<p>南北向左转：自北入路口和自南入路口的左转车流的交通灯相同。</p>
-</dd>
-</dl>
+<li><p>共有 4 对交通灯需要控制，即：</p>
+<ul class="trafficlight-direction-list">
+<li><p>东西向直行：自西入路口和自东入路口的直行车流的交通灯相同；</p></li>
+<li><p>东西向左转：自西入路口和自东入路口的左转车流的交通灯相同；</p></li>
+<li><p>南北向直行：自北入路口和自南入路口的直行车流的交通灯相同；</p></li>
+<li><p>南北向左转：自北入路口和自南入路口的左转车流的交通灯相同。</p></li>
+</ul>
 </li>
 </ul>
-<p><strong>通行顺序</strong></p>
+<p class="trafficlight-list-label"><strong>通行顺序</strong></p>
 <ul class="simple">
 <li><p>东西向直行 -&gt; 东西向左转 -&gt; 南北向直行 -&gt; 南北向左转 -&gt; 东西向直行 -&gt; ...</p></li>
 </ul>
-<p><strong>切换时序要求</strong></p>
-<ul class="simple">
+<p class="trafficlight-list-label"><strong>切换时序要求</strong></p>
+<ul>
 <li><p>每一组交通灯的三种颜色切换顺序为：红灯 -&gt; 绿灯 -&gt; 黄灯 -&gt; 红灯；</p></li>
 <li><p>绿灯持续时间按车流量需求设置；</p></li>
 <li><p>黄灯持续 3 秒；</p></li>
-<li><p>通行方向切换的间隙，需有 “全红” 阶段持续 2 秒，以避免车辆冲突、确保安全；</p></li>
+<li><div class="trafficlight-timing-example line-block">
+<div class="line">通行方向切换的间隙，需有 “全红” 阶段持续 2 秒，以避免车辆冲突、确保安全；</div>
+<div class="line">例如，“东西向直行” 切换至 “东西向左转” 时，直行的 3 秒黄灯结束后，红灯亮起，此时左转依然保持红灯，经历 2 秒的 “全红” 阶段，左转绿灯再亮起。</div>
+</div>
+</li>
 </ul>
-<p>例如，“东西向直行” 切换至 “东西向左转” 时，直行的 3 秒黄灯结束后，红灯亮起，此时左转依然保持红灯，经历 2 秒的 “全红” 阶段，左转绿灯再亮起。</p>
-<p><strong>倒数计时</strong></p>
+<p class="trafficlight-list-label"><strong>倒数计时</strong></p>
 <ul class="simple">
 <li><p>每一组交通灯都有一个数字计时器，显示当前交通灯的倒数秒数；</p></li>
 <li><p>计时器的倒数秒数应与当前交通灯的颜色对应；</p></li>
