@@ -122,7 +122,7 @@ Vivado 软件为逻辑电路设计提供了从代码到最终 CLB 实现的整�
         initial begin
             clk <= 1'b0;
             start <= 1'b1;  // start active
-            rgba(58, 40, 40, 0)
+            #1000;
             start <= 1'b0;
         end
 
