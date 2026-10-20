@@ -137,7 +137,6 @@ ALU 设计
    .. code-block:: v
       :caption: ALU 代码框架
       :linenos:
-      :emphasize-lines: 
 
 
       `include "define.v"
@@ -187,14 +186,13 @@ ALU 的第一个操作数来自寄存器堆，第二个操作数可能来自寄�
 
 
    .. code-block:: v
-      :caption: ALU 代码框架
+      :caption: Top 代码框架
       :linenos:
-      :emphasize-lines: 
 
       `include "define.v"
 
       module Top (
-         input wire	clk   
+         input    wire	clk   
          ,input   wire	rst   
 
          ,input   wire   [`REG_ADDR_BW] write_addr 
