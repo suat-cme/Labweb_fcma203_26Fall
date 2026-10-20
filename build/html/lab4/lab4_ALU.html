@@ -122,9 +122,10 @@
 <blockquote>
 <div><ul class="simple">
 <li><p>寄存器堆中包含 32 个 32 位的寄存器，分别编址为 0 号 ~ 31 号；</p></li>
-<li><p>寄存器堆包含两路读出通路和一路写入通路，每一路都有使能信号、地址信号、数据信号。只有当使能信号为 “1” 时，才进行写入或读出操作。写入操作将输入数据 <code class="docutils literal notranslate"><span class="pre">write_data</span></code> 写入地址为 <code class="docutils literal notranslate"><span class="pre">write_addr</span></code> 的寄存器中去；读出操作将地址为 <code class="docutils literal notranslate"><span class="pre">read_addr</span></code> 的寄存器中的数据读出到数据输出端 <code class="docutils literal notranslate"><span class="pre">read_data</span></code>；</p></li>
-<li><p>数据的存入和读出由时钟信号 <code class="docutils literal notranslate"><span class="pre">clk</span></code> 控制， ；</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">reset</span></code> 信号可以将所有寄存器初始化为全零；</p></li>
+<li><p>寄存器堆包含两路读出通路和一路写入通路，每一路都有使能信号、地址信号、数据信号。</p></li>
+<li><p>读出操作 <strong>不受</strong> <code class="docutils literal notranslate"><span class="pre">clk</span></code> 控制，只要读出使能信号 <code class="docutils literal notranslate"><span class="pre">read_en</span></code> 为 1，就将地址为 <code class="docutils literal notranslate"><span class="pre">read_addr</span></code> 的寄存器中的数据读出到数据输出端 <code class="docutils literal notranslate"><span class="pre">read_data</span></code>；</p></li>
+<li><p>写入操作 <strong>受</strong> <code class="docutils literal notranslate"><span class="pre">clk</span></code> 控制，在时钟沿来临并且写入使能信号 <code class="docutils literal notranslate"><span class="pre">write_en</span></code> 为 1 时，将待写入的数据 <code class="docutils literal notranslate"><span class="pre">write_data</span></code> 写入地址为 <code class="docutils literal notranslate"><span class="pre">write_addr</span></code> 的寄存器中；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reset</span></code> 信号可以将所有寄存器写为全零；</p></li>
 <li><p>第 0 号寄存器恒为全零。</p></li>
 </ul>
 </div></blockquote>
@@ -153,7 +154,7 @@
 </a>
 </figure>
 <div class="mytodo admonition">
-<p class="admonition-title">必做内容1：证明判断数值大小的逻辑</p>
+<p class="admonition-title">必做内容1：证明数值大小的判断逻辑</p>
 <p>已知输入操作数 A、B、减法运算的输出进位 cout，判断 <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&lt;</span> <span class="pre">B</span></code> 的逻辑为：</p>
 <ul class="simple">
 <li><p>对于无符号数，当 <code class="docutils literal notranslate"><span class="pre">cout</span> <span class="pre">=</span> <span class="pre">0</span></code> 时， <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&lt;</span> <span class="pre">B</span></code>;</p></li>
@@ -162,68 +163,86 @@
 <p>请证明以上逻辑是正确的。</p>
 </div>
 <div class="mytodo admonition">
-<p class="admonition-title">必做内容2：Verilog 代码设计</p>
+<p class="admonition-title">必做内容2：ALU Verilog 代码设计</p>
 <p>根据功能描述完成 ALU verilog 代码的设计。注意 <strong>A &gt;= B</strong> 的逻辑可以由 <strong>A &lt; B</strong> 的逻辑取反推出。</p>
-<blockquote>
-<div><div class="literal-block-wrapper docutils container" id="id9">
+<p>下列代码中使用了一些宏定义，这些宏定义在 <a class="reference download internal" download="" href="../_downloads/d5ada7c29717ce87e159208ea02c15f2/define.v"><code class="xref download docutils literal notranslate"><span class="pre">define.v</span> <span class="pre">(点击下载)</span></code></a> 中定义，下载并添加到你的 project 中。宏定义可以将数据位宽、地址位宽、使能信号的高低等信息单独定义，使得可以在不修改主要源代码的情况下更方便地修改设计，例如将 32 位 ALU 的设计扩展位 64 位。</p>
+<div class="literal-block-wrapper docutils container" id="id9">
 <div class="code-block-caption"><span class="caption-text">ALU 代码框架</span><a class="headerlink" href="#id9" title="链接到此段代码"></a></div>
-<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">ALU</span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">input_A</span>
-<span class="linenos"> 3</span><span class="w">    </span><span class="p">,</span><span class="k">input</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">input_B</span>
-<span class="linenos"> 4</span><span class="w">    </span><span class="p">,</span><span class="k">input</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">5</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">  </span><span class="n">ALUctrl</span>
-<span class="linenos"> 5</span>
-<span class="linenos"> 6</span><span class="w">    </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">result</span>
-<span class="linenos"> 7</span><span class="w">    </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">zero</span>
-<span class="linenos"> 8</span><span class="w">    </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">lt</span>
-<span class="linenos"> 9</span><span class="w">    </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">ltu</span>
-<span class="linenos">10</span><span class="w">    </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">ge</span>
-<span class="linenos">11</span><span class="w">    </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">geu</span>
-<span class="linenos">12</span><span class="w">    </span><span class="p">);</span>
-<span class="linenos">13</span>
-<span class="linenos">14</span><span class="w">    </span><span class="kt">wire</span><span class="w"> </span><span class="n">c_out</span><span class="p">;</span>
+<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="no">`include</span><span class="w"> </span><span class="s">"define.v"</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">module</span><span class="w"> </span><span class="n">ALU</span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">   </span><span class="k">input</span><span class="w"> </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`ALU_DATA_BW</span><span class="p">]</span><span class="w"> </span><span class="n">input_A</span>
+<span class="linenos"> 5</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="no">`ALU_DATA_BW</span><span class="p">]</span><span class="w"> </span><span class="n">input_B</span>
+<span class="linenos"> 6</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">5</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">          </span><span class="n">ALUctrl</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="no">`ALU_DATA_BW</span><span class="p">]</span><span class="w"> </span><span class="n">result</span>
+<span class="linenos"> 9</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">zero</span>
+<span class="linenos">10</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">lt</span>
+<span class="linenos">11</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">ltu</span>
+<span class="linenos">12</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">ge</span>
+<span class="linenos">13</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="n">geu</span>
+<span class="linenos">14</span><span class="w">   </span><span class="p">);</span>
 <span class="linenos">15</span>
-<span class="linenos">16</span><span class="w">    </span><span class="c1">// Your codes should start from here.</span>
-<span class="linenos">17</span><span class="w">    </span><span class="c1">// ......</span>
-<span class="linenos">18</span><span class="w">    </span><span class="c1">// End of your codes.</span>
-<span class="linenos">19</span>
-<span class="linenos">20</span><span class="w"> </span><span class="k">endmodule</span>
+<span class="linenos">16</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="n">c_out</span><span class="p">;</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">   </span><span class="c1">// Your codes should start from here.</span>
+<span class="linenos">19</span><span class="w">   </span><span class="c1">// ......</span>
+<span class="linenos">20</span><span class="w">   </span><span class="c1">// End of your codes.</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="k">endmodule</span>
 </pre></div>
 </div>
 </div>
-</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">define.v</span><a class="headerlink" href="#id10" title="链接到此段代码"></a></div>
+<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">Macros</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">define</span><span class="p">.</span><span class="nl">v:</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="cp">`define RST_EN       1'b1</span>
+<span class="linenos"> 4</span><span class="cp">`define ZERO32       32'h00000000</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="cp">`define ALU_DATA_BW  31:0</span>
+<span class="linenos"> 7</span><span class="cp">`define IMM_BW       31:0</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="cp">`define REG_ADDR_BW  4:0</span>
+<span class="linenos">10</span><span class="cp">`define REG_BW       31:0</span>
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="id6">
 <h3>寄存器堆设计<a class="headerlink" href="#id6" title="链接到此标题。"></a></h3>
 <div class="mytodo admonition">
-<p class="admonition-title">必做内容3：寄存器堆代码设计</p>
+<p class="admonition-title">必做内容3：寄存器堆 verilog 代码设计</p>
 <p>根据功能描述完成寄存器堆的代码设计。regs 为 <code class="docutils literal notranslate"><span class="pre">[0:31]</span></code> 共 32 个寄存器组成的数组，每个寄存器有 <code class="docutils literal notranslate"><span class="pre">[31:0]</span></code> 位。</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">ALU 代码框架</span><a class="headerlink" href="#id10" title="链接到此段代码"></a></div>
-<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">   </span><span class="k">module</span><span class="w"> </span><span class="n">regfile</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">      </span><span class="k">input</span><span class="w">    </span><span class="kt">wire</span><span class="w">  </span><span class="n">clk</span>
-<span class="linenos"> 3</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">rst</span>
-<span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">4</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">write_addr</span>
-<span class="linenos"> 6</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">write_data</span>
-<span class="linenos"> 7</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">wen</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">4</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">read_addr1</span>
-<span class="linenos">10</span><span class="w">      </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">read_data1</span>
-<span class="linenos">11</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">read_en1</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">4</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">read_addr2</span>
-<span class="linenos">14</span><span class="w">      </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">read_data2</span>
-<span class="linenos">15</span><span class="w">      </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">read_en2</span>
-<span class="linenos">16</span><span class="w">   </span><span class="p">);</span>
-<span class="linenos">17</span>
-<span class="hll"><span class="linenos">18</span><span class="w">      </span><span class="kt">reg</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">regs</span><span class="w"> </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">31</span><span class="p">];</span>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">ALU 代码框架</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
+<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="no">`include</span><span class="w"> </span><span class="s">"define.v"</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">module</span><span class="w"> </span><span class="n">regfile</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 4</span><span class="w">   </span><span class="k">input</span><span class="w">    </span><span class="kt">wire</span><span class="w">  </span><span class="n">clk</span>
+<span class="linenos"> 5</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">rst</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">write_addr</span>
+<span class="linenos"> 8</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_BW</span><span class="p">]</span><span class="w">      </span><span class="n">write_data</span>
+<span class="linenos"> 9</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                 </span><span class="n">wen</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">read_addr1</span>
+<span class="linenos">12</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_BW</span><span class="p">]</span><span class="w">      </span><span class="n">read_data1</span>
+<span class="linenos">13</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                 </span><span class="n">read_en1</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">read_addr2</span>
+<span class="linenos">16</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_BW</span><span class="p">]</span><span class="w">      </span><span class="n">read_data2</span>
+<span class="linenos">17</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                 </span><span class="n">read_en2</span>
+<span class="hll"><span class="linenos">18</span><span class="p">);</span>
 </span><span class="linenos">19</span>
-<span class="linenos">20</span><span class="w">      </span><span class="c1">// Your codes should start from here.</span>
-<span class="linenos">21</span><span class="w">      </span><span class="c1">// ......</span>
-<span class="linenos">22</span><span class="w">      </span><span class="c1">// End of your codes.</span>
-<span class="linenos">23</span>
-<span class="linenos">24</span><span class="w">   </span><span class="k">endmodule</span>
+<span class="linenos">20</span><span class="w">   </span><span class="kt">reg</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">regs</span><span class="w"> </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">31</span><span class="p">];</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">   </span><span class="c1">// Your codes should start from here.</span>
+<span class="linenos">23</span><span class="w">   </span><span class="c1">// ......</span>
+<span class="linenos">24</span><span class="w">   </span><span class="c1">// End of your codes.</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="k">endmodule</span>
 </pre></div>
 </div>
 </div>
@@ -232,38 +251,11 @@
 <section id="id7">
 <h3>Top 模块仿真<a class="headerlink" href="#id7" title="链接到此标题。"></a></h3>
 <div class="mytodo admonition">
-<p class="admonition-title">必做内容4：对 Top 模块进行testbench 仿真</p>
+<p class="admonition-title">必做内容4：Top 模块 testbench 仿真</p>
 <p>新建 Top module，将寄存器堆和 ALU 连接起来。</p>
-<p>这里提供 testbench 文件：<a class="reference download internal" download="" href="../_downloads/6978da1bd23629b56292a234ba846a5f/Lab4_Report_26Fall.docx"><code class="xref download docutils literal notranslate"><span class="pre">tb_ALU.v</span> <span class="pre">(点击下载)</span></code></a> 。完成 top 模块的测试，并对 “所有 case 通过测试” 的界面进行截图。</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">交通灯fsm top</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
-<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">Top</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">   </span><span class="k">input</span><span class="w">    </span><span class="kt">wire</span><span class="w">  </span><span class="n">clk</span>
-<span class="linenos"> 3</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">rst</span>
-<span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">4</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">waddr</span>
-<span class="linenos"> 6</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">wdata</span>
-<span class="linenos"> 7</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">wen</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">4</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">raddr1</span>
-<span class="hll"><span class="linenos">10</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">rdata1</span>
-</span><span class="linenos">11</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">ren1</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">4</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">      </span><span class="n">raddr2</span>
-<span class="linenos">14</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">rdata2</span>
-<span class="linenos">15</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">ren2</span>
-<span class="linenos">16</span><span class="p">);</span>
-<span class="hll"><span class="linenos">17</span>
-</span><span class="linenos">18</span><span class="w">   </span><span class="kt">reg</span><span class="w">  </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">regs</span><span class="w"> </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">31</span><span class="p">];</span>
-<span class="linenos">19</span>
-<span class="linenos">20</span><span class="w">   </span><span class="c1">// Your codes should start from here.</span>
-<span class="linenos">21</span><span class="w">   </span><span class="c1">// ......</span>
-<span class="linenos">22</span><span class="w">   </span><span class="c1">// End of your codes.</span>
-<span class="linenos">23</span>
-<span class="linenos">24</span><span class="k">endmodule</span>
-</pre></div>
-</div>
-</div>
+<p>这里提供仿真所需的文件供下载：<a class="reference download internal" download="" href="../_downloads/6978da1bd23629b56292a234ba846a5f/Lab4_Report_26Fall.docx"><code class="xref download docutils literal notranslate"><span class="pre">tb_ALU.v</span> <span class="pre">(点击下载)</span></code></a> 、<a class="reference download internal" download="" href="../_downloads/6978da1bd23629b56292a234ba846a5f/Lab4_Report_26Fall.docx"><code class="xref download docutils literal notranslate"><span class="pre">tb_ALU.v</span> <span class="pre">(点击下载)</span></code></a>。
+其中 .v 文件是预存的运行结果，用作对比的标准。tb.v 是激励文件。</p>
+<p>完成 top 模块的测试，并对 “所有 case 通过测试” 的界面进行截图。</p>
 </div>
 </section>
 </section>
@@ -273,7 +265,7 @@
 <blockquote>
 <div><ul class="simple">
 <li><p>实验报告：<a class="reference download internal" download="" href="../_downloads/6978da1bd23629b56292a234ba846a5f/Lab4_Report_26Fall.docx"><code class="xref download docutils literal notranslate"><span class="pre">下载实验报告模板</span></code></a></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">.v</span></code> 文件压缩包：包含设计文件和仿真文件</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.v</span></code> 文件压缩包：只设计文件，无需仿真文件</p></li>
 </ul>
 </div></blockquote>
 <p>两项一同扫码提交（支持从微信聊天记录上传）。</p>

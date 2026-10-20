@@ -37,9 +37,10 @@ A 和 B 是两个 32 位的输入操作数，Result 是 32 位的运算结果。
 本实验中，ALU 的操作数可以来自寄存器，也可以是立即数，因此需要设计寄存器堆 (Register file)。功能如下：
 
    * 寄存器堆中包含 32 个 32 位的寄存器，分别编址为 0 号 ~ 31 号；
-   * 寄存器堆包含两路读出通路和一路写入通路，每一路都有使能信号、地址信号、数据信号。只有当使能信号为 “1” 时，才进行写入或读出操作。写入操作将输入数据 ``write_data`` 写入地址为 ``write_addr`` 的寄存器中去；读出操作将地址为 ``read_addr`` 的寄存器中的数据读出到数据输出端 ``read_data``；
-   * 数据的存入和读出由时钟信号 ``clk`` 控制， ；
-   * ``reset`` 信号可以将所有寄存器初始化为全零；
+   * 寄存器堆包含两路读出通路和一路写入通路，每一路都有使能信号、地址信号、数据信号。
+   * 读出操作 **不受** ``clk`` 控制，只要读出使能信号 ``read_en`` 为 1，就将地址为 ``read_addr`` 的寄存器中的数据读出到数据输出端 ``read_data``；
+   * 写入操作 **受** ``clk`` 控制，在时钟沿来临并且写入使能信号 ``write_en`` 为 1 时，将待写入的数据 ``write_data`` 写入地址为 ``write_addr`` 的寄存器中；
+   * ``reset`` 信号可以将所有寄存器写为全零；
    * 第 0 号寄存器恒为全零。
 
 .. figure:: ./pics/Registerfile.jpg
@@ -72,7 +73,7 @@ ALU 设计
    :scale: 10
 
 
-.. admonition:: 必做内容1：证明判断数值大小的逻辑
+.. admonition:: 必做内容1：证明数值大小的判断逻辑
    :class: mytodo
 
    已知输入操作数 A、B、减法运算的输出进位 cout，判断 ``A < B`` 的逻辑为：
@@ -83,41 +84,61 @@ ALU 设计
    请证明以上逻辑是正确的。
 
 
-.. admonition:: 必做内容2：Verilog 代码设计
+.. admonition:: 必做内容2：ALU Verilog 代码设计
    :class: mytodo
 
    根据功能描述完成 ALU verilog 代码的设计。注意 **A \>= B** 的逻辑可以由 **A \< B** 的逻辑取反推出。
 
-    .. code-block:: v
-        :caption: ALU 代码框架
-        :linenos:
+   下列代码中使用了一些宏定义，这些宏定义在 :download:`define.v (点击下载) <define.v>` 中定义，下载并添加到你的 project 中。宏定义可以将数据位宽、地址位宽、使能信号的高低等信息单独定义，使得可以在不修改主要源代码的情况下更方便地修改设计，例如将 32 位 ALU 的设计扩展位 64 位。
 
-         module ALU(
-            input wire [31:0] input_A
-            ,input wire [31:0] input_B
-            ,input wire [5:0]  ALUctrl
+   .. code-block:: v
+      :caption: ALU 代码框架
+      :linenos:
 
-            ,output reg [31:0] result
-            ,output wire zero
-            ,output wire lt
-            ,output wire ltu
-            ,output wire ge
-            ,output wire geu
-            );
+      `include "define.v"
+      
+      module ALU(
+         input wire  [`ALU_DATA_BW] input_A
+         ,input wire [`ALU_DATA_BW] input_B
+         ,input wire [5:0]          ALUctrl
 
-            wire c_out;
+         ,output reg [`ALU_DATA_BW] result
+         ,output wire zero
+         ,output wire lt
+         ,output wire ltu
+         ,output wire ge
+         ,output wire geu
+         );
 
-            // Your codes should start from here.
-            // ......
-            // End of your codes.
+         wire c_out;
 
-         endmodule
+         // Your codes should start from here.
+         // ......
+         // End of your codes.
+
+      endmodule
+
+   .. code-block:: v
+      :caption: define.v
+      :linenos:
+
+      Macros in define.v: 
+
+      `define RST_EN       1'b1
+      `define ZERO32       32'h00000000
+
+      `define ALU_DATA_BW  31:0
+      `define IMM_BW       31:0
+
+      `define REG_ADDR_BW  4:0
+      `define REG_BW       31:0
+
 
 
 寄存器堆设计
 -------------------------------
 
-.. admonition:: 必做内容3：寄存器堆代码设计
+.. admonition:: 必做内容3：寄存器堆 verilog 代码设计
    :class: mytodo
 
    根据功能描述完成寄存器堆的代码设计。regs 为 ``[0:31]`` 共 32 个寄存器组成的数组，每个寄存器有 ``[31:0]`` 位。
@@ -128,62 +149,23 @@ ALU 设计
       :emphasize-lines: 18
 
 
-         module regfile (
-            input    wire  clk   
-            ,input   wire  rst   
-
-            ,input   wire  [4:0]    write_addr 
-            ,input   wire  [31:0]   write_data 
-            ,input   wire  wen   
-            
-            ,input   wire  [4:0]    read_addr1
-            ,output  wire  [31:0]   read_data1
-            ,input   wire  read_en1  
-
-            ,input   wire  [4:0]    read_addr2
-            ,output  wire  [31:0]   read_data2
-            ,input   wire  read_en2  
-         );
-         
-            reg  [31:0] regs [0:31];
-
-            // Your codes should start from here.
-            // ......
-            // End of your codes.
-
-         endmodule
-
-
-Top 模块仿真
--------------------------------
-.. admonition:: 必做内容4：对 Top 模块进行testbench 仿真
-   :class: mytodo
-
-   新建 Top module，将寄存器堆和 ALU 连接起来。
-   
-   这里提供 testbench 文件：:download:`tb_ALU.v (点击下载) <Lab4_Report_26Fall.docx>` 。完成 top 模块的测试，并对 “所有 case 通过测试” 的界面进行截图。
-
-
-   .. code-block:: v
-      :caption: 交通灯fsm top
-      :emphasize-lines: 10, 17
-      :linenos:
-
-      module Top (
+      `include "define.v"
+      
+      module regfile (
          input    wire  clk   
          ,input   wire  rst   
 
-         ,input   wire  [4:0]    waddr 
-         ,input   wire  [31:0]   wdata 
-         ,input   wire  wen   
+         ,input   wire  [`REG_ADDR_BW] write_addr 
+         ,input   wire  [`REG_BW]      write_data 
+         ,input   wire                 wen   
          
-         ,input   wire  [4:0]    raddr1
-         ,output  wire  [31:0]   rdata1
-         ,input   wire  ren1  
+         ,input   wire  [`REG_ADDR_BW] read_addr1
+         ,output  wire  [`REG_BW]      read_data1
+         ,input   wire                 read_en1  
 
-         ,input   wire  [4:0]	   raddr2
-         ,output  wire  [31:0]   rdata2
-         ,input   wire  ren2  
+         ,input   wire  [`REG_ADDR_BW] read_addr2
+         ,output  wire  [`REG_BW]      read_data2
+         ,input   wire                 read_en2  
       );
       
          reg  [31:0] regs [0:31];
@@ -195,6 +177,19 @@ Top 模块仿真
       endmodule
 
 
+Top 模块仿真
+-------------------------------
+.. admonition:: 必做内容4：Top 模块 testbench 仿真
+   :class: mytodo
+
+   新建 Top module，将寄存器堆和 ALU 连接起来。
+   
+   这里提供仿真所需的文件供下载：:download:`tb_ALU.v (点击下载) <Lab4_Report_26Fall.docx>` 、:download:`tb_ALU.v (点击下载) <Lab4_Report_26Fall.docx>`。
+   其中 .v 文件是预存的运行结果，用作对比的标准。tb.v 是激励文件。
+   
+   完成 top 模块的测试，并对 “所有 case 通过测试” 的界面进行截图。
+
+
 
 3. 报告提交
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -202,7 +197,7 @@ Top 模块仿真
 本次实验需要提交：
 
    * 实验报告：:download:`下载实验报告模板 <Lab4_Report_26Fall.docx>` 
-   * ``.v`` 文件压缩包：包含设计文件和仿真文件
+   * ``.v`` 文件压缩包：只设计文件，无需仿真文件
 
 两项一同扫码提交（支持从微信聊天记录上传）。
 
