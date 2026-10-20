@@ -17,7 +17,7 @@ ALU 功能描述
    :align: center
    :scale: 20
 
-A 和 B 是两个 32 位的输入操作数，Result 是 32 位的运算结果。具体做什么运算由 6 位的 ALUControl 决定，如表格所示：
+A 和 B 是两个 32 位的输入操作数，Result 是 32 位的运算结果。具体做什么运算由 6 位的 ALUControl 决定，如表格所示。进行移位操作时，选择操作数 B 的后 5 位作为移位量。
 
 .. figure:: ./pics/ALUoperation.png
    :alt: ALUOperation
@@ -48,15 +48,6 @@ A 和 B 是两个 32 位的输入操作数，Result 是 32 位的运算结果。
    :align: center
    :scale: 30
 
-Top 模块
--------------------------------
-本实验中，我们将寄存器堆与 ALU 连接起来，使得寄存器堆为 ALU 提供输入，如图。
-
-ALU 的第一个操作数来自寄存器堆，第二个操作数可能来自寄存器堆或者是一个立即数 ``Imm`` ，选哪一路取决于 ``ALUSrc`` 的控制。
-
-.. figure:: ./pics/Registerfile_ALU_top.jpg
-   :alt: Registerfile_ALU_top
-   :align: center
 
 
 2. 实验内容
@@ -146,7 +137,7 @@ ALU 设计
    .. code-block:: v
       :caption: ALU 代码框架
       :linenos:
-      :emphasize-lines: 18
+      :emphasize-lines: 
 
 
       `include "define.v"
@@ -179,15 +170,65 @@ ALU 设计
 
 Top 模块仿真
 -------------------------------
+新建 Top module，将寄存器堆和 ALU 连接起来，使得寄存器堆为 ALU 提供输入，如图。
+
+ALU 的第一个操作数来自寄存器堆，第二个操作数可能来自寄存器堆或者是一个立即数 ``Imm`` ，选哪一路取决于 ``ALUSrc`` 的控制。
+
+   .. figure:: ./pics/Registerfile_ALU_top.jpg
+      :alt: Registerfile_ALU_top
+      :align: center
+
+
+
 .. admonition:: 必做内容4：Top 模块 testbench 仿真
    :class: mytodo
+   
+   以下为 top 模块示例，注意不要修改输入输出信号名。
 
-   新建 Top module，将寄存器堆和 ALU 连接起来。
+
+   .. code-block:: v
+      :caption: ALU 代码框架
+      :linenos:
+      :emphasize-lines: 
+
+      `include "define.v"
+
+      module Top (
+         input wire	clk   
+         ,input   wire	rst   
+
+         ,input   wire   [`REG_ADDR_BW] write_addr 
+         ,input   wire                  wen          
+         ,input   wire   [`REG_ADDR_BW] read_addr1
+         ,input   wire                  read_en1  
+         ,input   wire   [`REG_ADDR_BW] read_addr2
+         ,input   wire                  read_en2
+
+         ,input   wire               ALUSrc
+         ,input   wire    [5:0]      ALUctrl
+         ,input   wire    [`IMM_BW]  Imm 
+
+         ,output  wire    [`ALU_DATA_BW]  ALU_result
+         ,output  wire    zero
+         ,output  wire    lt
+         ,output  wire    ltu
+         ,output  wire    ge
+         ,output  wire    geu
+         );
+
+         // Your codes should start from here.
+         // ......
+         // End of your codes.
+
+      endmodule
    
-   这里提供仿真所需的文件供下载：:download:`tb_ALU.v (点击下载) <Lab4_Report_26Fall.docx>` 、:download:`tb_ALU.v (点击下载) <Lab4_Report_26Fall.docx>`。
-   其中 .v 文件是预存的运行结果，用作对比的标准。tb.v 是激励文件。
-   
-   完成 top 模块的测试，并对 “所有 case 通过测试” 的界面进行截图。
+      
+   Testbench 文件需要对各种 ALU 操作和不同的寄存器读写进行测试，测试激励较为复杂，因此此处直接提供 testbench 文件：:download:`tb_top.v (点击下载) <tb_top.v>` 。完成 top 模块的测试，并对所有测试用例都通过测试的界面进行截图，示例如下。
+
+   .. figure:: ./pics/pass.png
+      :alt: pass
+      :align: center
+      :scale: 80
 
 
 
