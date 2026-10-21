@@ -125,6 +125,16 @@ ALU 设计
       `define REG_BW       31:0
 
 
+.. raw:: html
+
+   <div class="admonition mycaution">
+      <p class="admonition-title"> verilog 中变量的符号</p >
+      <p>verilog 语法中对变量的默认符号有规则约定。例如，在不加特殊声明的情况下，reg 类型的变量默认为无符号数，integer 类型的变量默认为有符号数。而运算结果的符号由所有操作数决定 —— 只要有一个操作数是无符号的，整个表达式就按无符号运算。</p>
+      <p>使用过程中，如有需要强制将变量视为无符号数或有符号数，可使用系统函数 “$signed”, “$unsigned” 进行。</p>
+
+
+   </div>
+
 
 寄存器堆设计
 -------------------------------
