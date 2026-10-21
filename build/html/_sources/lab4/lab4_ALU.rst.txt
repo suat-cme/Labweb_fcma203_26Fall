@@ -182,7 +182,9 @@ ALU 的第一个操作数来自寄存器堆，第二个操作数可能来自寄�
 .. admonition:: 必做内容4：Top 模块 testbench 仿真
    :class: mytodo
    
-   以下为 top 模块示例，注意不要修改输入输出信号名。
+   以下为 top 模块示例。
+   
+   **注意**：不要修改输入输出信号名；实例化 ALU 时需要将实例命名为 ``u_ALU``；实例化 regfile 时需要将实例命名为 ``u_regfile``，以防 testbench 文件报错。
 
 
    .. code-block:: v
@@ -195,23 +197,23 @@ ALU 的第一个操作数来自寄存器堆，第二个操作数可能来自寄�
          input    wire	clk   
          ,input   wire	rst   
 
-         ,input   wire   [`REG_ADDR_BW] write_addr 
-         ,input   wire                  wen          
-         ,input   wire   [`REG_ADDR_BW] read_addr1
-         ,input   wire                  read_en1  
-         ,input   wire   [`REG_ADDR_BW] read_addr2
-         ,input   wire                  read_en2
+         ,input   wire  [`REG_ADDR_BW] write_addr 
+         ,input   wire                 wen          
+         ,input   wire  [`REG_ADDR_BW] read_addr1
+         ,input   wire                 read_en1  
+         ,input   wire  [`REG_ADDR_BW] read_addr2
+         ,input   wire                 read_en2
 
-         ,input   wire               ALUSrc
-         ,input   wire    [5:0]      ALUctrl
-         ,input   wire    [`IMM_BW]  Imm 
+         ,input   wire              ALUSrc
+         ,input   wire  [5:0]       ALUctrl
+         ,input   wire  [`IMM_BW]   Imm 
 
-         ,output  wire    [`ALU_DATA_BW]  ALU_result
-         ,output  wire    zero
-         ,output  wire    lt
-         ,output  wire    ltu
-         ,output  wire    ge
-         ,output  wire    geu
+         ,output  wire  [`ALU_DATA_BW] ALU_result
+         ,output  wire  zero
+         ,output  wire  lt
+         ,output  wire  ltu
+         ,output  wire  ge
+         ,output  wire  geu
          );
 
          // Your codes should start from here.

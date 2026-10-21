@@ -250,7 +250,8 @@
 </div></blockquote>
 <div class="mytodo admonition">
 <p class="admonition-title">必做内容4：Top 模块 testbench 仿真</p>
-<p>以下为 top 模块示例，注意不要修改输入输出信号名。</p>
+<p>以下为 top 模块示例。</p>
+<p><strong>注意</strong>：不要修改输入输出信号名；实例化 ALU 时需要将实例命名为 <code class="docutils literal notranslate"><span class="pre">u_ALU</span></code>；实例化 regfile 时需要将实例命名为 <code class="docutils literal notranslate"><span class="pre">u_regfile</span></code>，以防 testbench 文件报错。</p>
 <div class="literal-block-wrapper docutils container" id="id11">
 <div class="code-block-caption"><span class="caption-text">Top 代码框架</span><a class="headerlink" href="#id11" title="链接到此段代码"></a></div>
 <div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="no">`include</span><span class="w"> </span><span class="s">"define.v"</span>
@@ -259,23 +260,23 @@
 <span class="linenos"> 4</span><span class="w">   </span><span class="k">input</span><span class="w">    </span><span class="kt">wire</span><span class="w">  </span><span class="n">clk</span>
 <span class="linenos"> 5</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="n">rst</span>
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">   </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">write_addr</span>
-<span class="linenos"> 8</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                  </span><span class="n">wen</span>
-<span class="linenos"> 9</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">   </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">read_addr1</span>
-<span class="linenos">10</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                  </span><span class="n">read_en1</span>
-<span class="linenos">11</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">   </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">read_addr2</span>
-<span class="linenos">12</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                  </span><span class="n">read_en2</span>
+<span class="linenos"> 7</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">write_addr</span>
+<span class="linenos"> 8</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                 </span><span class="n">wen</span>
+<span class="linenos"> 9</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">read_addr1</span>
+<span class="linenos">10</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                 </span><span class="n">read_en1</span>
+<span class="linenos">11</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`REG_ADDR_BW</span><span class="p">]</span><span class="w"> </span><span class="n">read_addr2</span>
+<span class="linenos">12</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">                 </span><span class="n">read_en2</span>
 <span class="linenos">13</span>
-<span class="linenos">14</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">               </span><span class="n">ALUSrc</span>
-<span class="linenos">15</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">    </span><span class="p">[</span><span class="mh">5</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">      </span><span class="n">ALUctrl</span>
-<span class="linenos">16</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">    </span><span class="p">[</span><span class="no">`IMM_BW</span><span class="p">]</span><span class="w">  </span><span class="n">Imm</span>
+<span class="linenos">14</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">              </span><span class="n">ALUSrc</span>
+<span class="linenos">15</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="mh">5</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">       </span><span class="n">ALUctrl</span>
+<span class="linenos">16</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">   </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`IMM_BW</span><span class="p">]</span><span class="w">   </span><span class="n">Imm</span>
 <span class="linenos">17</span>
-<span class="linenos">18</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="p">[</span><span class="no">`ALU_DATA_BW</span><span class="p">]</span><span class="w">  </span><span class="n">ALU_result</span>
-<span class="linenos">19</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="n">zero</span>
-<span class="linenos">20</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="n">lt</span>
-<span class="linenos">21</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="n">ltu</span>
-<span class="linenos">22</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="n">ge</span>
-<span class="linenos">23</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="n">geu</span>
+<span class="linenos">18</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="p">[</span><span class="no">`ALU_DATA_BW</span><span class="p">]</span><span class="w"> </span><span class="n">ALU_result</span>
+<span class="linenos">19</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="n">zero</span>
+<span class="linenos">20</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="n">lt</span>
+<span class="linenos">21</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="n">ltu</span>
+<span class="linenos">22</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="n">ge</span>
+<span class="linenos">23</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w">  </span><span class="kt">wire</span><span class="w">  </span><span class="n">geu</span>
 <span class="linenos">24</span><span class="w">   </span><span class="p">);</span>
 <span class="linenos">25</span>
 <span class="linenos">26</span><span class="w">   </span><span class="c1">// Your codes should start from here.</span>
