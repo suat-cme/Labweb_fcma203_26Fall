@@ -27,7 +27,7 @@
 
 ALU 和 register file 模块可使用实验四中你的设计。由于 7 条指令中没有移位指令，ALUctrl 的最高 2 bits 可以硬连为 0。
    
-这里 **直接给出** 指令存储器 instruction memory 和数据存储器 data memory 的代码，:download:`下载 imem.v <sram.v>`，:download:`下载 dmem.v <sram.v>`，:download:`下载 sram.v <sram.v>`。注意不要修改模块名和端口名。
+这里 **直接给出** 指令存储器 instruction memory 和数据存储器 data memory 的代码，:download:`下载 imem.v <imem.v>`，:download:`下载 dmem.v <dmem.v>`，:download:`下载 sram.v <sram.v>`。注意不要修改模块名和端口名。
 
 
 .. admonition:: 必做内容1：单周期 CPU verilog 代码设计
