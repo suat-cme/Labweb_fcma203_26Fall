@@ -214,7 +214,7 @@ module tb_cpu_top_plan;
                 ctx_printed = 1'b1;
                 $display("------------------------------------------------------------");
                 $display("[%0t] ERROR @cycle %0d", $time, cycle_cnt);
-                $display("  instr pc : %08x", cur_instr_pc);
+//                $display("  instr pc : %08x", cur_instr_pc);
                 $display("  dut   pc : %08x    golden pc : %08x", dut.pc, g_pc);
                 $display("  encoding : %08x", g_imem[cur_instr_pc[15:2]]);
                 $display("  asm      : %s", disasm(g_imem[cur_instr_pc[15:2]]));
