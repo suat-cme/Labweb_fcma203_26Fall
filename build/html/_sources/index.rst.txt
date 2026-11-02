@@ -18,8 +18,8 @@
    实验二 移位器设计与FPGA实现 <lab2/lab2_shifter>
    实验三 交通灯有限状态机 <lab3/lab3_trafficlight>
    实验四 ALU 与寄存器堆设计 <lab4/lab4_ALU>
-..   实验五 时序逻辑电路设计 <labs/lab5>
-   实验六 移位乘法器设计 <labs/lab6>
+   实验五 7 指令单周期 CPU 设计 <lab5/lab5_cpu_7inst>
+..   实验六 移位乘法器设计 <labs/lab6>
    番外一 EDA发展史 <extra/extra1>
    敬请期待 <labs/TODO.rst>
 
