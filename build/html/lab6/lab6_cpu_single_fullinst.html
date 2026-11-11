@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>实验六 RV32I 全指令单周期 CPU 设计 &mdash; 《数字逻辑与计算机组成》实验 1.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ee66a2cc" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=f115507d"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/translations.js?v=540d3cec"></script>
+      <script src="../_static/copy-code.js?v=8d386ce0"></script>
+      <script src="../_static/download-files.js"></script>
+      <script src="../_static/image-viewer.js?v=a22a8b11"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="prev" title="实验五 7 指令单周期 CPU 设计" href="../lab5/lab5_cpu_7inst.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            《数字逻辑与计算机组成》实验
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/lab1_adder.html">实验一 加法器设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/lab2_shifter.html">实验二 移位器设计与FPGA实现</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/lab3_trafficlight.html">实验三 交通灯有限状态机</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/lab4_ALU.html">实验四 ALU 与寄存器堆设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/lab5_cpu_7inst.html">实验五 7 指令单周期 CPU 设计</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">实验六 RV32I 全指令单周期 CPU 设计</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rv32i">1. 待实现的 RV32I 指令</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#slt-sltu-slti-slitu">slt | sltu | slti | slitu 指令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lb-lh-lw-lbu-lhu">lb | lh | lw | lbu | lhu 指令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sb-sh-sw">sb | sh | sw 指令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jal-jalr">jal | jalr 指令</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2. 实验内容</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cpu">单周期 CPU 设计</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">单周期 CPU 仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">3. 报告提交</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">《数字逻辑与计算机组成》实验</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">实验六 RV32I 全指令单周期 CPU 设计</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab6/lab6_cpu_single_fullinst.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rv32i-cpu">
+<h1>实验六 RV32I 全指令单周期 CPU 设计<a class="headerlink" href="#rv32i-cpu" title="链接到此标题。"></a></h1>
+<p>在实验五中设计的单周期 CPU 的基础上，我们将在本实验中完善指令集，实现 RV32I 集中的大部分指令，并通过仿真验证。</p>
+<section id="rv32i">
+<h2>1. 待实现的 RV32I 指令<a class="headerlink" href="#rv32i" title="链接到此标题。"></a></h2>
+<p>待实现的 RV32I 指令如下图，最后两行的 ecall 和 ebreak 指令除外。</p>
+<figure class="align-center">
+<img alt="RV32I" src="../_images/RV32I.png" />
+</figure>
+<p>如果需要查看各指令的详细描述，请参考 RISC-V 指令集手册，手册在 git 仓库中已提供，这里再次提供下载链接：<a class="reference download internal" download="" href="../_downloads/fd2f33df6721fd6a43d391e537f4616c/The%20RISC-V%20Instruction%20Set%20Manual_20260120.pdf"><code class="xref download docutils literal notranslate"><span class="pre">下载</span> <span class="pre">The</span> <span class="pre">RISC-V</span> <span class="pre">Instruction</span> <span class="pre">Set</span> <span class="pre">Manual_20260120.pdf</span></code></a>。文档比较长，可以用 Ctrl+F 搜索指令助记符，找到对应的指令描述。</p>
+<p>一部分指令的实现方式与上次实验中的数据通路非常类似，例如 sll 、srl、sra 等指令的实现方式与 add、sub、and、or 指令类似，只是 ALUctrl 的值不同。</p>
+<p>但以下几类指令的实现需要 <strong>新增</strong> 数据通路，必须理解指令功能，因此特别说明。</p>
+<section id="slt-sltu-slti-slitu">
+<h3>slt | sltu | slti | slitu 指令<a class="headerlink" href="#slt-sltu-slti-slitu" title="链接到此标题。"></a></h3>
+<p>slt 和 sltu 指令将寄存器 rs1 和 rs2 的值分别视为有符号和无符号数，并进行比较。如果 rs1 &lt; rs2， rd = 1，否则 rd = 0。</p>
+<p>slti 和 sltiu 指令将寄存器 rs1 的值和立即数 imm 的值分别视为有符号和无符号数，并进行比较。如果 rs1 &lt; imm， rd = 1，否则 rd = 0。</p>
+<p>前序实验的 ALU 设计中已经完成比较功能并输出了 lt 和 ltu 标志位。这两个标志位可以直接作为 slt、sltu、slti、sltiu 指令的判断依据。只需要在 ALU 模块中增加将 ALU 的输出值 set 为 1 或 0 的功能即可。</p>
+</section>
+<section id="lb-lh-lw-lbu-lhu">
+<h3>lb | lh | lw | lbu | lhu 指令<a class="headerlink" href="#lb-lh-lw-lbu-lhu" title="链接到此标题。"></a></h3>
+</section>
+<section id="sb-sh-sw">
+<h3>sb | sh | sw 指令<a class="headerlink" href="#sb-sh-sw" title="链接到此标题。"></a></h3>
+</section>
+<section id="jal-jalr">
+<h3>jal | jalr 指令<a class="headerlink" href="#jal-jalr" title="链接到此标题。"></a></h3>
+</section>
+</section>
+<section id="id1">
+<h2>2. 实验内容<a class="headerlink" href="#id1" title="链接到此标题。"></a></h2>
+<section id="cpu">
+<h3>单周期 CPU 设计<a class="headerlink" href="#cpu" title="链接到此标题。"></a></h3>
+<p>课堂已详细讲解了单周期处理器设计各模块的功能，模块总框图如图。</p>
+<figure class="align-center">
+<img alt="inst_binary" src="lab6/pics/cpu_7inst_diagram.png" />
+</figure>
+<p>ALU 和 register file 模块可使用实验四中你的设计。由于 7 条指令中没有移位指令，ALUctrl 的最高 2 bits 可以硬连为 0。</p>
+<p>这里 <strong>直接给出</strong> 指令存储器 instruction memory 和数据存储器 data memory 的代码，<code class="xref download docutils literal notranslate"><span class="pre">下载</span> <span class="pre">imem.v</span></code>，<code class="xref download docutils literal notranslate"><span class="pre">下载</span> <span class="pre">dmem.v</span></code>，<code class="xref download docutils literal notranslate"><span class="pre">下载</span> <span class="pre">sram.v</span></code>。注意不要修改模块名和端口名。</p>
+<div class="mytodo admonition">
+<p class="admonition-title">必做内容1：单周期 CPU verilog 代码设计</p>
+<p>参考总框图完成剩余模块及 Top 模块的代码设计。</p>
+<p>Top 模块代码框架给出如下，请补充内部连线和模块例化。</p>
+<p><code class="docutils literal notranslate"><span class="pre">注意</span></code>：不要改变示例中给出的顶层名 cpu_top 以及 module 内部信号名，以防 testbench 中抓取信号时因找不到而报错。这些信号包括 input/output 信号名，pc、inst 等给出的内部连线，例化的寄存器堆实例的名字 u_regfile 和 数据存储器实例的名字 u_dmem。</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">CPU top 代码框架</span><a class="headerlink" href="#id4" title="链接到此段代码"></a></div>
+<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">cpu_top</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">        </span><span class="n">clk</span><span class="p">,</span>
+<span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">        </span><span class="n">reset</span><span class="p">,</span><span class="w">     </span><span class="c1">// 异步复位信号，高电平有效</span>
+<span class="linenos"> 4</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">start_pc</span><span class="w">   </span><span class="c1">// 程序起始地址：复位后 PC 从该地址开始取指</span>
+<span class="linenos"> 5</span><span class="p">);</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos"> 8</span><span class="w">   </span><span class="c1">// 给定的一部分内部连线</span>
+<span class="linenos"> 9</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos">10</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span><span class="w">             </span><span class="c1">// 当前 PC</span>
+<span class="linenos">11</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">inst</span><span class="p">;</span><span class="w">           </span><span class="c1">// 当前指令</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">read_data_1</span><span class="p">;</span><span class="w">    </span><span class="c1">// 寄存器堆读口 1</span>
+<span class="linenos">14</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">read_data_2</span><span class="p">;</span><span class="w">    </span><span class="c1">// 寄存器堆读口 2</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">imm</span><span class="p">;</span><span class="w">            </span><span class="c1">// 立即数</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos">19</span><span class="w">   </span><span class="c1">// 请补充其他内部连线</span>
+<span class="linenos">20</span><span class="w">   </span><span class="c1">// ......</span>
+<span class="linenos">21</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos">25</span><span class="w">   </span><span class="c1">// 给定的一部分模块例化名，请补充信号对应关系</span>
+<span class="linenos">26</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos">27</span><span class="w">   </span><span class="n">regfile</span><span class="w"> </span><span class="n">u_regfile</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">28</span><span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">            </span><span class="p">()</span>
+<span class="linenos">29</span><span class="w">      </span><span class="p">,.</span><span class="n">rst</span><span class="w">           </span><span class="p">()</span>
+<span class="linenos">30</span><span class="w">      </span><span class="p">,.</span><span class="n">write_addr</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">31</span><span class="w">      </span><span class="p">,.</span><span class="n">write_data</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">32</span><span class="w">      </span><span class="p">,.</span><span class="n">wen</span><span class="w">           </span><span class="p">()</span>
+<span class="linenos">33</span><span class="w">      </span><span class="p">,.</span><span class="n">read_addr1</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">34</span><span class="w">      </span><span class="p">,.</span><span class="n">read_data1</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">35</span><span class="w">      </span><span class="p">,.</span><span class="n">read_en1</span><span class="w">      </span><span class="p">()</span>
+<span class="linenos">36</span><span class="w">      </span><span class="p">,.</span><span class="n">read_addr2</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">37</span><span class="w">      </span><span class="p">,.</span><span class="n">read_data2</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">38</span><span class="w">      </span><span class="p">,.</span><span class="n">read_en2</span><span class="w">      </span><span class="p">()</span>
+<span class="linenos">39</span><span class="w">   </span><span class="p">);</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">   </span><span class="n">dmem</span><span class="w"> </span><span class="n">u_dmem</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">42</span><span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">       </span><span class="p">()</span>
+<span class="linenos">43</span><span class="w">      </span><span class="p">,.</span><span class="n">addr</span><span class="w">     </span><span class="p">()</span>
+<span class="linenos">44</span><span class="w">      </span><span class="p">,.</span><span class="n">wdata</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">45</span><span class="w">      </span><span class="p">,.</span><span class="n">write_en</span><span class="w"> </span><span class="p">()</span>
+<span class="linenos">46</span><span class="w">      </span><span class="p">,.</span><span class="n">rdata</span><span class="w">    </span><span class="p">()</span>
+<span class="linenos">47</span><span class="w">   </span><span class="p">);</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos">50</span><span class="w">   </span><span class="c1">// 请补充其他赋值语句模块及例化模块</span>
+<span class="linenos">51</span><span class="w">   </span><span class="c1">// ......</span>
+<span class="linenos">52</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
+<span class="linenos">53</span>
+<span class="linenos">54</span><span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h3>单周期 CPU 仿真<a class="headerlink" href="#id2" title="链接到此标题。"></a></h3>
+<p>本次实验的 testbench 文件直接提供，<code class="xref download docutils literal notranslate"><span class="pre">tb_cpu_top_plan.sv</span> <span class="pre">(点击下载)</span></code> 。</p>
+<p>为了对 CPU 指令执行的正确性进行测试，testbench 中需要在测试前对指令寄存器 imem 和数据寄存器 dmem 进行初始化，这个过程由 testbench 文件中的系统函数 <code class="docutils literal notranslate"><span class="pre">$readmemh</span></code> 完成。这个函数将十六进制表示的机器码内容从文件中读入到 memory 中。为指令存储器 imem 和数据存储器 dmem 准备的初始化机器码文件提供如下，<code class="xref download docutils literal notranslate"><span class="pre">imem.hex</span> <span class="pre">(点击下载)</span></code> 和 <code class="xref download docutils literal notranslate"><span class="pre">dmem.hex</span> <span class="pre">(点击下载)</span></code>。请下载这两个 .hex 文件并以 simulation source 的途径添加到 project 中。</p>
+<div class="mytodo admonition">
+<p class="admonition-title">必做内容2：CPU testbench 仿真</p>
+<p>完成 Top 模块的测试。</p>
+<p>如果对比结果有误，软件会在 Tcl Console 一栏内给出提示信息。如下图所示，dut 为待测试设计，也就是你的 Top 模块。提示信息将给出 dut 和 golden standard 的对比值，包括：pc 的对比、指令的十六进制表示和助记符形式、操作数的对比、寄存器值的对比等信息。请根据提示信息检查你的设计，找出 bug 并修正。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="lab6/pics/error.png"><img alt="error" src="lab6/pics/error.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\CourseFile\Labweb_fcma203_26Fall\source\lab6\lab6_cpu_single_fullinst.rst</span>, line 143)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;lab6/pics/error.png&quot;:
+  Requires Python Imaging Library.</p>
+</aside>
+</a>
+</figure>
+<p>请 de 出所有的 bug，并对所有测试用例都通过的界面进行截图，示例如下。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/pass2.png"><img alt="pass" height="401" src="../_images/pass2.png" width="897" />
+</a>
+</figure>
+</div>
+</section>
+</section>
+<section id="id3">
+<h2>3. 报告提交<a class="headerlink" href="#id3" title="链接到此标题。"></a></h2>
+<p>本次实验需要提交：</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>实验报告：<code class="xref download docutils literal notranslate"><span class="pre">下载实验报告模板</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.v</span></code> 文件压缩包：只需设计文件，无需仿真文件</p></li>
+</ul>
+</div></blockquote>
+<p>两项一同扫码提交（支持从微信聊天记录上传）。</p>
+<p>Deadline ：<strong style="color: #d32f2f;">2026-11-15 23:59:59 </strong>。</p><figure class="align-center">
+<a class="reference internal image-reference" href="lab6/pics/FCMA203_26Fall_Lab5QR.png"><img alt="QRcode" src="lab6/pics/FCMA203_26Fall_Lab5QR.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\CourseFile\Labweb_fcma203_26Fall\source\lab6\lab6_cpu_single_fullinst.rst</span>, line 172)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;lab6/pics/FCMA203_26Fall_Lab5QR.png&quot;:
+  Requires Python Imaging Library.</p>
+</aside>
+</a>
+</figure>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="../lab5/lab5_cpu_7inst.html" class="btn btn-neutral float-left" title="实验五 7 指令单周期 CPU 设计" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 ：深圳理工大学 - 算力微电子学院，2026 。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
