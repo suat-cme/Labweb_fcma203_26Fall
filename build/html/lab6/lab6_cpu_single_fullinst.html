@@ -19,7 +19,7 @@
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=540d3cec"></script>
       <script src="../_static/copy-code.js?v=8d386ce0"></script>
-      <script src="../_static/download-files.js?v=7753ecd0"></script>
+      <script src="../_static/download-files.js"></script>
       <script src="../_static/image-viewer.js?v=a22a8b11"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
@@ -124,49 +124,52 @@
 <span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span>
 <span class="linenos"> 4</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">wdata</span><span class="p">,</span>
 <span class="linenos"> 5</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">        </span><span class="n">write_en</span><span class="p">,</span>
-<span class="linenos"> 6</span><span class="w">   </span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">rdata</span>
-<span class="linenos"> 7</span><span class="p">);</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="w">   </span><span class="n">sram</span><span class="w"> </span><span class="p">#(.</span><span class="n">AW</span><span class="p">(</span><span class="mh">14</span><span class="p">))</span><span class="w"> </span><span class="n">u_sram</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos">10</span><span class="w">      </span><span class="p">.</span><span class="n">CLK</span><span class="w">   </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
-<span class="hll"><span class="linenos">11</span><span class="w">      </span><span class="p">.</span><span class="n">ADDR</span><span class="w">  </span><span class="p">(</span><span class="n">addr</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">2</span><span class="p">]),</span><span class="w">       </span><span class="c1">// 字节地址 -&gt; 字地址：取 addr[15:2]</span>
-</span><span class="linenos">12</span><span class="w">      </span><span class="p">.</span><span class="n">WDATA</span><span class="w"> </span><span class="p">(</span><span class="n">wdata</span><span class="p">),</span>
-<span class="hll"><span class="linenos">13</span><span class="w">      </span><span class="p">.</span><span class="n">WREN</span><span class="w">  </span><span class="p">({</span><span class="mh">4</span><span class="p">{</span><span class="n">write_en</span><span class="p">}}),</span><span class="w">    </span><span class="c1">// sw 为全字写：4 个字节写使能同时有效</span>
-</span><span class="linenos">14</span><span class="w">      </span><span class="p">.</span><span class="n">RDATA</span><span class="w"> </span><span class="p">(</span><span class="n">rdata</span><span class="p">)</span>
-<span class="linenos">15</span><span class="w">   </span><span class="p">);</span>
-<span class="linenos">16</span>
-<span class="linenos">17</span><span class="k">endmodule</span>
-<span class="linenos">18</span>
-<span class="linenos">19</span><span class="k">module</span><span class="w"> </span><span class="n">sram</span><span class="w"> </span><span class="p">#(</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">AW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">14</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos">20</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">           </span><span class="n">CLK</span>
-<span class="linenos">21</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="n">AW</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">ADDR</span>
-<span class="linenos">22</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">WDATA</span>
-<span class="linenos">23</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">WREN</span>
-<span class="linenos">24</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">RDATA</span>
-<span class="linenos">25</span><span class="p">);</span>
-<span class="linenos">26</span><span class="w">   </span><span class="k">localparam</span><span class="w"> </span><span class="n">AWT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mh">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">AW</span><span class="o">-</span><span class="mh">0</span><span class="p">))</span><span class="o">-</span><span class="mh">1</span><span class="p">);</span>
-<span class="linenos">27</span>
-<span class="linenos">28</span><span class="w">   </span><span class="c1">// Memory Array</span>
-<span class="linenos">29</span><span class="w">   </span><span class="kt">reg</span><span class="w">     </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">  </span><span class="n">sram</span><span class="w"> </span><span class="p">[</span><span class="nl">AWT:</span><span class="mh">0</span><span class="p">];</span>
+<span class="linenos"> 6</span><span class="w">   </span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">rdata</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">   </span><span class="p">...</span>
+<span class="linenos"> 8</span><span class="p">);</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">   </span><span class="p">......</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">   </span><span class="n">sram</span><span class="w"> </span><span class="p">#(.</span><span class="n">AW</span><span class="p">(</span><span class="mh">14</span><span class="p">))</span><span class="w"> </span><span class="n">u_sram</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">13</span><span class="w">      </span><span class="p">.</span><span class="n">CLK</span><span class="w">   </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="hll"><span class="linenos">14</span><span class="w">      </span><span class="p">.</span><span class="n">ADDR</span><span class="w">  </span><span class="p">(</span><span class="n">addr</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">2</span><span class="p">]),</span><span class="w"> </span><span class="c1">// 字节地址 -&gt; 字地址：取 addr[15:2]</span>
+</span><span class="linenos">15</span><span class="w">      </span><span class="p">.</span><span class="n">WDATA</span><span class="w"> </span><span class="p">(...),</span>
+<span class="hll"><span class="linenos">16</span><span class="w">      </span><span class="p">.</span><span class="n">WREN</span><span class="w">  </span><span class="p">(...),</span><span class="w">        </span><span class="c1">// 4 个字节的写使能</span>
+</span><span class="linenos">17</span><span class="w">      </span><span class="p">.</span><span class="n">RDATA</span><span class="w"> </span><span class="p">(...)</span>
+<span class="linenos">18</span><span class="w">   </span><span class="p">);</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="k">endmodule</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="k">module</span><span class="w"> </span><span class="n">sram</span><span class="w"> </span><span class="p">#(</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">AW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">14</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">23</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">           </span><span class="n">CLK</span>
+<span class="linenos">24</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="n">AW</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">ADDR</span>
+<span class="linenos">25</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">WDATA</span>
+<span class="linenos">26</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">WREN</span>
+<span class="linenos">27</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">RDATA</span>
+<span class="linenos">28</span><span class="p">);</span>
+<span class="linenos">29</span><span class="w">   </span><span class="k">localparam</span><span class="w"> </span><span class="n">AWT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mh">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">AW</span><span class="o">-</span><span class="mh">0</span><span class="p">))</span><span class="o">-</span><span class="mh">1</span><span class="p">);</span>
 <span class="linenos">30</span>
-<span class="linenos">31</span><span class="w">   </span><span class="c1">// Write, byte-based enable, synchronous</span>
-<span class="linenos">32</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
-<span class="linenos">33</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">0</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="w"> </span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="w"> </span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">];</span>
-<span class="linenos">34</span><span class="w">   </span><span class="k">end</span>
+<span class="linenos">31</span><span class="w">   </span><span class="c1">// Memory Array</span>
+<span class="linenos">32</span><span class="w">   </span><span class="kt">reg</span><span class="w">     </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">  </span><span class="n">sram</span><span class="w"> </span><span class="p">[</span><span class="nl">AWT:</span><span class="mh">0</span><span class="p">];</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">   </span><span class="c1">// Write, byte-based enable, synchronous</span>
 <span class="linenos">35</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
-<span class="linenos">36</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">1</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">15</span><span class="o">:</span><span class="mh">8</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">8</span><span class="p">];</span>
+<span class="linenos">36</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">0</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="w"> </span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="w"> </span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">];</span>
 <span class="linenos">37</span><span class="w">   </span><span class="k">end</span>
 <span class="linenos">38</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
-<span class="linenos">39</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">2</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">23</span><span class="o">:</span><span class="mh">16</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">23</span><span class="o">:</span><span class="mh">16</span><span class="p">];</span>
+<span class="linenos">39</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">1</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">15</span><span class="o">:</span><span class="mh">8</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">8</span><span class="p">];</span>
 <span class="linenos">40</span><span class="w">   </span><span class="k">end</span>
 <span class="linenos">41</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
-<span class="linenos">42</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">3</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">31</span><span class="o">:</span><span class="mh">24</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">24</span><span class="p">];</span>
+<span class="linenos">42</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">2</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">23</span><span class="o">:</span><span class="mh">16</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">23</span><span class="o">:</span><span class="mh">16</span><span class="p">];</span>
 <span class="linenos">43</span><span class="w">   </span><span class="k">end</span>
-<span class="linenos">44</span>
-<span class="linenos">45</span><span class="w">   </span><span class="c1">// Read, word based, asynchronous</span>
-<span class="linenos">46</span><span class="w">   </span><span class="k">assign</span><span class="w"> </span><span class="n">RDATA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">];</span>
+<span class="linenos">44</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">45</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">3</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">31</span><span class="o">:</span><span class="mh">24</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">24</span><span class="p">];</span>
+<span class="linenos">46</span><span class="w">   </span><span class="k">end</span>
 <span class="linenos">47</span>
-<span class="linenos">48</span><span class="k">endmodule</span>
+<span class="linenos">48</span><span class="w">   </span><span class="c1">// Read, word based, asynchronous</span>
+<span class="linenos">49</span><span class="w">   </span><span class="k">assign</span><span class="w"> </span><span class="n">RDATA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">];</span>
+<span class="linenos">50</span>
+<span class="linenos">51</span><span class="k">endmodule</span>
 </pre></div>
 </div>
 </div>
@@ -218,18 +221,12 @@
 <p>完成 Top 模块的测试。</p>
 <p>如果对比结果有误，软件会在 Tcl Console 一栏内给出提示信息。如下图所示，dut 为待测试设计，也就是你的 Top 模块。提示信息将给出 dut 和 golden standard 的对比值，包括：pc 的对比、指令的十六进制表示和助记符形式、操作数的对比、寄存器值的对比等信息。请根据提示信息检查你的设计，找出 bug 并修正。</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="lab6/pics/error.png"><img alt="error" src="lab6/pics/error.png" />
-<aside class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">C:\FileShare\Labweb_fcma203_26Fall\source\lab6\lab6_cpu_single_fullinst.rst</span>, line 155)</p>
-<p>Cannot scale image!
-  Could not get size from &quot;lab6/pics/error.png&quot;:
-  Requires Python Imaging Library.</p>
-</aside>
+<a class="reference internal image-reference" href="../_images/error1.png"><img alt="error" height="430" src="../_images/error1.png" width="561" />
 </a>
 </figure>
 <p>请 de 出所有的 bug，并对所有测试用例都通过的界面进行截图，示例如下。</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/pass2.png"><img alt="pass" height="401" src="../_images/pass2.png" width="897" />
+<a class="reference internal image-reference" href="../_images/pass2.png"><img alt="pass" height="501" src="../_images/pass2.png" width="1121" />
 </a>
 </figure>
 </div>

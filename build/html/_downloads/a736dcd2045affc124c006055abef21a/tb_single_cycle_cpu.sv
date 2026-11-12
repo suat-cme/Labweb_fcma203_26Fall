@@ -45,6 +45,7 @@ module tb_single_cycle_cpu;
     reg [31:0] cur_dut_src1;
     reg [31:0] cur_dut_src2;
     reg [31:0] cur_dut_imm;
+    reg [31:0] cur_dut_pc;
     reg        cur_mem_access;
     reg [31:0] cur_mem_addr;
 
@@ -498,8 +499,11 @@ module tb_single_cycle_cpu;
         begin
             $display("------------------------------------------------------------");
             $display("ERROR: %s", error_type);
-            $display("  Current instruction PC = 0x%08h", cur_pc);
-            $display("  DUT PC = 0x%08h, REF PC = 0x%08h", dut.pc, ref_pc);
+//            $display("  Current instruction PC = 0x%08h", cur_pc);
+            $display("  Current inst PC : REF = 0x%08h, DUT = 0x%08h", cur_pc, cur_dut_pc);
+            $display("  Next PC         : REF = 0x%08h, DUT = 0x%08h", ref_pc, dut.pc);
+//            $display("  Note: the post-state PCs are the next instruction's address;");
+//            $display("        delta=4 is normal sequential flow, not a PC error.");
             $display("  Instruction binary = %032b", cur_inst);
             $display("  Instruction hex = 0x%08h", cur_inst);
             $display("  Assembly = %s", cur_assembly);
@@ -976,6 +980,7 @@ module tb_single_cycle_cpu;
             cur_dut_src1 = dut.read_data_1;
             cur_dut_src2 = dut.read_data_2;
             cur_dut_imm  = dut.imm;
+            cur_dut_pc   = dut.pc;
             ref_step();
 
             @(posedge clk);

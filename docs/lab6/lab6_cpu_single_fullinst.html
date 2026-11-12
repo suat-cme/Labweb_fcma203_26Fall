@@ -19,11 +19,12 @@
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=540d3cec"></script>
       <script src="../_static/copy-code.js?v=8d386ce0"></script>
-      <script src="../_static/download-files.js?v=7753ecd0"></script>
+      <script src="../_static/download-files.js"></script>
       <script src="../_static/image-viewer.js?v=a22a8b11"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
-    <link rel="search" title="搜索" href="../search.html" /> 
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="prev" title="实验五 7 指令单周期 CPU 设计" href="../lab5/lab5_cpu_7inst.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,12 +47,28 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <p class="caption" role="heading"><span class="caption-text">目录</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../lab1/lab1_adder.html">实验一 加法器设计</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab2/lab2_shifter.html">实验二 移位器设计与FPGA实现</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab3/lab3_trafficlight.html">实验三 交通灯有限状态机</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab4/lab4_ALU.html">实验四 ALU 与寄存器堆设计</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lab5/lab5_cpu_7inst.html">实验五 7 指令单周期 CPU 设计</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">实验六 RV32I 全指令单周期 CPU 设计</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rv32i">1. 待实现的 RV32I 指令</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#slt-sltu-slti-slitu">slt | sltu | slti | slitu 指令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lw-lb-lh-lbu-lhu">lw | lb | lh | lbu | lhu 指令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sw-sh-sb">sw | sh | sb 指令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jal-jalr">jal | jalr 指令</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2. 实验内容</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cpu">单周期 CPU 设计</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">单周期 CPU 仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">3. 报告提交</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -94,115 +111,122 @@
 <h3>slt | sltu | slti | slitu 指令<a class="headerlink" href="#slt-sltu-slti-slitu" title="链接到此标题。"></a></h3>
 <p>slt 和 sltu 指令将寄存器 rs1 和 rs2 的值分别视为有符号和无符号数，并进行比较。如果 rs1 &lt; rs2， rd = 1，否则 rd = 0。</p>
 <p>slti 和 sltiu 指令将寄存器 rs1 的值和立即数 imm 的值分别视为有符号和无符号数，并进行比较。如果 rs1 &lt; imm， rd = 1，否则 rd = 0。</p>
-<p>前序实验的 ALU 设计中已经完成比较功能并输出了 lt 和 ltu 标志位。这两个标志位可以直接作为 slt、sltu、slti、sltiu 指令的判断依据。只需要在 ALU 模块中增加将 ALU 的输出值 set 为 1 或 0 的功能即可。</p>
+<p>前序实验的 ALU 设计中已经完成比较功能并输出了 lt 和 ltu 标志位。   这两个标志位可以直接作为 slt、sltu、slti、sltiu 指令的判断依据。只需要在 ALU 模块中增加将 ALU 的输出值 set 为 1 或 0 的功能即可。</p>
 </section>
-<section id="lb-lh-lw-lbu-lhu">
-<h3>lb | lh | lw | lbu | lhu 指令<a class="headerlink" href="#lb-lh-lw-lbu-lhu" title="链接到此标题。"></a></h3>
+<section id="lw-lb-lh-lbu-lhu">
+<h3>lw | lb | lh | lbu | lhu 指令<a class="headerlink" href="#lw-lb-lh-lbu-lhu" title="链接到此标题。"></a></h3>
+<p>实验五中已经把 dmem, imem, 以及存储核心模块 sram 提供给大家，sram 代码如下。本次需要考虑到 load 指令的 <strong>字节对齐</strong> 问题。</p>
+<p>代码中所示的 dmem 模块中地址 addr 是按 byte 寻址的，但是核心存储模块 sram 的地址 ADDR 是按 word 对齐的。因此 dmem 在调用 sram 时，需要把地址 addr 的低两位去掉，取 <code class="docutils literal notranslate"><span class="pre">addr[15:2]</span></code> 作为 sram 的地址 ADDR 进行读写操作。</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">dmem 和 sram 代码</span><a class="headerlink" href="#id4" title="链接到此段代码"></a></div>
+<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">dmem</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">        </span><span class="n">clk</span><span class="p">,</span>
+<span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">wdata</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">        </span><span class="n">write_en</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">   </span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">rdata</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">   </span><span class="p">...</span>
+<span class="linenos"> 8</span><span class="p">);</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">   </span><span class="p">......</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">   </span><span class="n">sram</span><span class="w"> </span><span class="p">#(.</span><span class="n">AW</span><span class="p">(</span><span class="mh">14</span><span class="p">))</span><span class="w"> </span><span class="n">u_sram</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">13</span><span class="w">      </span><span class="p">.</span><span class="n">CLK</span><span class="w">   </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="hll"><span class="linenos">14</span><span class="w">      </span><span class="p">.</span><span class="n">ADDR</span><span class="w">  </span><span class="p">(</span><span class="n">addr</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">2</span><span class="p">]),</span><span class="w"> </span><span class="c1">// 字节地址 -&gt; 字地址：取 addr[15:2]</span>
+</span><span class="linenos">15</span><span class="w">      </span><span class="p">.</span><span class="n">WDATA</span><span class="w"> </span><span class="p">(...),</span>
+<span class="hll"><span class="linenos">16</span><span class="w">      </span><span class="p">.</span><span class="n">WREN</span><span class="w">  </span><span class="p">(...),</span><span class="w">        </span><span class="c1">// 4 个字节的写使能</span>
+</span><span class="linenos">17</span><span class="w">      </span><span class="p">.</span><span class="n">RDATA</span><span class="w"> </span><span class="p">(...)</span>
+<span class="linenos">18</span><span class="w">   </span><span class="p">);</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="k">endmodule</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="k">module</span><span class="w"> </span><span class="n">sram</span><span class="w"> </span><span class="p">#(</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">AW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">14</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">23</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">           </span><span class="n">CLK</span>
+<span class="linenos">24</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="n">AW</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">ADDR</span>
+<span class="linenos">25</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">WDATA</span>
+<span class="linenos">26</span><span class="w">   </span><span class="p">,</span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">WREN</span>
+<span class="linenos">27</span><span class="w">   </span><span class="p">,</span><span class="k">output</span><span class="w"> </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">RDATA</span>
+<span class="linenos">28</span><span class="p">);</span>
+<span class="linenos">29</span><span class="w">   </span><span class="k">localparam</span><span class="w"> </span><span class="n">AWT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mh">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">AW</span><span class="o">-</span><span class="mh">0</span><span class="p">))</span><span class="o">-</span><span class="mh">1</span><span class="p">);</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="w">   </span><span class="c1">// Memory Array</span>
+<span class="linenos">32</span><span class="w">   </span><span class="kt">reg</span><span class="w">     </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">  </span><span class="n">sram</span><span class="w"> </span><span class="p">[</span><span class="nl">AWT:</span><span class="mh">0</span><span class="p">];</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">   </span><span class="c1">// Write, byte-based enable, synchronous</span>
+<span class="linenos">35</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">36</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">0</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="w"> </span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="w"> </span><span class="mh">7</span><span class="o">:</span><span class="mh">0</span><span class="p">];</span>
+<span class="linenos">37</span><span class="w">   </span><span class="k">end</span>
+<span class="linenos">38</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">39</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">1</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">15</span><span class="o">:</span><span class="mh">8</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">8</span><span class="p">];</span>
+<span class="linenos">40</span><span class="w">   </span><span class="k">end</span>
+<span class="linenos">41</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">42</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">2</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">23</span><span class="o">:</span><span class="mh">16</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">23</span><span class="o">:</span><span class="mh">16</span><span class="p">];</span>
+<span class="linenos">43</span><span class="w">   </span><span class="k">end</span>
+<span class="linenos">44</span><span class="w">   </span><span class="k">always</span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">45</span><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">WREN</span><span class="p">[</span><span class="mh">3</span><span class="p">])</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">][</span><span class="mh">31</span><span class="o">:</span><span class="mh">24</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">WDATA</span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">24</span><span class="p">];</span>
+<span class="linenos">46</span><span class="w">   </span><span class="k">end</span>
+<span class="linenos">47</span>
+<span class="linenos">48</span><span class="w">   </span><span class="c1">// Read, word based, asynchronous</span>
+<span class="linenos">49</span><span class="w">   </span><span class="k">assign</span><span class="w"> </span><span class="n">RDATA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sram</span><span class="p">[</span><span class="n">ADDR</span><span class="p">];</span>
+<span class="linenos">50</span>
+<span class="linenos">51</span><span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+<p>由于 sram 地址是 word 对齐的，所以读操作每次只能返回一个完整的 32-bit 的 word，而不能返回一个单独的 byte 或 half word。因此在实现 lb、lh、lbu、lhu 指令时，需要在读出来的 32-bit word 中根据地址的低两位 <code class="docutils literal notranslate"><span class="pre">addr[1:0]</span></code> 选择对应的 byte 或 half word，并根据指令类型进行符号扩展或零扩展，如图所示。这部分是需要你自行在 dmem 模块中 <strong>补充</strong> 完成的。</p>
+<figure class="align-center">
+<img alt="lblh" src="../_images/lblh.jpg" />
+</figure>
 </section>
-<section id="sb-sh-sw">
-<h3>sb | sh | sw 指令<a class="headerlink" href="#sb-sh-sw" title="链接到此标题。"></a></h3>
+<section id="sw-sh-sb">
+<h3>sw | sh | sb 指令<a class="headerlink" href="#sw-sh-sb" title="链接到此标题。"></a></h3>
+<p>sw 的功能实验五中已经实现，难点是 sb 和 sh 指令的 <strong>字节对齐</strong> 问题。</p>
+<p>sb 只取寄存器 rs2 值的低 8 位数值进行写入，sh 取 rs2 值的低 16 位数值进行写入。这种只写入一部分值的操作在 sram 模块中已经实现了，即用 WREN 信号的 [3:0] 位分别对 4 个字节进行写使能控制。因此在 dmem 中需要根据指令类型和地址的低两位 <code class="docutils literal notranslate"><span class="pre">addr[1:0]</span></code> 改变 WREN 的值，从而对 4 个字节分别进行写入控制。这部分是需要你自行在 dmem 模块中 <strong>补充</strong> 完成的。</p>
 </section>
 <section id="jal-jalr">
 <h3>jal | jalr 指令<a class="headerlink" href="#jal-jalr" title="链接到此标题。"></a></h3>
+<p>jal 和 jalr 指令需要进行跳转，因此需要在 CPU 中 <strong>添加</strong> PC 的更新逻辑。另外，这两条指令的 rd 寄存器需要写入 PC + 4 的值，作为返回地址，这个逻辑也需要 <strong>补充</strong>。</p>
+<p>跳转地址必须是 2 的倍数，也是需要重点考虑的问题。jal 指令的跳转地址是 PC + imm，PC 和 J 型指令的 imm 字段都保证了跳转地址是 2 的倍数；jalr 指令的情况更复杂，其跳转地址是 rs1 + imm，而 I 型指令的 imm 字段并没有特殊处理。因此需要将 jalr 的跳转地址的 <strong>最低位强制置为 0</strong>，以保证跳转地址是 2 的倍数，这一点需要你在代码中进行设置。</p>
 </section>
 </section>
 <section id="id1">
 <h2>2. 实验内容<a class="headerlink" href="#id1" title="链接到此标题。"></a></h2>
 <section id="cpu">
 <h3>单周期 CPU 设计<a class="headerlink" href="#cpu" title="链接到此标题。"></a></h3>
-<p>课堂已详细讲解了单周期处理器设计各模块的功能，模块总框图如图。</p>
-<figure class="align-center">
-<img alt="inst_binary" src="lab6/pics/cpu_7inst_diagram.png" />
-</figure>
-<p>ALU 和 register file 模块可使用实验四中你的设计。由于 7 条指令中没有移位指令，ALUctrl 的最高 2 bits 可以硬连为 0。</p>
-<p>这里 <strong>直接给出</strong> 指令存储器 instruction memory 和数据存储器 data memory 的代码，<code class="xref download docutils literal notranslate"><span class="pre">下载</span> <span class="pre">imem.v</span></code>，<code class="xref download docutils literal notranslate"><span class="pre">下载</span> <span class="pre">dmem.v</span></code>，<code class="xref download docutils literal notranslate"><span class="pre">下载</span> <span class="pre">sram.v</span></code>。注意不要修改模块名和端口名。</p>
 <div class="mytodo admonition">
-<p class="admonition-title">必做内容1：单周期 CPU verilog 代码设计</p>
-<p>参考总框图完成剩余模块及 Top 模块的代码设计。</p>
-<p>Top 模块代码框架给出如下，请补充内部连线和模块例化。</p>
-<p><code class="docutils literal notranslate"><span class="pre">注意</span></code>：不要改变示例中给出的顶层名 cpu_top 以及 module 内部信号名，以防 testbench 中抓取信号时因找不到而报错。这些信号包括 input/output 信号名，pc、inst 等给出的内部连线，例化的寄存器堆实例的名字 u_regfile 和 数据存储器实例的名字 u_dmem。</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">CPU top 代码框架</span><a class="headerlink" href="#id4" title="链接到此段代码"></a></div>
-<div class="highlight-v notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">module</span><span class="w"> </span><span class="n">cpu_top</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos"> 2</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">        </span><span class="n">clk</span><span class="p">,</span>
-<span class="linenos"> 3</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w">        </span><span class="n">reset</span><span class="p">,</span><span class="w">     </span><span class="c1">// 异步复位信号，高电平有效</span>
-<span class="linenos"> 4</span><span class="w">   </span><span class="k">input</span><span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">start_pc</span><span class="w">   </span><span class="c1">// 程序起始地址：复位后 PC 从该地址开始取指</span>
-<span class="linenos"> 5</span><span class="p">);</span>
-<span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos"> 8</span><span class="w">   </span><span class="c1">// 给定的一部分内部连线</span>
-<span class="linenos"> 9</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos">10</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span><span class="w">             </span><span class="c1">// 当前 PC</span>
-<span class="linenos">11</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">inst</span><span class="p">;</span><span class="w">           </span><span class="c1">// 当前指令</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">read_data_1</span><span class="p">;</span><span class="w">    </span><span class="c1">// 寄存器堆读口 1</span>
-<span class="linenos">14</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">read_data_2</span><span class="p">;</span><span class="w">    </span><span class="c1">// 寄存器堆读口 2</span>
-<span class="linenos">15</span>
-<span class="linenos">16</span><span class="w">   </span><span class="kt">wire</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">imm</span><span class="p">;</span><span class="w">            </span><span class="c1">// 立即数</span>
-<span class="linenos">17</span>
-<span class="linenos">18</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos">19</span><span class="w">   </span><span class="c1">// 请补充其他内部连线</span>
-<span class="linenos">20</span><span class="w">   </span><span class="c1">// ......</span>
-<span class="linenos">21</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos">22</span>
-<span class="linenos">23</span>
-<span class="linenos">24</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos">25</span><span class="w">   </span><span class="c1">// 给定的一部分模块例化名，请补充信号对应关系</span>
-<span class="linenos">26</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos">27</span><span class="w">   </span><span class="n">regfile</span><span class="w"> </span><span class="n">u_regfile</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos">28</span><span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">            </span><span class="p">()</span>
-<span class="linenos">29</span><span class="w">      </span><span class="p">,.</span><span class="n">rst</span><span class="w">           </span><span class="p">()</span>
-<span class="linenos">30</span><span class="w">      </span><span class="p">,.</span><span class="n">write_addr</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">31</span><span class="w">      </span><span class="p">,.</span><span class="n">write_data</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">32</span><span class="w">      </span><span class="p">,.</span><span class="n">wen</span><span class="w">           </span><span class="p">()</span>
-<span class="linenos">33</span><span class="w">      </span><span class="p">,.</span><span class="n">read_addr1</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">34</span><span class="w">      </span><span class="p">,.</span><span class="n">read_data1</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">35</span><span class="w">      </span><span class="p">,.</span><span class="n">read_en1</span><span class="w">      </span><span class="p">()</span>
-<span class="linenos">36</span><span class="w">      </span><span class="p">,.</span><span class="n">read_addr2</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">37</span><span class="w">      </span><span class="p">,.</span><span class="n">read_data2</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">38</span><span class="w">      </span><span class="p">,.</span><span class="n">read_en2</span><span class="w">      </span><span class="p">()</span>
-<span class="linenos">39</span><span class="w">   </span><span class="p">);</span>
-<span class="linenos">40</span>
-<span class="linenos">41</span><span class="w">   </span><span class="n">dmem</span><span class="w"> </span><span class="n">u_dmem</span><span class="w"> </span><span class="p">(</span>
-<span class="linenos">42</span><span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">       </span><span class="p">()</span>
-<span class="linenos">43</span><span class="w">      </span><span class="p">,.</span><span class="n">addr</span><span class="w">     </span><span class="p">()</span>
-<span class="linenos">44</span><span class="w">      </span><span class="p">,.</span><span class="n">wdata</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">45</span><span class="w">      </span><span class="p">,.</span><span class="n">write_en</span><span class="w"> </span><span class="p">()</span>
-<span class="linenos">46</span><span class="w">      </span><span class="p">,.</span><span class="n">rdata</span><span class="w">    </span><span class="p">()</span>
-<span class="linenos">47</span><span class="w">   </span><span class="p">);</span>
-<span class="linenos">48</span>
-<span class="linenos">49</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos">50</span><span class="w">   </span><span class="c1">// 请补充其他赋值语句模块及例化模块</span>
-<span class="linenos">51</span><span class="w">   </span><span class="c1">// ......</span>
-<span class="linenos">52</span><span class="w">   </span><span class="c1">//--------------------------------------------------------------------------</span>
-<span class="linenos">53</span>
-<span class="linenos">54</span><span class="k">endmodule</span>
-</pre></div>
+<p class="admonition-title">必做内容1：单周期 CPU 数据通路设计</p>
+<p>参考实验五中 7 条指令的数据通路设计，画出本次实验的单周期 CPU 数据通路图。</p>
 </div>
-</div>
+<div class="mytodo admonition">
+<p class="admonition-title">必做内容2：单周期 CPU verilog 代码设计</p>
+<p>根据你画出的数据通路图，完成单周期 CPU 的 verilog 代码设计。为了防止 testbench 中抓取信号时因找不到而报错，请按以下规则设计：</p>
+<ul class="simple">
+<li><p>顶层 module 名为 &quot;single_cycle_cpu&quot;</p></li>
+<li><p>顶层 module 有三个端口 &quot;clk&quot;、&quot;reset&quot;、&quot;[31:0] start_pc&quot;。</p></li>
+<li><p>reset 为同步复位、高有效，reset 后 PC = start_pc</p></li>
+<li><p>顶层存在 5 个 wire 变量，名字为：&quot;pc&quot;、&quot;inst&quot;、&quot;read_data_1&quot;、&quot;read_data_2&quot;、&quot;imm&quot;</p></li>
+<li><p>寄存器堆例化的实例名为 u_regfile，regfile 模块内必须包含名为 regs 的结构（32 × 32bit）</p></li>
+<li><p>数据 memory 例化的实例名为 u_dmem，dmem 模块内必须包含名为 sram 的结构（16K × 32bit）</p></li>
+<li><p>sram 读操作为组合逻辑、写操作在 clk 上升沿触发 （实验五中给出的 sram 模块已完成该功能）；</p></li>
+<li><p>除 clk 上升沿外无其他时钟沿触发状态更新</p></li>
+</ul>
 </div>
 </section>
 <section id="id2">
 <h3>单周期 CPU 仿真<a class="headerlink" href="#id2" title="链接到此标题。"></a></h3>
-<p>本次实验的 testbench 文件直接提供，<code class="xref download docutils literal notranslate"><span class="pre">tb_cpu_top_plan.sv</span> <span class="pre">(点击下载)</span></code> 。</p>
-<p>为了对 CPU 指令执行的正确性进行测试，testbench 中需要在测试前对指令寄存器 imem 和数据寄存器 dmem 进行初始化，这个过程由 testbench 文件中的系统函数 <code class="docutils literal notranslate"><span class="pre">$readmemh</span></code> 完成。这个函数将十六进制表示的机器码内容从文件中读入到 memory 中。为指令存储器 imem 和数据存储器 dmem 准备的初始化机器码文件提供如下，<code class="xref download docutils literal notranslate"><span class="pre">imem.hex</span> <span class="pre">(点击下载)</span></code> 和 <code class="xref download docutils literal notranslate"><span class="pre">dmem.hex</span> <span class="pre">(点击下载)</span></code>。请下载这两个 .hex 文件并以 simulation source 的途径添加到 project 中。</p>
+<p>本次实验的 testbench 文件直接提供，<a class="reference download internal" download="" href="../_downloads/a736dcd2045affc124c006055abef21a/tb_single_cycle_cpu.sv"><code class="xref download docutils literal notranslate"><span class="pre">tb_single_cycle_cpu.sv</span> <span class="pre">(点击下载)</span></code></a> 。</p>
+<p>与实验五类似，testbench 中需要在测试前用系统函数 <code class="docutils literal notranslate"><span class="pre">$readmemh</span></code> 对指令寄存器 imem 和数据寄存器 dmem 进行初始化。为指令存储器 imem 和数据存储器 dmem 准备的初始化机器码文件提供如下，<a class="reference download internal" download="" href="../_downloads/4b5f1816bfc9776ba5a4b51e3a7bd1e1/imem.hex"><code class="xref download docutils literal notranslate"><span class="pre">imem.hex</span> <span class="pre">(点击下载)</span></code></a> 和 <a class="reference download internal" download="" href="../_downloads/9b13c7a4c171de08b443dd5360303231/dmem.hex"><code class="xref download docutils literal notranslate"><span class="pre">dmem.hex</span> <span class="pre">(点击下载)</span></code></a>。请下载这两个 .hex 文件并以 simulation source 的途径添加到 project 中。</p>
 <div class="mytodo admonition">
-<p class="admonition-title">必做内容2：CPU testbench 仿真</p>
+<p class="admonition-title">必做内容3：CPU testbench 仿真</p>
 <p>完成 Top 模块的测试。</p>
 <p>如果对比结果有误，软件会在 Tcl Console 一栏内给出提示信息。如下图所示，dut 为待测试设计，也就是你的 Top 模块。提示信息将给出 dut 和 golden standard 的对比值，包括：pc 的对比、指令的十六进制表示和助记符形式、操作数的对比、寄存器值的对比等信息。请根据提示信息检查你的设计，找出 bug 并修正。</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="lab6/pics/error.png"><img alt="error" src="lab6/pics/error.png" />
-<aside class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\CourseFile\Labweb_fcma203_26Fall\source\lab6\lab6_cpu_single_fullinst.rst</span>, line 143)</p>
-<p>Cannot scale image!
-  Could not get size from &quot;lab6/pics/error.png&quot;:
-  Requires Python Imaging Library.</p>
-</aside>
+<a class="reference internal image-reference" href="../_images/error1.png"><img alt="error" height="430" src="../_images/error1.png" width="561" />
 </a>
 </figure>
 <p>请 de 出所有的 bug，并对所有测试用例都通过的界面进行截图，示例如下。</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/pass2.png"><img alt="pass" height="401" src="../_images/pass2.png" width="897" />
+<a class="reference internal image-reference" href="../_images/pass2.png"><img alt="pass" height="501" src="../_images/pass2.png" width="1121" />
 </a>
 </figure>
 </div>
@@ -213,19 +237,13 @@
 <p>本次实验需要提交：</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>实验报告：<code class="xref download docutils literal notranslate"><span class="pre">下载实验报告模板</span></code></p></li>
+<li><p>实验报告：<a class="reference download internal" download="" href="../_downloads/a6f27a2b7d3c1810211bfbc369c6ee61/Lab6_Report_26Fall.docx"><code class="xref download docutils literal notranslate"><span class="pre">下载实验报告模板</span></code></a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">.v</span></code> 文件压缩包：只需设计文件，无需仿真文件</p></li>
 </ul>
 </div></blockquote>
 <p>两项一同扫码提交（支持从微信聊天记录上传）。</p>
-<p>Deadline ：<strong style="color: #d32f2f;">2026-11-15 23:59:59 </strong>。</p><figure class="align-center">
-<a class="reference internal image-reference" href="lab6/pics/FCMA203_26Fall_Lab5QR.png"><img alt="QRcode" src="lab6/pics/FCMA203_26Fall_Lab5QR.png" />
-<aside class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\CourseFile\Labweb_fcma203_26Fall\source\lab6\lab6_cpu_single_fullinst.rst</span>, line 172)</p>
-<p>Cannot scale image!
-  Could not get size from &quot;lab6/pics/FCMA203_26Fall_Lab5QR.png&quot;:
-  Requires Python Imaging Library.</p>
-</aside>
+<p>Deadline ：<strong style="color: #d32f2f;">2026-11-29 23:59:59 </strong>。</p><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FCMA203_26Fall_Lab6QR.png"><img alt="QRcode" height="464" src="../_images/FCMA203_26Fall_Lab6QR.png" width="320" />
 </a>
 </figure>
 </section>
@@ -234,7 +252,9 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="../lab5/lab5_cpu_7inst.html" class="btn btn-neutral float-left" title="实验五 7 指令单周期 CPU 设计" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+    </div>
 
   <hr/>
 

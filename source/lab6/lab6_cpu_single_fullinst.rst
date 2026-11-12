@@ -38,7 +38,7 @@ lw | lb | lh | lbu | lhu 指令
 
 .. code-block:: v
    :caption: dmem 和 sram 代码
-   :emphasize-lines: 11, 13
+   :emphasize-lines: 14, 16
    :linenos:
 
    module dmem (
@@ -46,15 +46,18 @@ lw | lb | lh | lbu | lhu 指令
       input  wire [31:0] addr,
       input  wire [31:0] wdata,
       input  wire        write_en,
-      output wire [31:0] rdata
+      output wire [31:0] rdata,
+      ...
    );
       
+      ......
+
       sram #(.AW(14)) u_sram (
          .CLK   (clk),
-         .ADDR  (addr[15:2]),       // 字节地址 -> 字地址：取 addr[15:2]
-         .WDATA (wdata),
-         .WREN  ({4{write_en}}),    // sw 为全字写：4 个字节写使能同时有效
-         .RDATA (rdata)
+         .ADDR  (addr[15:2]), // 字节地址 -> 字地址：取 addr[15:2]
+         .WDATA (...),
+         .WREN  (...),        // 4 个字节的写使能
+         .RDATA (...)
       );
 
    endmodule
@@ -155,14 +158,14 @@ jal 和 jalr 指令需要进行跳转，因此需要在 CPU 中 **添加** PC �
    .. figure:: ./pics/error.png
       :alt: error
       :align: center
-      :scale: 70
+      :scale: 80
 
    请 de 出所有的 bug，并对所有测试用例都通过的界面进行截图，示例如下。
 
    .. figure:: ./pics/pass.png
       :alt: pass
       :align: center
-      :scale: 80
+      :scale: 100
 
 
 
