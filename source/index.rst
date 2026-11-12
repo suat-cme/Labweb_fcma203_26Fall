@@ -19,7 +19,7 @@
    实验三 交通灯有限状态机 <lab3/lab3_trafficlight>
    实验四 ALU 与寄存器堆设计 <lab4/lab4_ALU>
    实验五 7 指令单周期 CPU 设计 <lab5/lab5_cpu_7inst>
-..   实验六 RV32I 全指令单周期 CPU 设计 <lab6/lab6_cpu_single_fullinst>
+   实验六 RV32I 全指令单周期 CPU 设计 <lab6/lab6_cpu_single_fullinst>
 ..   番外一 EDA发展史 <extra/extra1>
    敬请期待 <labs/TODO.rst>
 
